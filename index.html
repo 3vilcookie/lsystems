@@ -40,7 +40,7 @@
 
     <body class="text-center">
 
-        <div class='container jumbotron'>
+        <div class='jumbotron' style='padding:10px'>
             <h1>L-Systems</h1>
         </div>
 
@@ -49,6 +49,7 @@
 
             <div class="form-group">
                     <button type="button" class="btn btn-primary" id="kochTemplateButton" v-on:click="setKochTemplate">Koch Snowflake</button>
+                    <button type="button" class="btn btn-primary" id="hilbertTemplateButton" v-on:click="setHilbertTemplate">Hilbert Curve</button>
 
             </div>
 
@@ -77,6 +78,11 @@
                 <input type="text" class="form-control" v-model="n" id="iterations">
             </div>
             
+            <div class="form-group">
+                <label class="control-label" for="angle">Angle:</label>
+                <input type="text" class="form-control" v-model="n" id="iterations">
+            </div>
+
             <div class="form-group">
                 <button type="button" class="btn btn-primary" id="generateButton" v-on:click="generate">Generate</button>
             </div>
@@ -138,7 +144,22 @@
                 this.x = 0;
                 this.y = 0;
                 this.angleRad = 0;
-
+            },
+            consume  : function(symbol){
+                switch (symbol) {
+                    case "F":
+                    case "f":
+                        this.forward();
+                        break;
+                    case "+":
+                        this.left();
+                        break;
+                    case "-":
+                        this.right();
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -150,6 +171,7 @@
                 E: "-+",
                 A: "FG",
                 n: 2,
+                angle : 0,
                 out : "",
                 log : ""
             },
@@ -165,8 +187,8 @@
                 },
 
                 setHilbertTemplate : function (){
-                    this.V = "F";
-                    this.P = "F=F-F++F-F";
+                    this.V = "FG";
+                    this.P = "F=+Gf-FfF-fG+\nG=-Ff+GfG+fF-";
                     this.E = "+-f";
                     this.A = "F";
                     this.out = "";
@@ -222,8 +244,8 @@
                             {
                                 // Find rule for this variable and replace it
                                 
-                            if(s == 'F')
-                                Turtle.forward();
+                            //if(s == 'F')
+                                //Turtle.forward();
 
                                 ruleSet = this.P.split('\n');
 
@@ -243,12 +265,13 @@
                             else if(this.E.indexOf(s) != -1)
                             {
                                 // Terminalsymbol -> Just append it
-                                if(s == '+')
+                               /* if(s == '+')
                                     Turtle.left();
                                 else if(s == '-')
                                     Turtle.right();
                                 else if(s == 'f')
                                     Turtle.forward();
+                                */
 
                                 output += s;
                             }
@@ -261,8 +284,15 @@
                             input = output;
                     }
 
-                    //this.A = output;
                     this.out = output;
+                    
+                    // Draw it.
+                    //Turtle.angleRad = 360.0 /2* Math.PI * this.angle; 
+                    Turtle.length = 20.0/this.n;
+                    for(i=0;i<output.length;i++)
+                    {
+                        Turtle.consume(output[i]);
+                    }
                 }
             }
         });
