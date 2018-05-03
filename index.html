@@ -5,7 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- <link rel="shortcut icon" type="image/png" href="icons8-iceberg-48.png">-->
+    <link rel="shortcut icon" type="image/png" href="icons8-navigate-96.png">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
@@ -41,15 +41,19 @@
     <body class="text-center">
 
         <div class='jumbotron' style='padding:10px'>
-            <h1>L-Systems</h1>
+                
+            <h1><img src='icons8-navigate-96.png' style='vertical-align:center;margin-right:40px'>L-Systems</h1>
+            
         </div>
 
         <div class='container' id='lSystemsApp'>
             <div v-html="log"> </div>
 
             <div class="form-group">
-                    <button type="button" class="btn btn-primary" id="kochTemplateButton" v-on:click="setKochTemplate">Koch Snowflake</button>
+                    <button type="button" class="btn btn-primary" id="kochTemplateButton" v-on:click="setKochTemplate">Koch Curve</button>
                     <button type="button" class="btn btn-primary" id="hilbertTemplateButton" v-on:click="setHilbertTemplate">Hilbert Curve</button>
+                    <button type="button" class="btn btn-primary" id="kochSnowflakeTemplateButton" v-on:click="setKochSnowflakeTemplate">Koch Snowflake</button>
+                    <button type="button" class="btn btn-primary" id="dragonCurveTemplateButton" v-on:click="setDragonCurveTemplate">Dragon Curve</button>
 
             </div>
 
@@ -75,12 +79,29 @@
 
             <div class="form-group">
                 <label class="control-label" for="iterations">Iterations:</label>
-                <input type="text" class="form-control" v-model="n" id="iterations">
+                <input type="number" class="form-control" v-model="n" id="iterations">
             </div>
             
             <div class="form-group">
                 <label class="control-label" for="angle">Angle:</label>
-                <input type="text" class="form-control" v-model="n" id="iterations">
+                <input type="number" class="form-control" v-model="angle" id="angle">
+            </div>
+
+            
+            <div class="form-group">
+                    <label class="control-label" for="angleOffset">Angle Offset:</label>
+                    <input type="number" class="form-control" v-model="angleOffset" id="angleOffset">
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="xOffset">X Offset:</label>
+                <input type="number" class="form-control" v-model="xOffset" id="xOffset">
+            </div>
+
+
+            <div class="form-group">
+                <label class="control-label" for="yOffset">Y Offset:</label>
+                <input type="number" class="form-control" v-model="yOffset" id="yOffset">
             </div>
 
             <div class="form-group">
@@ -92,7 +113,7 @@
                 <textarea class="form-control" rows="5" id="output">{{ out }}</textarea>
             </div>
 
-            <canvas id='screen' width='500' height='300'></canvas>
+            <canvas id='screen' width='300' height='300'></canvas>
         </div>
 
 
@@ -101,6 +122,9 @@
         var Turtle = {
             x : 0,
             y : 0,
+            xOffset : 0,
+            yOffset : 0,
+            angleOffset : 270.0,
             length: 5,
             alpha : 60,
             angleRad : 0,
@@ -128,8 +152,8 @@
                     */
 
                     this.ctx.beginPath();
-                    this.ctx.moveTo(lastX,lastY);
-                    this.ctx.lineTo(this.x,this.y);
+                    this.ctx.moveTo(this.ctx.canvas.width/2-lastX,this.ctx.canvas.height/2-lastY);
+                    this.ctx.lineTo(this.ctx.canvas.width/2-this.x,this.ctx.canvas.height/2-this.y);
                     this.ctx.stroke();
                 }
             },
@@ -145,8 +169,21 @@
                 this.y = 0;
                 this.angleRad = 0;
             },
+            computeWord : function(word)
+            {
+                this.clear();
+                //this.x = this.xOffset;
+                //this.y = this.yOffset;
+                this.angleRad = this.angleOffset * Math.PI/180.0;
+                //this.ctx.scale(1/this.length,1/this.length);
+                console.log(this.ctx);
+                var i;
+                for( i=0; i<word.length; i++)
+                    this.consume(word[i]);
+            },
             consume  : function(symbol){
                 switch (symbol) {
+                    case "G":
                     case "F":
                     case "f":
                         this.forward();
@@ -171,7 +208,10 @@
                 E: "-+",
                 A: "FG",
                 n: 2,
-                angle : 0,
+                angle : 60.0,
+                angleOffset : 270.0,
+                xOffset : 0.0,
+                yOffset : 0.0,
                 out : "",
                 log : ""
             },
@@ -182,15 +222,36 @@
                     this.P = "F=F-F++F-F";
                     this.E = "+-";
                     this.A = "F";
+                    this.angle = 60.0;
+                    this.out = "";
+                    this.log = "";
+                },
+                setKochSnowflakeTemplate : function(){
+                    this.V = "F";
+                    this.P = "F=F-F++F-F";
+                    this.E = "+-";
+                    this.A = "F++F++F++F";
+                    this.angle = 60.0;
                     this.out = "";
                     this.log = "";
                 },
 
+                setDragonCurveTemplate : function (){
+                    this.V = "FG";
+                    this.P = "F=F+Gf+\nF=-fF-G";
+                    this.E = "+-f";
+                    this.A = "fF";
+                    this.angle = 90.0;
+                    this.out = "";
+                    this.log = "";
+
+                },
                 setHilbertTemplate : function (){
                     this.V = "FG";
                     this.P = "F=+Gf-FfF-fG+\nG=-Ff+GfG+fF-";
                     this.E = "+-f";
                     this.A = "F";
+                    this.angle = 90.0;
                     this.out = "";
                     this.log = "";
 
@@ -287,12 +348,16 @@
                     this.out = output;
                     
                     // Draw it.
-                    //Turtle.angleRad = 360.0 /2* Math.PI * this.angle; 
-                    Turtle.length = 20.0/this.n;
-                    for(i=0;i<output.length;i++)
-                    {
-                        Turtle.consume(output[i]);
-                    }
+                    Turtle.angleRad = 20 * Math.PI / 360.0; 
+                    Turtle.alpha = this.angle;
+                    Turtle.angleOffset = this.angleOffset;
+                    Turtle.xOffset = this.xOffset;
+                    Turtle.yOffset = this.yOffset;
+                    //Turtle.length = 20.0/this.n;
+                    //Turtle.length = (this.n/3)*20;
+                    Turtle.length = (this.n/3)*2    ;
+                    
+                    Turtle.computeWord(output);
                 }
             }
         });
@@ -310,7 +375,7 @@
 
 
         </script>
-        <div class='footer'>(C) 2018 Raphael Pour LGPL</div>
+        <div class='footer'>(C) 2018 Raphael Pour LGPL, Icon by <a href='https://icons8.com'>Icons8</a></div>
     </body>
 
 </html>
