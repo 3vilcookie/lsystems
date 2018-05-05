@@ -6,3 +6,5 @@ Web Service to create, use and draw L-System Languages.
 
 (C) 2018 Raphael Pour
 LGPL
+
+Icon by http://icons8.com
