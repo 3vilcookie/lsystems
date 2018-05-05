@@ -15,6 +15,7 @@ class Turtle {
         this.xOffset = 0;
         this.yOffset = 0;
         this.alphaOffset = 0;
+        this.coordinateStack = [];
 
         if (context == null)
             throw new Error("Invalid Context: null");
@@ -40,12 +41,14 @@ class Turtle {
         var lastX = this.x;
         var lastY = this.y;
 
-        this.x += this.context.canvas.width* length*length  * Math.sin(this.angle);
-        this.y += this.context.canvas.height*length*length * Math.cos(this.angle) ;
+        //this.x += this.context.canvas.width* length*length  * Math.sin(this.angle);
+        // this.y += this.context.canvas.height*length*length * Math.cos(this.angle) ;
 
+        this.x += length * Math.sin(this.angle);
+        this.y += length * Math.cos(this.angle);
         this.context.beginPath();
-        this.context.moveTo(lastX , this.context.canvas.height - lastY);
-        this.context.lineTo(this.x ,this.context.canvas.height - this.y);
+        this.context.moveTo(lastX, this.context.canvas.height - lastY);
+        this.context.lineTo(this.x, this.context.canvas.height - this.y);
         this.context.stroke();
 
     }
@@ -58,13 +61,13 @@ class Turtle {
         this.right(-alpha);
     }
 
-    clear(){
-        
-        this.context.clearRect(0,0,this.context.canvas.width, this.context.canvas.height);
+    clear() {
+
+        this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
     }
 
     computeWord(word) {
-        
+
         var i;
         for (i = 0; i < word.length; i++)
             this.consume(word[i]);
@@ -81,6 +84,19 @@ class Turtle {
                 break;
             case "-":
                 this.right();
+                break;
+            case "[":
+                this.coordinateStack.push([this.x, this.y, this.angle]);
+                break;
+            case "]":
+                if (this.coordinateStack.length == 0) {
+                    console.log("[Turtle] Nothing coordinate on the stack. '[' missing?");
+                    break;
+                }
+                var pos = this.coordinateStack.pop();
+                this.x = pos[0];
+                this.y = pos[1];
+                this.angle = pos[2];
                 break;
             default:
                 //console.log("[Turtle] Ignore symbol '" + symbol + "'");

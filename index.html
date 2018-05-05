@@ -28,6 +28,9 @@
     <!-- Include our Turtle Class-->
     <script src="turtle.js"></script>
 
+    <!-- Include our LSystem Class-->
+    <script src="lsystem.js"></script>
+
     <title>L-Systems</title>
 </head>
 
@@ -35,10 +38,11 @@
     <div class='jumbotron' style='padding:10px'>
         <h1>
             <img src='icons8-navigate-96.png' style='vertical-align:center;margin-right:40px'>L-Systems</h1>
+        <p>~Fractals powerd by formal languages~</p>
     </div>
 
     <div class='container' id='lSystemsApp'>
-        <div v-html="log"> </div>
+
 
         <div class="form-group">
             <button type="button" class="btn btn-primary" id="kochTemplateButton" v-on:click="setKochTemplate">Koch Curve</button>
@@ -46,7 +50,7 @@
             <button type="button" class="btn btn-primary" id="hilbertTemplateButton" v-on:click="setHilbertTemplate">Hilbert Curve</button>
             <button type="button" class="btn btn-primary" id="sierpinskiTriangleTemplateButton" v-on:click="setSierpinskiTriangleTemplate">Sierpinski Triangle</button>
             <button type="button" class="btn btn-primary" id="dragonCurveTemplateButton" v-on:click="setDragonCurveTemplate">Dragon Curve</button>
-
+            <button type="button" class="btn btn-primary" id="plantTemplateButton" v-on:click="setPlantTemplate">Plant</button>
         </div>
 
         <!--class='form-inline'-->
@@ -78,56 +82,97 @@
                         </div>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-header">
-                        <a class="card-link" data-toggle="collapse" href="#collapse2">Turtle Graphic</a>
-                    </div>
-                    <div id="collapse2" class="collapse show">
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label class="control-label" for="iterations">Iterations:</label>
-                                <input type="number" class="form-control" v-model="n" id="iterations">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="alpha">Alpha:</label>
-                                <input type="number" class="form-control" v-model="alpha" id="alpha">
-                            </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <a class="card-link" data-toggle="collapse" href="#collapse2">Turtle Graphic Settings</a>
+                </div>
+                <div id="collapse2" class="collapse hidden">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="control-label" for="iterations">Iterations:</label>
+                            <input type="number" class="form-control" v-model="n" id="iterations">
                         </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="alpha">Alpha (&alpha;):</label>
+                            <input type="number" class="form-control" v-model="alpha" id="alpha">
+                        </div>
+
                     </div>
                 </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <a class="card-link" data-toggle="collapse" href="#collapse3">Canvas Debugging</a>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <a class="card-link" data-toggle="collapse" href="#collapse22">Turtle Command Reference</a>
+                </div>
+                <div id="collapse22" class="collapse hidden">
+                    <div class="card-body">
+                        <table class="table" style='text-align:left'>
+                            <thead>
+                                <tr>
+                                    <th>Symbol</th>
+                                    <th>Turtle Command</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>f,F,G</td>
+                                    <td>Go one step forward and draw a line</td>
+                                </tr>
+                                <tr>
+                                    <td>+</td>
+                                    <td>Turn right by &alpha;&deg;</td>
+                                </tr>
+                                <tr>
+                                    <td>-</td>
+                                    <td>Turn left by &alpha;&deg;</td>
+                                </tr>
+                                <tr>
+                                    <td>[</td>
+                                    <td>Push current position and orientation to the stack</td>
+                                </tr>
+                                <tr>
+                                    <td>]</td>
+                                    <td>Pop position and orientation from the stack</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div id="collapse3" class="collapse hidden">
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label class="control-label" for="alphaOffset">Alpha Offset:</label>
-                                <input type="number" class="form-control" v-model="alphaOffset" id="alphaOffset">
-                            </div>
+                </div>
+            </div>
 
-                            <div class="form-group">
-                                <label class="control-label" for="xOffset">X Offset:</label>
-                                <input type="number" class="form-control" v-model="xOffset" id="xOffset">
-                            </div>
+            <div class="card">
+                <div class="card-header">
+                    <a class="card-link" data-toggle="collapse" href="#collapse3">Canvas Debugging</a>
+                </div>
+                <div id="collapse3" class="collapse hidden">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="control-label" for="alphaOffset">Alpha Offset:</label>
+                            <input type="number" class="form-control" v-model="alphaOffset" id="alphaOffset">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="xOffset">X Offset:</label>
+                            <input type="number" class="form-control" v-model="xOffset" id="xOffset">
+                        </div>
 
 
-                            <div class="form-group">
-                                <label class="control-label" for="yOffset">Y Offset:</label>
-                                <input type="number" class="form-control" v-model="yOffset" id="yOffset">
-                            </div>
+                        <div class="form-group">
+                            <label class="control-label" for="yOffset">Y Offset:</label>
+                            <input type="number" class="form-control" v-model="yOffset" id="yOffset">
+                        </div>
 
-                            <div class="form-group">
-                                <label class="control-label" for="length">Length:</label>
-                                <input type="number" class="form-control" v-model="length" id="length">
-                            </div>
+                        <div class="form-group">
+                            <label class="control-label" for="length">Length:</label>
+                            <input type="number" class="form-control" v-model="length" id="length">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div v-html="log"> </div>
         <div class="form-group">
             <button type="button" class="btn btn-primary" id="generateButton" v-on:click="generate">Generate</button>
         </div>
@@ -163,7 +208,6 @@
                 ctx: null
             },
             methods: {
-
                 setKochTemplate: function () {
                     this.V = "F";
                     this.P = "F=F-F++F-F";
@@ -182,7 +226,6 @@
                     this.out = "";
                     this.log = "";
                 },
-
                 setDragonCurveTemplate: function () {
                     this.V = "FG";
                     this.P = "F=F+Gf+\nF=-fF-G";
@@ -191,7 +234,6 @@
                     this.alpha = 90.0;
                     this.out = "";
                     this.log = "";
-
                 },
                 setHilbertTemplate: function () {
                     this.V = "AB";
@@ -201,7 +243,6 @@
                     this.alpha = 90.0;
                     this.out = "";
                     this.log = "";
-
                 },
                 setSierpinskiTriangleTemplate: function () {
                     this.V = "FG";
@@ -211,89 +252,44 @@
                     this.alpha = 60.0;
                     this.out = "";
                     this.log = "";
-
+                },
+                setPlantTemplate: function () {
+                    this.V = "FG";
+                    this.P = "G=F+[[G]-G]-F[-FG]+F\nF=FF";
+                    this.E = "+-[]";
+                    this.A = "G";
+                    this.alpha = 25.0;
+                    this.out = "";
+                    this.log = "";
                 },
 
                 generate: function () {
-                    var i;
-                    var k;
-                    var s;
-                    var r;
-                    var off;
-                    var currentRule;
-                    var ruleSet;
-                    var input = this.A;
-                    var output;
 
-
-                    // Check if values are set 
-                    if (this.V.length == 0) {
-                        this.log = "<div class='alert alert-danger'>Please add at least one Variable. For example F or FG or XYZ</div>";
-                        return;
+                    var l = new LSystem();
+                    var output = "";
+                    try {
+                        l.V = this.V;
+                        l.E = this.E;
+                        l.Axiom = this.A;
+                        l.P = this.P;
+                        l.generate()
+                        this.out = l.out;
+                    } catch (error) {
+                        this.log = "<div class='alert alert-danger'>[LSystem]: " + error + "</div>";
                     }
 
-                    if (this.P.length == 0) {
-                        this.log = "<div class='alert alert-danger '>Please add at least one rule. For example F=F-F or G=F+G</div>";
-                        return;
-                    }
-
-                    if (this.A.length == 0) {
-                        this.log = "<div class='alert alert-danger'>Please add an Axiom (Start value). For example FG</div>";
-                        return;
-                    }
-
-
-                    this.log = "";
-                    //Turtle.clear();
-                    this.turtle = new Turtle(this.ctx, this.alpha, 1 / this.n);
-                    this.turtle.clear();
-
-                    // Every iteration is a new generation
-                    for (k = 0; k < this.n; k++) {
-                        output = "";
-
-                        // Go throgh each single char and try to replace it
-                        for (i = 0; i < input.length; i++) {
-                            s = input[i];
-
-
-                            if (this.V.indexOf(s) != -1) {
-                                // Find rule for this variable and replace it
-
-                                ruleSet = this.P.split('\n');
-
-                                for (r = 0; r < ruleSet.length; r++) {
-                                    currentRule = ruleSet[r];
-                                    if (currentRule.length > 2 && currentRule[0] == s) {
-                                        off = currentRule.indexOf('=');
-                                        output += currentRule.substr(off + 1);
-                                    }
-                                }
-
-                            }
-                            else if (this.E.indexOf(s) != -1)
-                                output += s;
-                            else
-                                this.log = "<div class='alert alert-danger'>Unknwon symbol '" + s + "' @ Position " + i + "</div>";
-
-                        }
-                        input = output;
-                    }
-
-                    this.out = output;
 
                     // Draw it.
-                    //Turtle.angleRad = 20 * Math.PI / 360.0; 
-                    //Turtle.alpha = this.alpha;
-                    //Turtle.angleOffset = this.angleOffset;
-                    this.turtle.xOffset = this.xOffset;
-                    this.turtle.yOffset = this.yOffset;
-                    this.turtle.alphaOffset = this.alphaOffset;
-                    //Turtle.length = 20.0/this.n;
-                    //Turtle.length = (this.n/3)*20;
-                    //Turtle.length = 10;
-
-                    this.turtle.computeWord(output);
+                    try {
+                        this.turtle = new Turtle(this.ctx, this.alpha, 1);
+                        this.turtle.clear();
+                        this.turtle.xOffset = this.xOffset;
+                        this.turtle.yOffset = this.yOffset;
+                        this.turtle.alphaOffset = this.alphaOffset;
+                        this.turtle.computeWord(l.out);
+                    } catch (error) {
+                        this.log = "<div class='alert alert-danger'>[Turtle]: " + error + "</div>";
+                    }
                 }
             }
         });
@@ -310,7 +306,9 @@
 
     </script>
     <div class='footer'>
-        &copy; 2018 Raphael Pour LGPL | Icon by <a href='https://icons8.com'>Icons8</a>
+        &copy; 2018 Raphael Pour LGPL | Icon by
+        <a href='https://icons8.com'>Icons8</a>
     </div>
 </body>
+
 </html>
