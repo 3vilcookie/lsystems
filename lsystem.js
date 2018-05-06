@@ -30,7 +30,6 @@ class LSystem {
     set P(value) {
 
         var rules = value.split("\n");
-        console.log(rules);
 
         var tempRules = [];
         var i;
@@ -122,7 +121,6 @@ class LSystem {
             if (!this.isVariable(value[i]) && !this.isTerminalsymbol(value[i]))
                 throw "Axiom can only consist of Variables and Terminalsymbols";
 
-
         this._Axiom = value;
     }
 
@@ -175,6 +173,7 @@ class LSystem {
             }
             input = output;
         }
+        console.log(output);
         this.out = output;
     }
 }

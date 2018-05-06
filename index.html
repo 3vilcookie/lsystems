@@ -42,7 +42,8 @@
 </head>
 
 <body class="text-center">
-    <div class='jumbotron' style='padding:10px'>
+
+    <div class='jumbotron' style='padding:2px'>
         <h1>
             <img src='icons8-navigate-96.png' style='vertical-align:center;margin-right:40px'>L-Systems</h1>
         <p>~Fractals powerd by formal languages~</p>
@@ -50,146 +51,123 @@
 
     <div class='container' id='lSystemsApp'>
 
-
-        <div class="form-group">
-            <button type="button" class="btn btn-primary" id="kochTemplateButton" v-on:click="setKochTemplate">Koch Curve</button>
-            <button type="button" class="btn btn-primary" id="kochSnowflakeTemplateButton" v-on:click="setKochSnowflakeTemplate">Koch Snowflake</button>
-            <button type="button" class="btn btn-primary" id="hilbertTemplateButton" v-on:click="setHilbertTemplate">Hilbert Curve</button>
-            <button type="button" class="btn btn-primary" id="sierpinskiTriangleTemplateButton" v-on:click="setSierpinskiTriangleTemplate">Sierpinski Triangle</button>
-            <button type="button" class="btn btn-primary" id="dragonCurveTemplateButton" v-on:click="setDragonCurveTemplate">Dragon Curve</button>
-            <button type="button" class="btn btn-primary" id="plantTemplateButton" v-on:click="setPlantTemplate">Plant</button>
-        </div>
-
-        <!--class='form-inline'-->
-        <div id="accordion" style='padding-bottom:25px'>
-            <div class="card">
-                <div class="card-header">
-                    <a class="card-link" data-toggle="collapse" href="#collapse1">L-System Language</a>
+        <div class='row'>
+            <div class='col-*-*'>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" id="kochTemplateButton" v-on:click="setKochTemplate">Koch Curve</button>
+                    <button type="button" class="btn btn-primary" id="kochSnowflakeTemplateButton" v-on:click="setKochSnowflakeTemplate">Koch Snowflake</button>
+                    <button type="button" class="btn btn-primary" id="hilbertTemplateButton" v-on:click="setHilbertTemplate">Hilbert Curve</button>
+                    <button type="button" class="btn btn-primary" id="sierpinskiTriangleTemplateButton" v-on:click="setSierpinskiTriangleTemplate">Sierpinski Triangle</button>
+                    <button type="button" class="btn btn-primary" id="dragonCurveTemplateButton" v-on:click="setDragonCurveTemplate">Dragon Curve</button>
+                    <button type="button" class="btn btn-primary" id="plantTemplateButton" v-on:click="setPlantTemplate">Plant</button>
                 </div>
-                <div id="collapse1" class="collapse hidden">
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label class="control-label" for="variables">Variables (V):</label>
-                            <input type="text" class="form-control" v-model="V" id="variables">
-                        </div>
 
-                        <div class="form-group">
-                            <label class="control-label" for="alphabet">Alphabet (&Sigma;):</label>
-                            <input type="text" class="form-control" v-model="E" id="alphabet">
+                <!--class='form-inline'-->
+                <div id="accordion" style='padding-bottom:25px'>
+                    <div class="card">
+                        <div class="card-header">
+                            <a class="card-link" data-toggle="collapse" href="#collapse1">L-System Language</a>
                         </div>
+                        <div id="collapse1" class="collapse hidden">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label class="control-label" for="variables">Variables (V):</label>
+                                    <input type="text" class="form-control" v-model="V" id="variables">
+                                </div>
 
-                        <div class="form-group">
-                            <label class="control-label" for="axiom">Axiom (&omega;):</label>
-                            <input type="text" class="form-control" v-model="A" id="axiom">
+                                <div class="form-group">
+                                    <label class="control-label" for="alphabet">Alphabet (&Sigma;):</label>
+                                    <input type="text" class="form-control" v-model="E" id="alphabet">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label" for="axiom">Axiom (&omega;):</label>
+                                    <input type="text" class="form-control" v-model="A" id="axiom">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label" for="rules">Rules (P):</label>
+                                    <textarea class="form-control" rows="3" v-model="P" id="rules"></textarea>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <a class="card-link" data-toggle="collapse" href="#collapse2">Turtle Graphic Settings</a>
+                        </div>
+                        <div id="collapse2" class="collapse hidden">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label class="control-label" for="iterations">Iterations:</label>
+                                    <input type="number" class="form-control" v-model="n" id="iterations">
+                                </div>
 
-                        <div class="form-group">
-                            <label class="control-label" for="rules">Rules (P):</label>
-                            <textarea class="form-control" rows="3" v-model="P" id="rules"></textarea>
+                                <div class="form-group">
+                                    <label class="control-label" for="alpha">Alpha (&alpha;):</label>
+                                    <input type="number" class="form-control" v-model="alpha" id="alpha">
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="length">Compression Factor:</label>
+                                    <input type="number" class="form-control" v-model="length" id="length">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <a class="card-link" data-toggle="collapse" href="#collapse22">Turtle Command Reference</a>
+                        </div>
+                        <div id="collapse22" class="collapse hidden">
+                            <div class="card-body">
+                                <table class="table" style='text-align:left'>
+                                    <thead>
+                                        <tr>
+                                            <th>Symbol</th>
+                                            <th>Turtle Command</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style='font-family:monospace;'>f,F,G</td>
+                                            <td>Go one step forward and draw a line</td>
+                                        </tr>
+                                        <tr>
+                                            <td style='font-family:monospace;'>+</td>
+                                            <td>Turn right by &alpha;&deg;</td>
+                                        </tr>
+                                        <tr>
+                                            <td style='font-family:monospace;'>-</td>
+                                            <td>Turn left by &alpha;&deg;</td>
+                                        </tr>
+                                        <tr>
+                                            <td style='font-family:monospace;'>[</td>
+                                            <td>Push current position and orientation to the stack</td>
+                                        </tr>
+                                        <tr>
+                                            <td style='font-family:monospace;'>]</td>
+                                            <td>Pop position and orientation from the stack</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="card">
-                <div class="card-header">
-                    <a class="card-link" data-toggle="collapse" href="#collapse2">Turtle Graphic Settings</a>
+                <div v-html="log"> </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" id="generateButton" v-on:click="generate">Generate</button>
                 </div>
-                <div id="collapse2" class="collapse hidden">
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label class="control-label" for="iterations">Iterations:</label>
-                            <input type="number" class="form-control" v-model="n" id="iterations">
-                        </div>
 
-                        <div class="form-group">
-                            <label class="control-label" for="alpha">Alpha (&alpha;):</label>
-                            <input type="number" class="form-control" v-model="alpha" id="alpha">
-                        </div>
-
-                    </div>
+                <div class="form-group">
+                    Output:
+                    <textarea readonly  class="form-control" rows="5" id="output">{{ out }}</textarea>
                 </div>
             </div>
-            <div class="card">
-                <div class="card-header">
-                    <a class="card-link" data-toggle="collapse" href="#collapse22">Turtle Command Reference</a>
-                </div>
-                <div id="collapse22" class="collapse hidden">
-                    <div class="card-body">
-                        <table class="table" style='text-align:left'>
-                            <thead>
-                                <tr>
-                                    <th>Symbol</th>
-                                    <th>Turtle Command</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>f,F,G</td>
-                                    <td>Go one step forward and draw a line</td>
-                                </tr>
-                                <tr>
-                                    <td>+</td>
-                                    <td>Turn right by &alpha;&deg;</td>
-                                </tr>
-                                <tr>
-                                    <td>-</td>
-                                    <td>Turn left by &alpha;&deg;</td>
-                                </tr>
-                                <tr>
-                                    <td>[</td>
-                                    <td>Push current position and orientation to the stack</td>
-                                </tr>
-                                <tr>
-                                    <td>]</td>
-                                    <td>Pop position and orientation from the stack</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <a class="card-link" data-toggle="collapse" href="#collapse3">Canvas Debugging</a>
-                </div>
-                <div id="collapse3" class="collapse hidden">
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label class="control-label" for="alphaOffset">Alpha Offset:</label>
-                            <input type="number" class="form-control" v-model="alphaOffset" id="alphaOffset">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="control-label" for="xOffset">X Offset:</label>
-                            <input type="number" class="form-control" v-model="xOffset" id="xOffset">
-                        </div>
-
-
-                        <div class="form-group">
-                            <label class="control-label" for="yOffset">Y Offset:</label>
-                            <input type="number" class="form-control" v-model="yOffset" id="yOffset">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="control-label" for="length">Length:</label>
-                            <input type="number" class="form-control" v-model="length" id="length">
-                        </div>
-                    </div>
-                </div>
+            <div class='col-*-*' style='padding:10px;'>
+                <canvas id='screen' width='400' height='400'></canvas>
             </div>
         </div>
-        <div v-html="log"> </div>
-        <div class="form-group">
-            <button type="button" class="btn btn-primary" id="generateButton" v-on:click="generate">Generate</button>
-        </div>
-
-        <div class="form-group">
-            Output:
-            <textarea class="form-control" rows="5" id="output">{{ out }}</textarea>
-        </div>
-
-        <canvas style='border: solid black 1px;' id='screen' width='300' height='300'></canvas>
     </div>
 
 
@@ -199,19 +177,15 @@
         var app = new Vue({
             el: '#lSystemsApp',
             data: {
-                V: "FG",
-                P: "F=F-G\nG=G+F",
-                E: "-+",
-                A: "FG",
-                n: 2,
-                length: 1,
-                alpha: 60.0,
-                alphaOffset: 0.0,
-                xOffset: 0.0,
-                yOffset: 0.0,
+                V: "FA",
+                P: "A=AAffff--f--fff++ff--f--fff+AA-",
+                E: "-+f",
+                A: "FA",
+                n: 4,
+                length: 2,
+                alpha: 45.0,
                 out: "",
                 log: "",
-                turtle: null,
                 ctx: null
             },
             methods: {
@@ -229,7 +203,7 @@
                     this.V = "F";
                     this.P = "F=F-F++F-F";
                     this.E = "+-";
-                    this.A = "F++F++F++F";
+                    this.A = "F++F++F";
                     this.alpha = 60.0;
                     this.length = 3;
                     this.out = "";
@@ -237,10 +211,11 @@
                 },
                 setDragonCurveTemplate: function () {
                     this.V = "FG";
-                    this.P = "F=F+Gf+\nF=-fF-G";
+                    this.P = "F=F+Gf+\nG=-fF-G";
                     this.E = "+-f";
                     this.A = "fF";
                     this.alpha = 90.0;
+                    this.length = 1.5;
                     this.out = "";
                     this.log = "";
                 },
@@ -250,6 +225,7 @@
                     this.E = "+-f";
                     this.A = "A";
                     this.alpha = 90.0;
+                    this.length = 2;
                     this.out = "";
                     this.log = "";
                 },
@@ -259,6 +235,7 @@
                     this.E = "+-";
                     this.A = "F";
                     this.alpha = 60.0;
+                    this.length = 2;
                     this.out = "";
                     this.log = "";
                 },
@@ -277,6 +254,7 @@
 
                     var l = new LSystem();
                     var output = "";
+                    this.log = "";
                     try {
                         l.V = this.V;
                         l.E = this.E;
@@ -289,13 +267,11 @@
                         this.log = "<div class='alert alert-danger'>[LSystem]: " + error + "</div>";
                     }
 
-
                     // Draw it.
                     try {
-                        this.turtle = new Turtle(this.ctx, this.alpha, this.n, this.length);
-                        this.turtle.clear();
-
-                        this.turtle.computeWord(l.out);
+                        var t =  new Turtle(this.ctx, this.alpha, this.n, this.length);
+                        t.clear();
+                        t.computeWord(l.out);
                     } catch (error) {
                         this.log = "<div class='alert alert-danger'>[Turtle]: " + error + "</div>";
                     }
@@ -307,14 +283,18 @@
 
         if (canvas && canvas.getContext) {
             app.ctx = canvas.getContext('2d');
+            app.generate();
         }
         else {
             console.log("Canvas error.");
         }
 
+
+
     </script>
     <div class='footer'>
-        &copy; 2018 Raphael Pour <a href='http://www.gnu.de/documents/lgpl.de.html'>LGPL</a> | Icon by
+        &copy; 2018 Raphael Pour
+        <a href='http://www.gnu.de/documents/lgpl.de.html'>LGPL</a> | Icon by
         <a href='https://icons8.com'>Icons8</a>
     </div>
 </body>

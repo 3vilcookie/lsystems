@@ -16,11 +16,11 @@ class Turtle {
         this.xOffset = 0;
         this.yOffset = 0;
         this.coordinateStack = [];
+
         if (context == null)
-            throw new Error("Invalid Context: null");
+            throw "Invalid Context: null";
 
         this.context = context;
-
     }
 
 
@@ -32,39 +32,23 @@ class Turtle {
         this._alpha = value * Math.PI / 180.0;
     }
 
-    set angleOffset(value){
-        this.angle = value *Math.PI/180.0;
+    set angleOffset(value) {
+        this.angle = value * Math.PI / 180.0;
     }
 
     log() {
         console.log("[Turtle] x:" + this.x + " y:" + this.y + " angle:" + this.alpha + " length:" + this.length);
     }
 
-    setOrigin(x, y) {
-        this.context.translate(x, y);
-    }
-
-    scale(x, y) {
-        this.context.scale(x, y);
-    }
-
-    rotate(angle) {
-        this.context.rotate(angle);
-    }
-
-    transform(x, y, sx, sy) {
-        this.context.transform(sx, 0, sy, 0, x, y);
-    }
 
     forward(length = this.length) {
         var lastX = this.x;
         var lastY = this.y;
 
-        var w = this.context.canvas.width / Math.pow(this.length,this.n);
-        var h = this.context.canvas.height / Math.pow(this.length,this.n);
+        var w = this.context.canvas.width / Math.pow(this.length, this.n);
+        var h = this.context.canvas.height / Math.pow(this.length, this.n);
         this.x += w * Math.sin(this.angle);
         this.y += h * Math.cos(this.angle);
-
 
         this.context.beginPath();
         this.context.moveTo(lastX, lastY);
@@ -89,22 +73,17 @@ class Turtle {
         // Clear everything on the canvas
         this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
 
-        // Move the coordinate system to left-bottom-corner
-        this.context.translate(this.context.canvas.width/1.5, this.context.canvas.height/2);
-
-        this.context.rotate(-90* Math.PI / 180.0);
+        // Move the coordinate system to the center
+        this.context.translate(this.context.canvas.width / 2, this.context.canvas.height / 2);
 
         // Scale it to the current factor
         this.context.scale(.5, -.5);
-
     }
 
     computeWord(word) {
-
         var i;
         for (i = 0; i < word.length; i++)
             this.consume(word[i]);
-
     }
     consume(symbol) {
         switch (symbol) {
