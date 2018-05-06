@@ -1,6 +1,13 @@
 <!doctype html>
 <html lang="en">
 
+<!--
+    @file:      index.html
+    @brief:     L-System Frontend
+    @author:    Raphael Pour <turtle@raphaelpour.de>
+    @license:   (C) 2018 Raphael Pour LGPL
+-->
+
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -59,7 +66,7 @@
                 <div class="card-header">
                     <a class="card-link" data-toggle="collapse" href="#collapse1">L-System Language</a>
                 </div>
-                <div id="collapse1" class="collapse show">
+                <div id="collapse1" class="collapse hidden">
                     <div class="card-body">
                         <div class="form-group">
                             <label class="control-label" for="variables">Variables (V):</label>
@@ -214,6 +221,7 @@
                     this.E = "+-";
                     this.A = "F";
                     this.alpha = 60.0;
+                    this.length = 3;
                     this.out = "";
                     this.log = "";
                 },
@@ -223,6 +231,7 @@
                     this.E = "+-";
                     this.A = "F++F++F++F";
                     this.alpha = 60.0;
+                    this.length = 3;
                     this.out = "";
                     this.log = "";
                 },
@@ -259,6 +268,7 @@
                     this.E = "+-[]";
                     this.A = "G";
                     this.alpha = 25.0;
+                    this.length = 2.25;
                     this.out = "";
                     this.log = "";
                 },
@@ -272,6 +282,7 @@
                         l.E = this.E;
                         l.Axiom = this.A;
                         l.P = this.P;
+                        l.n = this.n;
                         l.generate()
                         this.out = l.out;
                     } catch (error) {
@@ -281,11 +292,9 @@
 
                     // Draw it.
                     try {
-                        this.turtle = new Turtle(this.ctx, this.alpha, 1);
+                        this.turtle = new Turtle(this.ctx, this.alpha, this.n, this.length);
                         this.turtle.clear();
-                        this.turtle.xOffset = this.xOffset;
-                        this.turtle.yOffset = this.yOffset;
-                        this.turtle.alphaOffset = this.alphaOffset;
+
                         this.turtle.computeWord(l.out);
                     } catch (error) {
                         this.log = "<div class='alert alert-danger'>[Turtle]: " + error + "</div>";
@@ -303,10 +312,9 @@
             console.log("Canvas error.");
         }
 
-
     </script>
     <div class='footer'>
-        &copy; 2018 Raphael Pour LGPL | Icon by
+        &copy; 2018 Raphael Pour <a href='http://www.gnu.de/documents/lgpl.de.html'>LGPL</a> | Icon by
         <a href='https://icons8.com'>Icons8</a>
     </div>
 </body>
