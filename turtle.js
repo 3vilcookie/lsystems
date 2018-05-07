@@ -81,6 +81,10 @@ class Turtle {
     }
 
     computeWord(word) {
+
+        if(typeof word == 'undefined')
+            throw "Word is empty. Check if the L-System is correct."
+
         var i;
         for (i = 0; i < word.length; i++)
             this.consume(word[i]);

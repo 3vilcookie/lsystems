@@ -14,20 +14,23 @@ class LSystem {
     }
 
     isTerminalsymbol(value) {
-        if (this._E)
+        if(typeof this._E != 'undefined')
             return this._E.indexOf(value) != -1;
         else
             return false;
     }
 
     isVariable(value) {
-        if (this._V)
+        if(typeof this._V != 'undefined')
             return this._V.indexOf(value) != -1;
         else
             return false;
     }
 
     set P(value) {
+
+        if(typeof value == 'undefined')
+            throw "Please add at least one rule. For example F=F-F or G=F+G";
 
         var rules = value.split("\n");
 
@@ -82,6 +85,12 @@ class LSystem {
 
     set E(value) {
 
+        if(typeof value == 'undefined')
+        {
+            this._E = []
+            return;
+        }
+
         if (this._V) {
             var i;
             for (i = 0; i < value.length; i++)
@@ -97,6 +106,10 @@ class LSystem {
     }
 
     set V(value) {
+
+        if(typeof value == 'undefined')
+            throw "Please add at least one Variable. For example F or FG or XYZ";
+
 
         if (this._E) {
             var i;
@@ -116,6 +129,10 @@ class LSystem {
     }
 
     set Axiom(value) {
+
+        if(typeof value == 'undefined')
+            throw "Please add an Axiom (Start value). For example FG";
+
         var i;
         for (i = 0; i < value.length; i++)
             if (!this.isVariable(value[i]) && !this.isTerminalsymbol(value[i]))
@@ -146,6 +163,7 @@ class LSystem {
 
         if (!this._P || this._P.length == 0)
             throw "Please add at least one rule. For example F=F-F or G=F+G";
+
 
         // Every iteration is a new generation
         for (k = 0; k < this.n; k++) {
