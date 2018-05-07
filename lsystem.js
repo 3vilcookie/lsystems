@@ -173,7 +173,6 @@ class LSystem {
             }
             input = output;
         }
-        console.log(output);
         this.out = output;
     }
 }

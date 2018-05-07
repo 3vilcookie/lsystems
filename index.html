@@ -12,7 +12,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" type="image/png" href="icons8-navigate-96.png">
+    <link rel="shortcut icon" type="image/png" href="logo.png">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
@@ -43,10 +43,10 @@
 
 <body class="text-center">
 
-    <div class='jumbotron' style='padding:2px'>
+    <div class='jumbotron' style='padding:10px'>
         <h1>
-            <img src='icons8-navigate-96.png' style='vertical-align:center;margin-right:40px'>L-Systems</h1>
-        <p>~Fractals powerd by formal languages~</p>
+            <img src='logo.png' style='vertical-align:center;margin-right:40px'>L-Systems</h1>
+        <p><em>~Fractals powered by formal languages~</em></p>
     </div>
 
     <div class='container' id='lSystemsApp'>
@@ -100,16 +100,16 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     <label class="control-label" for="iterations">Iterations:</label>
-                                    <input type="number" class="form-control" v-model="n" id="iterations">
+                                    <input type="text" class="form-control" v-model="n" id="iterations">
                                 </div>
 
                                 <div class="form-group">
                                     <label class="control-label" for="alpha">Alpha (&alpha;):</label>
-                                    <input type="number" class="form-control" v-model="alpha" id="alpha">
+                                    <input type="text" class="form-control" v-model="alpha" id="alpha">
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label" for="length">Compression Factor:</label>
-                                    <input type="number" class="form-control" v-model="length" id="length">
+                                    <input type="text" class="form-control" v-model="length" id="length">
                                 </div>
                             </div>
                         </div>
@@ -293,9 +293,8 @@
 
     </script>
     <div class='footer'>
-        &copy; 2018 Raphael Pour
-        <a href='http://www.gnu.de/documents/lgpl.de.html'>LGPL</a> | Icon by
-        <a href='https://icons8.com'>Icons8</a>
+        &copy; 2018 Raphael Pour | Licensed under 
+        <a href='http://www.gnu.de/documents/lgpl.de.html'>LGPL</a>
     </div>
 </body>
 
