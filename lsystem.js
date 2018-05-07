@@ -14,14 +14,14 @@ class LSystem {
     }
 
     isTerminalsymbol(value) {
-        if(typeof this._E != 'undefined')
+        if(typeof this._E != 'undefined'  || value == "")
             return this._E.indexOf(value) != -1;
         else
             return false;
     }
 
     isVariable(value) {
-        if(typeof this._V != 'undefined')
+        if(typeof this._V != 'undefined'  || value == "")
             return this._V.indexOf(value) != -1;
         else
             return false;
@@ -29,7 +29,7 @@ class LSystem {
 
     set P(value) {
 
-        if(typeof value == 'undefined')
+        if(typeof value == 'undefined'  || value == "")
             throw "Please add at least one rule. For example F=F-F or G=F+G";
 
         var rules = value.split("\n");
@@ -74,6 +74,10 @@ class LSystem {
     }
 
     get P() {
+
+        if(typeof this._P == 'undefined')
+            return "";
+
         var out = "";
 
         var i;
@@ -85,13 +89,13 @@ class LSystem {
 
     set E(value) {
 
-        if(typeof value == 'undefined')
+        if(typeof value == 'undefined'  || value == "")
         {
             this._E = []
             return;
         }
 
-        if (this._V) {
+        if (typeof this._V != 'undefined') {
             var i;
             for (i = 0; i < value.length; i++)
                 if (this.isVariable(value[i]))
@@ -102,16 +106,19 @@ class LSystem {
     }
 
     get E() {
-        return this._E;
+        if(typeof this._E != 'undefined')
+            return this._E.join('');
+        else
+            return "";
     }
 
     set V(value) {
 
-        if(typeof value == 'undefined')
+        if(typeof value == 'undefined' || value == "")
             throw "Please add at least one Variable. For example F or FG or XYZ";
 
 
-        if (this._E) {
+        if (typeof this._E != 'undefined') {
             var i;
             for (i = 0; i < value.length; i++)
                 if (this.isTerminalsymbol(value[i]))
@@ -122,7 +129,7 @@ class LSystem {
     }
 
     get V() {
-        if (this._V)
+        if (typeof this._V != 'undefined')
             return this._V.join('');
         else
             return "";
@@ -130,7 +137,7 @@ class LSystem {
 
     set Axiom(value) {
 
-        if(typeof value == 'undefined')
+        if(typeof value == 'undefined'  || value == "")
             throw "Please add an Axiom (Start value). For example FG";
 
         var i;
@@ -142,7 +149,10 @@ class LSystem {
     }
 
     get Axiom() {
-        return this._Axiom;
+        if(typeof this._Axiom != 'undefined')
+            return this._Axiom;
+        else
+            return "";
     }
 
     generate() {
@@ -155,13 +165,13 @@ class LSystem {
         var output;
 
         // Check if values are set 
-        if (!this._V || this._V.length == 0)
+        if (typeof this._V == 'undefined' || this._V.length == 0)
             throw "Please add at least one Variable. For example F or FG or XYZ";
 
-        if (!this._Axiom || this._Axiom.length == 0)
+        if (typeof this._Axiom == 'undefined' || this._Axiom.length == 0)
             throw "Please add an Axiom (Start value). For example FG";
 
-        if (!this._P || this._P.length == 0)
+        if (typeof this._P == 'undefined' || this._P.length == 0)
             throw "Please add at least one rule. For example F=F-F or G=F+G";
 
 

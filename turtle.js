@@ -82,7 +82,7 @@ class Turtle {
 
     computeWord(word) {
 
-        if(typeof word == 'undefined')
+        if(typeof word == 'undefined'  || word == "")
             throw "Word is empty. Check if the L-System is correct."
 
         var i;

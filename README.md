@@ -1,10 +1,8 @@
 # L-Systems
 
-Web Service to create, use and draw L-System Languages.
+Web Service to create, use and draw L-System Languages with Turtle Graphics.
 
 ## License
 
 (C) 2018 Raphael Pour
 LGPL
-
-Icon by http://icons8.com
