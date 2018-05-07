@@ -46,7 +46,7 @@
     <div class='jumbotron' style='padding:10px'>
         <h1>
             <img src='logo.png' style='vertical-align:center;margin-right:40px'>L-Systems</h1>
-        <p><em>~Fractals powered by formal languages~</em></p>
+        <p><em>~Fractals, powered by formal languages~</em></p>
     </div>
 
     <div class='container' id='lSystemsApp'>
@@ -89,6 +89,9 @@
                                     <label class="control-label" for="rules">Rules (P):</label>
                                     <textarea class="form-control" rows="3" v-model="P" id="rules"></textarea>
                                 </div>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-danger" id="clearButton" v-on:click="clear">Clear</button>
                             </div>
                         </div>
                     </div>
@@ -189,6 +192,14 @@
                 ctx: null
             },
             methods: {
+
+                clear : function(){
+                    this.V = "";
+                    this.P = "";
+                    this.E = "";
+                    this.A = "";
+                },
+
                 setKochTemplate: function () {
                     this.V = "F";
                     this.P = "F=F-F++F-F";
@@ -293,8 +304,8 @@
 
     </script>
     <div class='footer'>
-        &copy; 2018 Raphael Pour | Licensed under 
-        <a href='http://www.gnu.de/documents/lgpl.de.html'>LGPL</a>
+        &copy; 2018 <a href='https://raphaelpour.de'>Raphael Pour</a> | Licensed under 
+        <a href='http://www.gnu.de/documents/lgpl.de.html'>LGPL</a> | <a href='https://raphaelpour.de/impressum/'>Impressum</a>
     </div>
 </body>
 
