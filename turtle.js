@@ -6,6 +6,11 @@
  */
 
 class Turtle {
+
+    /*
+     * Command Drawing System using an input string and a char interpreter to draw
+     * on a HTML5 Canvas  
+     */
     constructor(context, alpha = 60.0, n = 1, length = 1.0) {
         this.alpha = alpha;
         this.length = length;
@@ -15,7 +20,9 @@ class Turtle {
         this.n = n;
         this.xOffset = 0;
         this.yOffset = 0;
+        this.bypassDrawing = false;
         this.coordinateStack = [];
+        this.bounds = { "x": { "min": Infinity, "max": -Infinity }, "y": { "min": Infinity, "max": -Infinity } };
 
         if (context == null)
             throw "Invalid Context: null";
@@ -41,6 +48,7 @@ class Turtle {
     }
 
 
+
     forward(length = this.length) {
         var lastX = this.x;
         var lastY = this.y;
@@ -50,10 +58,23 @@ class Turtle {
         this.x += w * Math.sin(this.angle);
         this.y += h * Math.cos(this.angle);
 
-        this.context.beginPath();
-        this.context.moveTo(lastX, lastY);
-        this.context.lineTo(this.x, this.y);
-        this.context.stroke();
+        if (this.bypassDrawing) {
+            // Bypass Rendering and calculate min/max coordinates
+            if (this.x > this.bounds.x.max)
+                this.bounds.x.max = this.x
+            else if (this.x < this.bounds.x.min)
+                this.bounds.x.min = this.x
+            if (this.y > this.bounds.y.max)
+                this.bounds.y.max = this.y
+            else if (this.y < this.bounds.y.min)
+                this.bounds.y.min = this.y
+        }
+        else {
+            this.context.beginPath();
+            this.context.moveTo(lastX, lastY);
+            this.context.lineTo(this.x, this.y);
+            this.context.stroke();
+        }
 
     }
 
@@ -82,12 +103,31 @@ class Turtle {
 
     computeWord(word) {
 
-        if(typeof word == 'undefined'  || word == "")
+        if (typeof word == 'undefined' || word == "")
             throw "Word is empty. Check if the L-System is correct."
 
+
+        // Bypass drawing and calculate bounds
+        this.bypassDrawing = true;
         var i;
-        for (i = 0; i < word.length; i++)
+        for (i = 0; i < word.length; i++) {
             this.consume(word[i]);
+        }
+
+        console.log(this.bounds);
+
+        // Second Pass whith
+        this.bypassDrawing = false;
+        for (i = 0; i < word.length; i++) {
+            this.consume(word[i]);
+        }
+        /*
+        var width = this.bounds.x.max - this.bounds.x.min;
+        var height = this.bounds.y.max - this.bounds.y.min;
+
+        for (i = 0; i < word.length; i++) 
+            this.consume(word[i]);
+            */
     }
     consume(symbol) {
         switch (symbol) {
@@ -103,15 +143,15 @@ class Turtle {
                 this.right();
                 break;
             case "[":
-                this.coordinateStack.push([this.x, this.y, this.angle]);
+                this.coordinateStack.push({ "x": this.x, "y": this.y, "angle": this.angle });
                 break;
             case "]":
                 if (this.coordinateStack.length == 0)
                     throw "[Turtle] Nothing coordinate on the stack. '[' missing?";
                 var pos = this.coordinateStack.pop();
-                this.x = pos[0];
-                this.y = pos[1];
-                this.angle = pos[2];
+                this.x = pos.x;
+                this.y = pos.y;
+                this.angle = pos.angle;
                 break;
             default:
                 break;
