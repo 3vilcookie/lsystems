@@ -45,7 +45,7 @@
 
     <div class='jumbotron' style='padding:10px'>
         <h1>
-            <img src='logo.png' style='vertical-align:center;margin-right:40px'>L-Systems</h1>
+            <a href='index.html'><img src='logo.png' style='vertical-align:center;margin-right:40px'></a>L-Systems</h1>
         <p><em>~Fractals, powered by formal languages~</em></p>
     </div>
 
@@ -54,12 +54,20 @@
         <div class='row'>
             <div class='col-*-*'>
                 <div class="form-group">
-                    <button type="button" class="btn btn-primary" id="kochTemplateButton" v-on:click="setKochTemplate">Koch Curve</button>
-                    <button type="button" class="btn btn-primary" id="kochSnowflakeTemplateButton" v-on:click="setKochSnowflakeTemplate">Koch Snowflake</button>
-                    <button type="button" class="btn btn-primary" id="hilbertTemplateButton" v-on:click="setHilbertTemplate">Hilbert Curve</button>
-                    <button type="button" class="btn btn-primary" id="sierpinskiTriangleTemplateButton" v-on:click="setSierpinskiTriangleTemplate">Sierpinski Triangle</button>
-                    <button type="button" class="btn btn-primary" id="dragonCurveTemplateButton" v-on:click="setDragonCurveTemplate">Dragon Curve</button>
+                    <button type="button" class="btn btn-warning" id="debugCanvasTemplateButton" v-on:click="setDebugCanvasTemplate">Canvas
+                        Debug</button>
+                    <button type="button" class="btn btn-primary" id="kochTemplateButton" v-on:click="setKochTemplate">Koch
+                        Curve</button>
+                    <button type="button" class="btn btn-primary" id="kochSnowflakeTemplateButton" v-on:click="setKochSnowflakeTemplate">Koch
+                        Snowflake</button>
+                    <button type="button" class="btn btn-primary" id="hilbertTemplateButton" v-on:click="setHilbertTemplate">Hilbert
+                        Curve</button>
+                    <button type="button" class="btn btn-primary" id="sierpinskiTriangleTemplateButton" v-on:click="setSierpinskiTriangleTemplate">Sierpinski
+                        Triangle</button>
+                    <button type="button" class="btn btn-primary" id="dragonCurveTemplateButton" v-on:click="setDragonCurveTemplate">Dragon
+                        Curve</button>
                     <button type="button" class="btn btn-primary" id="plantTemplateButton" v-on:click="setPlantTemplate">Plant</button>
+                    <button type="button" class="btn btn-primary" id="lstarTemplateButton" v-on:click="setLStarTemplate">LStar</button>
                 </div>
 
                 <!--class='form-inline'-->
@@ -110,10 +118,6 @@
                                     <label class="control-label" for="alpha">Alpha (&alpha;):</label>
                                     <input type="text" class="form-control" v-model="alpha" id="alpha">
                                 </div>
-                                <div class="form-group">
-                                    <label class="control-label" for="length">Compression Factor:</label>
-                                    <input type="text" class="form-control" v-model="length" id="length">
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -156,6 +160,30 @@
                             </div>
                         </div>
                     </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <a class="card-link" data-toggle="collapse" href="#collapse4">Debugging</a>
+                        </div>
+                        <div id="collapse4" class="collapse hidden">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label class="control-label" for="xoffsetId">X-Offset:</label>
+                                    <input type="range" min="-100" max="100" value="0" step="0.01" class="form-control"
+                                        v-model="xoffsetUI" v-on:change="generate" id="xoffsetId">{{ xoffsetUI}}
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="yoffsetId">Y-Offset:</label>
+                                    <input type="range" min="-100" max="100" value="0" step="0.01" class="form-control"
+                                        v-model="yoffsetUI" v-on:change="generate" id="yoffsetId">{{ yoffsetUI}}
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="zoomId">Zoom:</label>
+                                    <input type="range" min="-10" max="10" value="1" step="1" class="form-control"
+                                        v-model="zoomUI" v-on:change="generate" id="zoomId">{{ zoomUI}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div v-html="log"> </div>
                 <div class="form-group">
@@ -164,11 +192,14 @@
 
                 <div class="form-group">
                     Output:
-                    <textarea readonly  class="form-control" rows="5" id="output">{{ out }}</textarea>
+                    <textarea readonly class="form-control" rows="5" id="output">{{ out }}</textarea>
                 </div>
             </div>
             <div class='col-*-*' style='padding:10px;'>
-                <canvas id='screen' style='border:1px solid black' width='400' height='400'></canvas>
+                <canvas id='screenPostProcessing' style="border: 2px solid black" width='512' height='512'></canvas>
+            </div>
+            <div class='col-*-*' style='padding:10px;'>
+                <canvas id='screen' style='border:2px solid black' width='512' height='512'></canvas>
             </div>
         </div>
     </div>
@@ -178,34 +209,62 @@
 
         var app = new Vue({
             el: '#lSystemsApp',
+
             data: {
-                V: "FA",
-                P: "A=AAffff--f--fff++ff--f--fff+AA-",
-                E: "-+f",
-                A: "FA",
+                V: "",
+                P: "",
+                E: "",
+                A: "",
                 n: 4,
-                length: 2,
                 alpha: 45.0,
                 out: "",
                 log: "",
-                ctx: null
+                xoffsetUI: 0,
+                yoffsetUI: 0,
+                zoomUI: 0,
+                ctx: null,
+                preProcesssingCtx: null
+            },
+            created: function () {
+                //this.setLStarTemplate(); // --> Default
+                this.setDebugCanvasTemplate();
             },
             methods: {
 
-                clear : function(){
+                clear: function () {
                     this.V = "";
                     this.P = "";
                     this.E = "";
                     this.A = "";
                 },
 
+                setDebugCanvasTemplate: function () {
+                    this.V = "F";
+                    this.P = "F=F+F";
+                    this.E = "+-";
+                    this.A = "F";
+                    this.alpha = 1.0;
+                    this.n = 12;
+                    this.out = "";
+                    this.log = "";
+                },
+                setLStarTemplate: function () {
+                    this.V = "AF";
+                    this.P = "A=AAffff--f--fff++ff--f--fff+AA-";
+                    this.E = "+-f";
+                    this.A = "FA";
+                    this.alpha = 45.0;
+                    this.n = 3;
+                    this.out = "";
+                    this.log = "";
+                },
                 setKochTemplate: function () {
                     this.V = "F";
                     this.P = "F=F-F++F-F";
                     this.E = "+-";
                     this.A = "F";
                     this.alpha = 60.0;
-                    this.length = 3;
+                    this.n = 3;
                     this.out = "";
                     this.log = "";
                 },
@@ -215,7 +274,7 @@
                     this.E = "+-";
                     this.A = "F++F++F";
                     this.alpha = 60.0;
-                    this.length = 3;
+                    this.n = 3;
                     this.out = "";
                     this.log = "";
                 },
@@ -225,7 +284,7 @@
                     this.E = "+-f";
                     this.A = "fF";
                     this.alpha = 90.0;
-                    this.length = 1.5;
+                    this.n = 3;
                     this.out = "";
                     this.log = "";
                 },
@@ -235,7 +294,7 @@
                     this.E = "+-f";
                     this.A = "A";
                     this.alpha = 90.0;
-                    this.length = 2;
+                    this.n = 3;
                     this.out = "";
                     this.log = "";
                 },
@@ -245,7 +304,7 @@
                     this.E = "+-";
                     this.A = "F";
                     this.alpha = 60.0;
-                    this.length = 2;
+                    this.n = 3;
                     this.out = "";
                     this.log = "";
                 },
@@ -255,7 +314,7 @@
                     this.E = "+-[]";
                     this.A = "G";
                     this.alpha = 25.0;
-                    this.length = 2.25;
+                    this.n = 3;
                     this.out = "";
                     this.log = "";
                 },
@@ -279,22 +338,42 @@
                     }
 
                     // Draw it.
-                    try {
-                        var t =  new Turtle(this.ctx, this.alpha, this.n, this.length);
+                    //try {
+                        var t = new Turtle(this.ctx.canvas.width, this.ctx.canvas.height, this.alpha, this.n);
+                        t.angleOffset = 90.0;
+                        t.xOffsetUI = this.xoffsetUI;
+                        t.yOffsetUI = this.yoffsetUI;
+                        t.zoomUI = this.zoomUI;
                         t.clear();
                         t.computeWord(l.out);
-                    } catch (error) {
-                        this.log = "<div class='alert alert-danger'>[Turtle]: " + error +  "</div>";
-                    }
+
+                        this.ctx.drawImage(t.finalCanvas,0,0);
+                       this.preProcesssingCtx.drawImage(t.preProcessingCanvas,0,0);
+
+                    /*} catch (error) {
+                        this.log = "<div class='alert alert-danger'>[Turtle]: " + error + "</div>";
+                    }*/
+
                 }
             }
         });
 
         var canvas = document.getElementById("screen");
 
+        var preProcessingCanvas = document.getElementById("screenPostProcessing");
+
         if (canvas && canvas.getContext) {
             app.ctx = canvas.getContext('2d');
-            app.generate();
+
+            if (preProcessingCanvas && preProcessingCanvas.getContext) {
+                app.preProcesssingCtx = preProcessingCanvas.getContext('2d');
+
+                // Create First Fractal on pageload
+                app.generate();
+
+            }
+            else
+                console.log("Pre-Processing Canvas Error");
         }
         else {
             console.log("Canvas error.");
@@ -304,8 +383,9 @@
 
     </script>
     <div class='footer'>
-        &copy; 2018 <a href='https://raphaelpour.de'>Raphael Pour</a> | <a href='https://bitbucket.org/evilc00kie/l-systems'>Source Code</a> licensed under 
-        <a href='http://www.gnu.de/documents/lgpl.de.html'>LGPL</a> | <a href='https://raphaelpour.de/impressum/'>Impressum</a>
+        &copy; 2018 <a href='https://raphaelpour.de'>Raphael Pour</a> | <a href='https://bitbucket.org/evilc00kie/l-systems'>Source
+            Code</a> licensed under
+        <a href='http://www.gnu.de/documents/gpl.de.html'>GPL</a> | <a href='https://raphaelpour.de/impressum/'>Impressum</a>
     </div>
 </body>
 
