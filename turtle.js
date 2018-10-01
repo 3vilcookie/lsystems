@@ -5,104 +5,13 @@
  * @license:    (C) 2018 Raphael Pour GPL
  */
 
-class Bounds {
-
-    constructor() {
-        this.xMin = Infinity;
-        this.xMax = -Infinity;
-        this.yMin = Infinity;
-        this.yMax = -Infinity;
-
-        this.decimals = 3;
-    }
-
-    get xMin() {
-        return this._xmin;
-    }
-
-    set xMin(value) {
-        this._xmin = value;
-    }
-
-    get xMax() {
-        return this._xmax;
-    }
-
-    set xMax(value) {
-        this._xmax = value;
-    }
-    get yMin() {
-        return this._ymin;
-    }
-
-    set yMin(value) {
-        this._ymin = value;
-    }
-
-    get yMax() {
-        return this._ymax;
-    }
-
-    set yMax(value) {
-        this._ymax = value;
-    }
-
-    process(x, y) {
-        this.processX(x);
-        this.processY(y);
-    }
-
-    processX(value) {
-        if (value > this.xMax)
-            this.xMax = this.round(value);
-        if (value < this.xMin)
-            this.xMin = this.round(value);
-    }
-
-    processY(value) {
-        if (value > this.yMax)
-            this.yMax = this.round(value);
-        if (value < this.yMin)
-            this.yMin = this.round(value);
-    }
-
-    get xAverage() {
-        return this.round((this.xMax + this.xMin) / 2.0);
-    }
-
-    get yAverage() {
-        return this.round((this.yMax + this.yMin) / 2.0);
-    }
-
-    get xLength() {
-        return Math.abs(this.xMax) - Math.abs(this.xMin);
-    }
-
-    get yLength() {
-        return Math.abs(this.yMax) - Math.abs(this.yMin);
-    }
-
-    round(value)
-    {
-        var factor = Math.pow(10,this.decimals);
-        return Math.round(value*factor)/factor;
-    }
-
-    toString() {
-        return "X: " + this.xMin + "/" + this.xMax + "\n" + 
-            "Y: " + this.yMin + "/" + this.yMax +"\n" + 
-            "LEN: " + this.xLength + "/" + this.yLength +"\n" + 
-            "AVG: " + this.xAverage + "/" + this.yAverage;
-    }
-}
-
 class Turtle {
 
     /*
      * Command Drawing System using an input string and a char interpreter to draw
      * on a HTML5 Canvas  
      */
-    constructor(width, height, alpha = 60.0, iterationCount = 1, length = 10.0) {
+    constructor(width, height, alpha = 60.0, iterationCount = 1, length = 100.0) {
         this.alpha = alpha;
         this.length = length;
         this.width = width;
@@ -117,7 +26,7 @@ class Turtle {
         this.yOffsetUI = 0;
         this.preProcessingStage = false;
         this.coordinateStack = [];
-        this.debugColorValue = 0.0;
+
 
         this.bounds = new Bounds();
 
@@ -130,7 +39,7 @@ class Turtle {
 
         if (this.preProcessingCanvas && this.preProcessingCanvas.getContext) {
             this.preProcessingContext = this.preProcessingCanvas.getContext('2d');
-            this.preProcessingContext.fillStyle = "rgb(0, 70, 215)";
+            this.preProcessingContext.fillStyle = "rgb(255, 255, 255)";
             this.preProcessingContext.strokeStyle = "black";
         }
         else
@@ -145,8 +54,9 @@ class Turtle {
 
         if (this.finalCanvas && this.finalCanvas.getContext) {
             this.finalContext = this.finalCanvas.getContext('2d');
-            this.finalContext.fillStyle = "rgb(190, 20, 10)";
+            this.finalContext.fillStyle = "rgb(255, 255, 255)";
             this.finalContext.strokeStyle = "black";
+            this.finalContext.lineWidth = 5;
 
         }
         else
@@ -195,31 +105,35 @@ class Turtle {
     }
 
     get alpha() {
-        return this._alpha * 180.0 / Math.PI;
+        return this._alpha;
     }
 
     set alpha(value) {
-        this._alpha = value * Math.PI / 180.0;
+        this._alpha = value;
     }
 
     set angleOffset(value) {
-        this.angle = value * Math.PI / 180.0;
+        this._angleOffset = value;
     }
 
-    log() {
-        console.log("[Turtle] x:" + this.x + " y:" + this.y + " angle:" + this.alpha + " length:" + this.length);
+    get angleOffset() {
+        return this._angleOffset;
     }
 
+    radians(degrees) {
+        return degrees * Math.PI / 180.0;
+    }
+
+    degrees(radians) {
+        return radians * 180.0 / Math.PI;
+    }
 
     forward(length = this.length) {
         var lastX = this.x;
         var lastY = this.y;
 
-        this.x += length * Math.sin(this.angle);
-        this.y += length * Math.cos(this.angle);
-
-
-        var precision = 100;
+        this.x += Math.round(length * Math.sin(this.radians(this.angle)));
+        this.y += Math.round(length * Math.cos(this.radians(this.angle)));
 
         if (this.preProcessingStage) {
             // Calculate min/max coordinates
@@ -229,16 +143,15 @@ class Turtle {
             this.preProcessingContext.moveTo(lastX, lastY);
             this.preProcessingContext.lineTo(this.x, this.y);
             this.preProcessingContext.stroke();
+            this.preProcessingContext.closePath();
         }
         else {
 
-            this.debugColorValue += 0.05;
-
             this.finalContext.beginPath();
-            this.finalContext.strokeStyle = "rgb(" + this.debugColorValue + "," + this.debugColorValue + "," + this.debugColorValue + ")";
             this.finalContext.moveTo(lastX, lastY);
             this.finalContext.lineTo(this.x, this.y);
             this.finalContext.stroke();
+            this.finalContext.closePath();
         }
 
     }
@@ -270,6 +183,13 @@ class Turtle {
 
     }
 
+    resetTurtle() {
+        this.angle = this.angleOffset;
+        this.x = 0;
+        this.y = 0;
+        this.coordinateStack = [];
+    }
+
     computeWord(word) {
 
         if (typeof word == 'undefined' || word == "")
@@ -282,49 +202,82 @@ class Turtle {
 
         // Bypass drawing and calculate bounds
         this.preProcessingStage = true;
-        var i;
-        for (i = 0; i < word.length; i++) {
+
+        this.preProcessingContext.scale(1, -1);
+        this.preProcessingContext.translate(0, -this.height);
+
+        this.resetTurtle();
+        for (var i = 0; i < word.length; i++) {
             this.consume(word[i]);
         }
+
+        // Write Name of the View on the Canvas
+        this.preProcessingContext.save();
+        this.preProcessingContext.setTransform(1, 0, 0, 1, 0, 0);
+        var fontSize = 20;
+        this.preProcessingContext.font = fontSize + "px Consolas";
+        this.preProcessingContext.fillStyle = "black";
+        this.preProcessingContext.fillText("Pre-Processing View", fontSize, this.height - fontSize);
+        this.preProcessingContext.restore();
+
 
         /*
          * Resize Canvas
          */
-
-        //var xLength = Math.abs(this.bounds.x.max) - Math.abs(this.bounds.x.min);
-        //var yLength = Math.abs(this.bounds.y.max) - Math.abs(this.bounds.y.min);
-
         var resizeFactor;
 
         // Use Dimension with the highest extend and stretch it to the
         // domain [0,1]x[0,1]
-        console.log(this.bounds.toString());
-        if (this.bounds.xLength > this.bounds.yLength)
-            resizeFactor = this.width / this.bounds.xLength;
-        else
-            resizeFactor = this.height / this.bounds.yLength;
+        resizeFactor = Math.max(this.width / this.bounds.xLength,this.height / this.bounds.yLength)
 
 
         /*
          * Second Render Pass
          */
         // Rendering with resized canvas
-        var xOffsetToCenter = this.bounds.xAverage / 2.0;
-        var yOffsetToCenter = this.bounds.yAverage / 2.0;
 
+        console.log(this.bounds.toString());
+        var translateX = (this.width/2.0) - (this.bounds.xAverage);
+        var translateY = (this.height/2.0) - (this.bounds.yAverage);
+
+        // Reset all Transformations
         this.finalContext.setTransform(1, 0, 0, 1, 0, 0);
-        this.finalContext.scale(resizeFactor, resizeFactor);
-        this.finalContext.translate(xOffsetToCenter, yOffsetToCenter);
 
-        // TODO : Display first rendering pass in order to check if
-        //        the debug circle is inside the canvas
-        //        If yes: fuck, if no, adjust translation
+        // Put Origin from Lefg-Up to Left-Down and put orientation
+        // to up direction
+
+        /*  .---->           ^
+            |                |
+            |          =>    |
+            v                .---->
+        */
+        //this.finalContext.scale(1, -1);
+        //this.finalContext.translate(0, -this.height);
+
+        //this.finalContext.scale(resizeFactor, resizeFactor);
+        //this.finalContext.translate(translateX, translateY);
+        //this.length *= resizeFactor;
+        this.finalContext.setTransform(resizeFactor,0,resizeFactor,0,
+            this.width/2.0 - resizeFactor * this.bounds.xAverage,
+            this.height/2.0 - resizeFactor * this.bounds.yAverage);
+        this.finalContext.lineWidth = 1;
+
         this.preProcessingStage = false;
-        //this.clear();
-
-        for (i = 0; i < word.length; i++) {
+        this.resetTurtle();
+        for (var i = 0; i < word.length; i++) {
             this.consume(word[i]);
         }
+        
+
+        // Write Name of the View on the Canvas
+        this.finalContext.save();
+
+        this.finalContext.setTransform(1, 0, 0, 1, 0, 0);
+        var fontSize = 20;
+        this.finalContext.font = fontSize + "px Consolas";
+        this.finalContext.fillStyle = "black";
+        this.finalContext.fillText("Output View", fontSize, this.height - fontSize);
+        this.finalContext.restore();
     }
 
     consume(symbol) {
@@ -339,6 +292,9 @@ class Turtle {
                 break;
             case "-":
                 this.right();
+                break;
+            case "|":
+                this.right(180.0);
                 break;
             case "[":
                 this.coordinateStack.push({ "x": this.x, "y": this.y, "angle": this.angle });

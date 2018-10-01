@@ -32,11 +32,19 @@
     <!-- production version, optimized for size and speed -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script>-->
 
+
+    <!-- Include our Bounds Class-->
+    <script src="bounds.js"></script>
+
     <!-- Include our Turtle Class-->
     <script src="turtle.js"></script>
 
+    <!-- Include our Silent Turtle Class-->
+    <script src="silent_turtle.js"></script>
+
     <!-- Include our LSystem Class-->
     <script src="lsystem.js"></script>
+
 
     <title>L-Systems</title>
 </head>
@@ -56,6 +64,8 @@
                 <div class="form-group">
                     <button type="button" class="btn btn-warning" id="debugCanvasTemplateButton" v-on:click="setDebugCanvasTemplate">Canvas
                         Debug</button>
+                    <button type="button" class="btn btn-warning" id="debugCanvasTemplateButton2" v-on:click="setDebugCanvas2Template">Canvas
+                        Debug2</button>
                     <button type="button" class="btn btn-primary" id="kochTemplateButton" v-on:click="setKochTemplate">Koch
                         Curve</button>
                     <button type="button" class="btn btn-primary" id="kochSnowflakeTemplateButton" v-on:click="setKochSnowflakeTemplate">Koch
@@ -111,12 +121,17 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     <label class="control-label" for="iterations">Iterations:</label>
-                                    <input type="text" class="form-control" v-model="n" id="iterations">
+                                    <input type="range" value="1" step="1" min="1" max="20" class="form-control"
+                                        v-model="n" id="iterations">
+                                    {{ n }}
                                 </div>
-
                                 <div class="form-group">
                                     <label class="control-label" for="alpha">Alpha (&alpha;):</label>
                                     <input type="text" class="form-control" v-model="alpha" id="alpha">
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="startAngleId">Start-Angle (&beta;):</label>
+                                    <input type="text" class="form-control" v-model="startAngle" id="startAngleId">
                                 </div>
                             </div>
                         </div>
@@ -148,12 +163,16 @@
                                             <td>Turn left by &alpha;&deg;</td>
                                         </tr>
                                         <tr>
+                                            <td style='font-family:monospace;'>|</td>
+                                            <td>Turn around (+180&deg;)</td>
+                                        </tr>
+                                        <tr>
                                             <td style='font-family:monospace;'>[</td>
-                                            <td>Push current position and orientation to the stack</td>
+                                            <td>Save current Turtle state (Position and Orientation)</td>
                                         </tr>
                                         <tr>
                                             <td style='font-family:monospace;'>]</td>
-                                            <td>Pop position and orientation from the stack</td>
+                                            <td>Restore last saved Turtle state</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -168,18 +187,38 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     <label class="control-label" for="xoffsetId">X-Offset:</label>
-                                    <input type="range" min="-100" max="100" value="0" step="0.01" class="form-control"
+                                    <input type="range" min="-200" max="200" value="0" step="0.01" class="form-control"
                                         v-model="xoffsetUI" v-on:change="generate" id="xoffsetId">{{ xoffsetUI}}
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label" for="yoffsetId">Y-Offset:</label>
-                                    <input type="range" min="-100" max="100" value="0" step="0.01" class="form-control"
+                                    <input type="range" min="-200" max="200" value="0" step="0.01" class="form-control"
                                         v-model="yoffsetUI" v-on:change="generate" id="yoffsetId">{{ yoffsetUI}}
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label" for="zoomId">Zoom:</label>
                                     <input type="range" min="-10" max="10" value="1" step="1" class="form-control"
                                         v-model="zoomUI" v-on:change="generate" id="zoomId">{{ zoomUI}}
+                                </div>
+
+                                <div class="form-group">
+                                    Pre-Processing Output<input type="checkbox" class="form-control" v-model="preProcessingVisible"
+                                        v-on:change="togglePreProcessingCanvas" id="preProcessingVisibilityId">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <a class="card-link" data-toggle="collapse" href="#collapse5">Language Output</a>
+                        </div>
+                        <div id="collapse5" class="collapse hidden">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    Output:
+                                    <textarea readonly class="form-control" rows="5" id="output">{{ out }}</textarea>
+                                    Silent-Turtle Output:
+                                    <textarea readonly class="form-control" rows="5" id="output2">{{ silentTurtleOut }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -188,19 +227,18 @@
                 <div v-html="log"> </div>
                 <div class="form-group">
                     <button type="button" class="btn btn-primary" id="generateButton" v-on:click="generate">Generate</button>
-                </div>
+                    <button type="button" class="btn btn-success" id="generateButton2" v-on:click="generateWithSilentTurtle">Silent
+                        Turtle</button>
 
-                <div class="form-group">
-                    Output:
-                    <textarea readonly class="form-control" rows="5" id="output">{{ out }}</textarea>
                 </div>
             </div>
             <div class='col-*-*' style='padding:10px;'>
-                <canvas id='screenPostProcessing' style="border: 2px solid black" width='512' height='512'></canvas>
+                <canvas id='screenPostProcessing' style="border: 2px solid black;display:ignore" width='512' height='256'></canvas>
             </div>
             <div class='col-*-*' style='padding:10px;'>
-                <canvas id='screen' style='border:2px solid black' width='512' height='512'></canvas>
+                <canvas id='screen' style='border:2px solid black' width='512' height='256'></canvas>
             </div>
+            <p style="color:grey"><em>{{ durationOut }}</em></p>
         </div>
     </div>
 
@@ -209,7 +247,6 @@
 
         var app = new Vue({
             el: '#lSystemsApp',
-
             data: {
                 V: "",
                 P: "",
@@ -217,17 +254,24 @@
                 A: "",
                 n: 4,
                 alpha: 45.0,
+                startAngle: 0.0,
+                angleOffset: 90.0,
                 out: "",
                 log: "",
                 xoffsetUI: 0,
                 yoffsetUI: 0,
                 zoomUI: 0,
+                startTime: null,
+                endTime: null,
+                durationOut: "",
+                silentTurtleOut: "",
                 ctx: null,
-                preProcesssingCtx: null
+                preProcesssingCtx: null,
+                preProcessingVisible: false
             },
             created: function () {
                 //this.setLStarTemplate(); // --> Default
-                this.setDebugCanvasTemplate();
+                this.setKochSnowflakeTemplate();
             },
             methods: {
 
@@ -244,7 +288,19 @@
                     this.E = "+-";
                     this.A = "F";
                     this.alpha = 1.0;
-                    this.n = 12;
+                    this.startAngle = 0.0;
+                    this.n = 10;
+                    this.out = "";
+                    this.log = "";
+                },
+                setDebugCanvas2Template: function () {
+                    this.V = "F";
+                    this.P = "F=FF";
+                    this.E = "+";
+                    this.A = "+FFFF";
+                    this.alpha = 45.0;
+                    this.startAngle = 0.0;
+                    this.n = 3;
                     this.out = "";
                     this.log = "";
                 },
@@ -254,26 +310,29 @@
                     this.E = "+-f";
                     this.A = "FA";
                     this.alpha = 45.0;
+                    this.startAngle = 0.0;
                     this.n = 3;
                     this.out = "";
                     this.log = "";
                 },
                 setKochTemplate: function () {
                     this.V = "F";
-                    this.P = "F=F-F++F-F";
+                    this.P = "F=F+F--F+F";
                     this.E = "+-";
                     this.A = "F";
                     this.alpha = 60.0;
+                    this.startAngle = 0.0;
                     this.n = 3;
                     this.out = "";
                     this.log = "";
                 },
                 setKochSnowflakeTemplate: function () {
                     this.V = "F";
-                    this.P = "F=F-F++F-F";
+                    this.P = "F=F+F--F+F";
                     this.E = "+-";
-                    this.A = "F++F++F";
+                    this.A = "F--F--F";
                     this.alpha = 60.0;
+                    this.startAngle = 0.0;
                     this.n = 3;
                     this.out = "";
                     this.log = "";
@@ -284,6 +343,7 @@
                     this.E = "+-f";
                     this.A = "fF";
                     this.alpha = 90.0;
+                    this.startAngle = 0.0;
                     this.n = 3;
                     this.out = "";
                     this.log = "";
@@ -292,8 +352,9 @@
                     this.V = "AB";
                     this.P = "A=-Bf+AfA+fB-\nB=+Af-BfB-fA+";
                     this.E = "+-f";
-                    this.A = "A";
+                    this.A = "B";
                     this.alpha = 90.0;
+                    this.startAngle = 0.0;
                     this.n = 3;
                     this.out = "";
                     this.log = "";
@@ -304,6 +365,7 @@
                     this.E = "+-";
                     this.A = "F";
                     this.alpha = 60.0;
+                    this.startAngle = 30.0;
                     this.n = 3;
                     this.out = "";
                     this.log = "";
@@ -314,9 +376,19 @@
                     this.E = "+-[]";
                     this.A = "G";
                     this.alpha = 25.0;
+                    this.startAngle = 270.0;
                     this.n = 3;
                     this.out = "";
                     this.log = "";
+                },
+
+                togglePreProcessingCanvas() {
+
+                    if (this.preProcessingVisible)
+                        $('#screenPostProcessing').show();
+                    else
+                        $('#screenPostProcessing').hide();
+
                 },
 
                 generate: function () {
@@ -339,21 +411,64 @@
 
                     // Draw it.
                     //try {
-                        var t = new Turtle(this.ctx.canvas.width, this.ctx.canvas.height, this.alpha, this.n);
-                        t.angleOffset = 90.0;
-                        t.xOffsetUI = this.xoffsetUI;
-                        t.yOffsetUI = this.yoffsetUI;
-                        t.zoomUI = this.zoomUI;
-                        t.clear();
-                        t.computeWord(l.out);
+                    var t = new Turtle(this.ctx.canvas.width, this.ctx.canvas.height, this.alpha, this.n);
 
-                        this.ctx.drawImage(t.finalCanvas,0,0);
-                       this.preProcesssingCtx.drawImage(t.preProcessingCanvas,0,0);
+                    t.angleOffset = parseFloat(this.angleOffset) + parseFloat(this.startAngle);
+                    console.log(this.angleOffset + "/" + this.startAngle + "/" + t.angleOffset);
+                    t.xOffsetUI = this.xoffsetUI;
+                    t.yOffsetUI = this.yoffsetUI;
+                    t.zoomUI = this.zoomUI;
+                    t.clear();
+
+                    this.startTime = performance.now();
+                    t.computeWord(l.out);
+                    this.endTime = performance.now();
+
+                    var duration = (this.endTime - this.startTime) / 1000.0;
+                    this.durationOut = "Rendered within " + duration + "s"
+
+                    this.ctx.drawImage(t.finalCanvas, 0, 0);
+                    this.preProcesssingCtx.drawImage(t.preProcessingCanvas, 0, 0);
 
                     /*} catch (error) {
                         this.log = "<div class='alert alert-danger'>[Turtle]: " + error + "</div>";
                     }*/
 
+                },
+
+                generateWithSilentTurtle: function () {
+                    var l = new LSystem();
+                    var output = "";
+                    this.log = "";
+                    try {
+                        l.V = this.V;
+                        l.E = this.E;
+                        l.Axiom = this.A;
+                        l.P = this.P;
+                        l.n = this.n;
+                        l.generate()
+                        this.out = l.out;
+                    } catch (error) {
+                        this.log = "<div class='alert alert-danger'>[LSystem]: " + error + "</div>";
+                        return;
+                    }
+
+                    var st = new SilentTurtle();
+                    st.processWord(l.out, this.alpha);
+
+                    this.silentTurtleOut = ""
+                    var points = st.points;
+                    for (let index = 0; index < points.length - 1; index++) {
+                        const e = points[index];
+                        console.log(e);
+                        this.silentTurtleOut += "(" + e[0] + "," + e[1] + "), "
+                    }
+
+                    this.silentTurtleOut += "(" +
+                        points[points.length - 1][0] + "," +
+                        points[points.length - 1][1] + ")";
+
+                    //this.silentTurtleOut = st.points;
                 }
             }
         });
