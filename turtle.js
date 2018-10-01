@@ -11,7 +11,7 @@ class Turtle {
      * Command Drawing System using an input string and a char interpreter to draw
      * on a HTML5 Canvas  
      */
-    constructor(width, height, alpha = 60.0, iterationCount = 1, length = 100.0) {
+    constructor(width, height, alpha = 60.0, iterationCount = 1, length = 100.0, debugCanvas = false) {
         this.alpha = alpha;
         this.length = length;
         this.width = width;
@@ -26,6 +26,7 @@ class Turtle {
         this.yOffsetUI = 0;
         this.preProcessingStage = false;
         this.coordinateStack = [];
+        this.showCanvasDebug = debugCanvas;
 
 
         this.bounds = new Bounds();
@@ -220,54 +221,63 @@ class Turtle {
         this.preProcessingContext.fillText("Pre-Processing View", fontSize, this.height - fontSize);
         this.preProcessingContext.restore();
 
-
-        /*
-         * Resize Canvas
-         */
-        var resizeFactor;
-
-        // Use Dimension with the highest extend and stretch it to the
-        // domain [0,1]x[0,1]
-        resizeFactor = Math.max(this.width / this.bounds.xLength,this.height / this.bounds.yLength)
-
-
         /*
          * Second Render Pass
+         * 
+         * Change Canvas Orientation and transform it in order to get the
+         * best view onto the Fractal
          */
-        // Rendering with resized canvas
 
-        console.log(this.bounds.toString());
-        var translateX = (this.width/2.0) - (this.bounds.xAverage);
-        var translateY = (this.height/2.0) - (this.bounds.yAverage);
 
-        // Reset all Transformations
-        this.finalContext.setTransform(1, 0, 0, 1, 0, 0);
+        // 1) Invert Y-Axis, let it point to the bottom
+        this.finalContext.scale(1, -1);
 
-        // Put Origin from Lefg-Up to Left-Down and put orientation
-        // to up direction
+        // 2) Move Coordinate Origin into the bottom-left Corner
+        this.finalContext.translate(0, -this.height);
 
-        /*  .---->           ^
-            |                |
-            |          =>    |
-            v                .---->
-        */
-        //this.finalContext.scale(1, -1);
-        //this.finalContext.translate(0, -this.height);
+        // 3) Scale it depending on the extent
+        var r;
+        if (this.bounds.xLength + this.width > this.bounds.yLength + this.height)
+            r = this.width / this.bounds.xLength;
+        else
+            r = this.height / this.bounds.yLength;
 
-        //this.finalContext.scale(resizeFactor, resizeFactor);
-        //this.finalContext.translate(translateX, translateY);
-        //this.length *= resizeFactor;
-        this.finalContext.setTransform(resizeFactor,0,resizeFactor,0,
-            this.width/2.0 - resizeFactor * this.bounds.xAverage,
-            this.height/2.0 - resizeFactor * this.bounds.yAverage);
-        this.finalContext.lineWidth = 1;
+        this.finalContext.scale(r, r);
 
+        // 4) Move Canvas to the Fractal
+        this.finalContext.translate(this.width / 2 - this.bounds.xAverage * r, this.height / 2 - this.bounds.yAverage * r);
+
+
+        // Render Fractal
         this.preProcessingStage = false;
         this.resetTurtle();
         for (var i = 0; i < word.length; i++) {
             this.consume(word[i]);
         }
-        
+
+        // Mark special Points
+        if (this.showCanvasDebug) {
+            this.finalContext.save();
+
+            // Draw Bounding Box
+            this.finalContext.strokeStyle = "cyan"
+            this.finalContext.strokeRect(this.bounds.xMin, this.bounds.yMin, this.bounds.xLength, this.bounds.yLength);
+
+            // Draw Extrema of the Bounding Box
+            var t = 2 / r;
+            this.finalContext.fillStyle = "magenta"
+            this.finalContext.fillRect(this.bounds.xMin - 5 * t, this.bounds.yAverage - 5 * t, 10 * t, 10 * t);
+            this.finalContext.fillRect(this.bounds.xMax - 5 * t, this.bounds.yAverage - 5 * t, 10 * t, 10 * t);
+            this.finalContext.fillRect(this.bounds.xAverage - 5 * t, this.bounds.yMax - 5 * t, 10 * t, 10 * t);
+            this.finalContext.fillRect(this.bounds.xAverage - 5 * t, this.bounds.yMin - 5 * t, 10 * t, 10 * t);
+
+            // Draw Center
+            this.finalContext.fillStyle = "yellow"
+            this.finalContext.fillRect(this.bounds.xAverage-5*t, this.bounds.yAverage-5*t,10*t,10*t)
+            this.finalContext.restore();
+        }
+
+
 
         // Write Name of the View on the Canvas
         this.finalContext.save();

@@ -68,11 +68,11 @@ class Bounds {
     }
 
     get xLength() {
-        return this.xMin - this.xMax;
+        return this.xMax- this.xMin;
     }
 
     get yLength() {
-        return this.yMin - this.yMax;
+        return this.yMax - this.yMin;
     }
 
     round(value) {

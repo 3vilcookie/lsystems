@@ -27,7 +27,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
         crossorigin="anonymous"></script>
     <!-- development version, includes helpful console warnings -->
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!--<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>-->
+    <!--<script src="https://unpkg.com/vue@2.3.3/dist/vue.js"></script>-->
+    <script src="https://unpkg.com/vue"></script>
 
     <!-- production version, optimized for size and speed -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script>-->
@@ -90,22 +92,22 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     <label class="control-label" for="variables">Variables (V):</label>
-                                    <input type="text" class="form-control" v-model="V" id="variables">
+                                    <input type="text" class="form-control" v-model="V" v-on:keyup="autoGenerate" id="variables">
                                 </div>
 
                                 <div class="form-group">
                                     <label class="control-label" for="alphabet">Alphabet (&Sigma;):</label>
-                                    <input type="text" class="form-control" v-model="E" id="alphabet">
+                                    <input type="text" class="form-control" v-model="E" v-on:keyup="autoGenerate" id="alphabet">
                                 </div>
 
                                 <div class="form-group">
                                     <label class="control-label" for="axiom">Axiom (&omega;):</label>
-                                    <input type="text" class="form-control" v-model="A" id="axiom">
+                                    <input type="text" class="form-control" v-model="A" v-on:keyup="autoGenerate" id="axiom">
                                 </div>
 
                                 <div class="form-group">
                                     <label class="control-label" for="rules">Rules (P):</label>
-                                    <textarea class="form-control" rows="3" v-model="P" id="rules"></textarea>
+                                    <textarea class="form-control" rows="3" v-model="P" v-on:keyup="autoGenerate" id="rules"></textarea>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -122,16 +124,24 @@
                                 <div class="form-group">
                                     <label class="control-label" for="iterations">Iterations:</label>
                                     <input type="range" value="1" step="1" min="1" max="20" class="form-control"
-                                        v-model="n" id="iterations">
+                                        v-model="n" v-on:change="autoGenerate" id="iterations">
                                     {{ n }}
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label" for="alpha">Alpha (&alpha;):</label>
-                                    <input type="text" class="form-control" v-model="alpha" id="alpha">
+                                    <input type="range" start="0" min="0" max="360" step="0.1" class="form-control"
+                                        v-model="alpha" v-on:change="autoGenerate" id="alpha">
+                                    {{alpha}}
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label" for="startAngleId">Start-Angle (&beta;):</label>
-                                    <input type="text" class="form-control" v-model="startAngle" id="startAngleId">
+                                    <input type="range" start="0" min="0" max="360" step="0.1" class="form-control"
+                                        v-model="startAngle" v-on:change="autoGenerate" id="startAngleId">
+                                    {{startAngle}}
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="autoGenId">Auto Generate</label>
+                                    <input type="checkbox" class="form-control" v-model="autoGen" id="autoGenId">
                                 </div>
                             </div>
                         </div>
@@ -205,6 +215,10 @@
                                     Pre-Processing Output<input type="checkbox" class="form-control" v-model="preProcessingVisible"
                                         v-on:change="togglePreProcessingCanvas" id="preProcessingVisibilityId">
                                 </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="showCanvasDebugId">Show Canvas Debug Graphics</label>
+                                    <input type="checkbox" class="form-control" v-model="showCanvasDebug" id="showCanvasDebugId">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -229,16 +243,16 @@
                     <button type="button" class="btn btn-primary" id="generateButton" v-on:click="generate">Generate</button>
                     <button type="button" class="btn btn-success" id="generateButton2" v-on:click="generateWithSilentTurtle">Silent
                         Turtle</button>
+                        <p style="color:grey"><em>{{ durationOut }}</em></p>
 
                 </div>
             </div>
             <div class='col-*-*' style='padding:10px;'>
-                <canvas id='screenPostProcessing' style="border: 2px solid black;display:ignore" width='512' height='256'></canvas>
+                <canvas id='screenPostProcessing' style="border: 2px solid black;display:ignore" width='512' height='512'></canvas>
             </div>
             <div class='col-*-*' style='padding:10px;'>
-                <canvas id='screen' style='border:2px solid black' width='512' height='256'></canvas>
+                <canvas id='screen' style='border:2px solid black' width='512' height='512'></canvas>
             </div>
-            <p style="color:grey"><em>{{ durationOut }}</em></p>
         </div>
     </div>
 
@@ -265,7 +279,9 @@
                 endTime: null,
                 durationOut: "",
                 silentTurtleOut: "",
+                showCanvasDebug: true,
                 ctx: null,
+                autoGen: true,
                 preProcesssingCtx: null,
                 preProcessingVisible: false
             },
@@ -292,6 +308,7 @@
                     this.n = 10;
                     this.out = "";
                     this.log = "";
+                    this.autoGenerate();
                 },
                 setDebugCanvas2Template: function () {
                     this.V = "F";
@@ -303,6 +320,7 @@
                     this.n = 3;
                     this.out = "";
                     this.log = "";
+                    this.autoGenerate();
                 },
                 setLStarTemplate: function () {
                     this.V = "AF";
@@ -314,6 +332,7 @@
                     this.n = 3;
                     this.out = "";
                     this.log = "";
+                    this.autoGenerate();
                 },
                 setKochTemplate: function () {
                     this.V = "F";
@@ -325,6 +344,7 @@
                     this.n = 3;
                     this.out = "";
                     this.log = "";
+                    this.autoGenerate();
                 },
                 setKochSnowflakeTemplate: function () {
                     this.V = "F";
@@ -336,6 +356,7 @@
                     this.n = 3;
                     this.out = "";
                     this.log = "";
+                    this.autoGenerate();
                 },
                 setDragonCurveTemplate: function () {
                     this.V = "FG";
@@ -347,6 +368,7 @@
                     this.n = 3;
                     this.out = "";
                     this.log = "";
+                    this.autoGenerate();
                 },
                 setHilbertTemplate: function () {
                     this.V = "AB";
@@ -358,6 +380,7 @@
                     this.n = 3;
                     this.out = "";
                     this.log = "";
+                    this.autoGenerate();
                 },
                 setSierpinskiTriangleTemplate: function () {
                     this.V = "FG";
@@ -365,10 +388,11 @@
                     this.E = "+-";
                     this.A = "F";
                     this.alpha = 60.0;
-                    this.startAngle = 30.0;
+                    this.startAngle = 0.0;
                     this.n = 3;
                     this.out = "";
                     this.log = "";
+                    this.autoGenerate();
                 },
                 setPlantTemplate: function () {
                     this.V = "FG";
@@ -380,6 +404,7 @@
                     this.n = 3;
                     this.out = "";
                     this.log = "";
+                    this.autoGenerate();
                 },
 
                 togglePreProcessingCanvas() {
@@ -389,6 +414,11 @@
                     else
                         $('#screenPostProcessing').hide();
 
+                },
+
+                autoGenerate: function () {
+                    if (this.autoGen)
+                        this.generate();
                 },
 
                 generate: function () {
@@ -411,7 +441,7 @@
 
                     // Draw it.
                     //try {
-                    var t = new Turtle(this.ctx.canvas.width, this.ctx.canvas.height, this.alpha, this.n);
+                    var t = new Turtle(this.ctx.canvas.width, this.ctx.canvas.height, this.alpha, this.n,100.0,this.showCanvasDebug);
 
                     t.angleOffset = parseFloat(this.angleOffset) + parseFloat(this.startAngle);
                     console.log(this.angleOffset + "/" + this.startAngle + "/" + t.angleOffset);
