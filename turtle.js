@@ -30,6 +30,7 @@ class Turtle {
 
 
         this.bounds = new Bounds();
+        this.bounds.process(this.x,this.y);
 
 
         // Create Pre-Processing Canvas
@@ -245,8 +246,7 @@ class Turtle {
         this.finalContext.scale(r, r);
 
         // 4) Move Canvas to the Fractal
-        this.finalContext.translate(this.width / 2 - this.bounds.xAverage * r, this.height / 2 - this.bounds.yAverage * r);
-
+        this.finalContext.translate(this.width - this.bounds.xAverage*r, this.height  - this.bounds.yAverage*r);
 
         // Render Fractal
         this.preProcessingStage = false;

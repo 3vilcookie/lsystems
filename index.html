@@ -243,7 +243,9 @@
                     <button type="button" class="btn btn-primary" id="generateButton" v-on:click="generate">Generate</button>
                     <button type="button" class="btn btn-success" id="generateButton2" v-on:click="generateWithSilentTurtle">Silent
                         Turtle</button>
-                        <p style="color:grey"><em>{{ durationOut }}</em></p>
+                    <button type="button" class="btn btn-success" id="calcDimensionButton" v-on:click="calcDimension">Calc
+                        Self-Similarity Dimension</button>
+                    <p style="color:grey"><em>{{ durationOut }}</em></p>
 
                 </div>
             </div>
@@ -287,7 +289,14 @@
             },
             created: function () {
                 //this.setLStarTemplate(); // --> Default
+
+                // Disable AutoGenerate inside the constructor
+                // to avoid Canvas Context Reference Errors
+                // This is maybe caused by the execution order of the browser
+                var temp = this.autoGen;
+                this.autoGen = false;
                 this.setKochSnowflakeTemplate();
+                this.autoGen = temp;
             },
             methods: {
 
@@ -441,10 +450,10 @@
 
                     // Draw it.
                     //try {
-                    var t = new Turtle(this.ctx.canvas.width, this.ctx.canvas.height, this.alpha, this.n,100.0,this.showCanvasDebug);
+                    var t = new Turtle(this.ctx.canvas.width, this.ctx.canvas.height, this.alpha, this.n, 100.0, this.showCanvasDebug);
 
                     t.angleOffset = parseFloat(this.angleOffset) + parseFloat(this.startAngle);
-                    console.log(this.angleOffset + "/" + this.startAngle + "/" + t.angleOffset);
+                    //console.log(this.angleOffset + "/" + this.startAngle + "/" + t.angleOffset);
                     t.xOffsetUI = this.xoffsetUI;
                     t.yOffsetUI = this.yoffsetUI;
                     t.zoomUI = this.zoomUI;
@@ -490,7 +499,7 @@
                     var points = st.points;
                     for (let index = 0; index < points.length - 1; index++) {
                         const e = points[index];
-                        console.log(e);
+                        //console.log(e);
                         this.silentTurtleOut += "(" + e[0] + "," + e[1] + "), "
                     }
 
@@ -498,7 +507,55 @@
                         points[points.length - 1][0] + "," +
                         points[points.length - 1][1] + ")";
 
-                    //this.silentTurtleOut = st.points;
+                    this.silentTurtleOut = st.points;
+                },
+                calcDimension: function () {
+                    var l1 = new LSystem();
+                    l1.V = this.V;
+                    l1.E = this.E;
+                    l1.Axiom = this.A;
+                    l1.P = this.P;
+                    l1.n = 2;
+                    l1.generate();
+
+                    var l2 = new LSystem();
+                    l2.V = this.V;
+                    l2.E = this.E;
+                    l2.Axiom = this.A;
+                    l2.P = this.P;
+                    l2.n = 3;
+                    l2.generate();
+
+                    var t1 = new SilentTurtle();
+                    t1.processWord(l1.out, this.alpha);
+
+                    var t2 = new SilentTurtle();
+                    t2.processWord(l2.out, this.alpha);
+
+                    var A = t1.points
+                    var B = t2.points
+
+                    
+
+                    var p1 = A[A.length-1]
+                    var p2 = B[B.length-1]
+                    var p1b = Math.sqrt(Math.pow(p2[0],2)+Math.pow(p2[1],2))
+                    var p2b = Math.sqrt(Math.pow(p1[0],2)+Math.pow(p1[1],2))
+
+                    console.log("p1b: " + p1b);
+                    console.log("p2b: " + p2b);
+
+                    var scaleFactor = p1b / p2b;
+                    
+                    var N = (B.length / A.length);
+                    
+                    var dim = Math.log(N) / Math.log(scaleFactor);
+                    console.log(p1);
+
+                    console.log("|A| = " + A.length + "\n|B| = " + B.length);
+                    console.log("N = |B|/|A| = " + N);
+                    console.log("ε = sqr((B.last.x - A.last.x)^2 + (B.last.y - A.last.y)^2) = "  + scaleFactor)
+                    console.log("dim_s(F) = " + dim);
                 }
             }
         });
