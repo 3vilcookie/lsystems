@@ -18,6 +18,9 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
         crossorigin="anonymous">
 
+    <!-- Custom CSS to make  UI more awesome-->
+    <link rel="stylesheet" href="style.css">
+
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -62,7 +65,7 @@
     <div class='container' id='lSystemsApp'>
 
         <div class='row'>
-            <div class='col-*-*'>
+            <div class="col-md-2" style='text-align:left;line-height:40px;'>
                 <div class="form-group">
                     <button type="button" class="btn btn-warning" id="debugCanvasTemplateButton" v-on:click="setDebugCanvasTemplate">Canvas
                         Debug</button>
@@ -81,14 +84,14 @@
                     <button type="button" class="btn btn-primary" id="plantTemplateButton" v-on:click="setPlantTemplate">Plant</button>
                     <button type="button" class="btn btn-primary" id="lstarTemplateButton" v-on:click="setLStarTemplate">LStar</button>
                 </div>
-
-                <!--class='form-inline'-->
-                <div id="accordion" style='padding-bottom:25px'>
-                    <div class="card">
+            </div>
+            <div class='col-md-5'>
+                <div id="accordion" style='padding-bottom:25px;'>
+                    <div class="card" id="card1">
                         <div class="card-header">
                             <a class="card-link" data-toggle="collapse" href="#collapse1">L-System Language</a>
                         </div>
-                        <div id="collapse1" class="collapse hidden">
+                        <div id="collapse1" class="collapse show" data-parent="#accordion">
                             <div class="card-body">
                                 <div class="form-group">
                                     <label class="control-label" for="variables">Variables (V):</label>
@@ -109,17 +112,18 @@
                                     <label class="control-label" for="rules">Rules (P):</label>
                                     <textarea class="form-control" rows="3" v-model="P" v-on:keyup="autoGenerate" id="rules"></textarea>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <button type="button" class="btn btn-danger" id="clearButton" v-on:click="clear">Clear</button>
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-danger" id="clearButton" v-on:click="clear">Clear</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card">
+                    <div class="card" id="card2">
                         <div class="card-header">
-                            <a class="card-link" data-toggle="collapse" href="#collapse2">Turtle Graphic Settings</a>
+                            <a class="collapsed card-link" data-toggle="collapse" href="#collapse2">Turtle
+                                Graphic Settings</a>
                         </div>
-                        <div id="collapse2" class="collapse hidden">
+                        <div id="collapse2" class="collapse hidden" data-parent="#accordion">
                             <div class="card-body">
                                 <div class="form-group">
                                     <label class="control-label" for="iterations">Iterations:</label>
@@ -146,11 +150,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card">
+
+                    <div class="card" id="card3">
                         <div class="card-header">
-                            <a class="card-link" data-toggle="collapse" href="#collapse22">Turtle Command Reference</a>
+                            <a class="collapsed card-link" data-toggle="collapse" href="#collapse22">Turtle
+                                Command Reference</a>
                         </div>
-                        <div id="collapse22" class="collapse hidden">
+                        <div id="collapse22" class="collapse hidden" data-parent="#accordion">
                             <div class="card-body">
                                 <table class="table" style='text-align:left'>
                                     <thead>
@@ -189,44 +195,53 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card">
+
+                    <div class="card" id="card4">
                         <div class="card-header">
-                            <a class="card-link" data-toggle="collapse" href="#collapse4">Debugging</a>
+                            <a class="collapsed card-link" data-toggle="collapse" href="#collapse4">Debugging</a>
                         </div>
-                        <div id="collapse4" class="collapse hidden">
+                        <div id="collapse4" class="collapse hidden" data-parent="#accordion">
                             <div class="card-body">
-                                <div class="form-group">
-                                    <label class="control-label" for="xoffsetId">X-Offset:</label>
-                                    <input type="range" min="-200" max="200" value="0" step="0.01" class="form-control"
-                                        v-model="xoffsetUI" v-on:change="generate" id="xoffsetId">{{ xoffsetUI}}
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4" for="xoffsetId">X-Offset:</label>
+                                    <input type="range" min="-200" max="200" value="0" step="0.01" class="form-control col-sm-4 slider"
+                                        v-model="xoffsetUI" v-on:change="generate" id="xoffsetId">
+                                    <div class="col-sm-2">{{ xoffsetUI}}</div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="control-label" for="yoffsetId">Y-Offset:</label>
-                                    <input type="range" min="-200" max="200" value="0" step="0.01" class="form-control"
-                                        v-model="yoffsetUI" v-on:change="generate" id="yoffsetId">{{ yoffsetUI}}
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4" for="yoffsetId">Y-Offset:</label>
+                                    <input type="range" min="-200" max="200" value="0" step="0.01" class="form-control col-sm-4 slider"
+                                        v-model="yoffsetUI" v-on:change="generate" id="yoffsetId">
+                                    <div class="col-sm-2">{{ yoffsetUI}}</div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="control-label" for="zoomId">Zoom:</label>
-                                    <input type="range" min="-10" max="10" value="1" step="1" class="form-control"
-                                        v-model="zoomUI" v-on:change="generate" id="zoomId">{{ zoomUI}}
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4" for="zoomId">Zoom:</label>
+                                    <input type="range" min="-10" max="10" value="1" step="1" class="form-control col-sm-4 slider"
+                                        v-model="zoomUI" v-on:change="generate" id="zoomId">
+                                    <div class="col-sm-2">{{ zoomUI}}</div>
                                 </div>
 
-                                <div class="form-group">
-                                    Pre-Processing Output<input type="checkbox" class="form-control" v-model="preProcessingVisible"
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4" for="preProcessingVisibilityId">Pre-Processing
+                                        Output:</label>
+                                    <input type="checkbox" class="form-control col-sm-1" v-model="preProcessingVisible"
                                         v-on:change="togglePreProcessingCanvas" id="preProcessingVisibilityId">
                                 </div>
-                                <div class="form-group">
-                                    <label class="control-label" for="showCanvasDebugId">Show Canvas Debug Graphics</label>
-                                    <input type="checkbox" class="form-control" v-model="showCanvasDebug" id="showCanvasDebugId">
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4" for="showCanvasDebugId">Show Canvas Debug
+                                        Graphics</label>
+                                    <input type="checkbox" class="form-control col-sm-1" v-model="showCanvasDebug" id="showCanvasDebugId">
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card">
+
+                    <div class="card" id="card5">
                         <div class="card-header">
-                            <a class="card-link" data-toggle="collapse" href="#collapse5">Language Output</a>
+                            <a class="collapsed card-link" data-toggle="collapse" href="#collapse5">Language
+                                Output</a>
                         </div>
-                        <div id="collapse5" class="collapse hidden">
+                        <div id="collapse5" class="collapse hidden" data-parent="#accordion">
                             <div class="card-body">
                                 <div class="form-group">
                                     Output:
@@ -237,27 +252,69 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="card" id="card6">
+                        <div class="card-header">
+                            <a class="collapsed card-link" data-toggle="collapse" href="#collapse6">Fractal
+                                Properties</a>
+                        </div>
+                        <div id="collapse6" class="collapse hidden" data-parent="#accordion">
+                            <div class="card-body">
+                                
+                                <table class="table" style='text-align:left'>
+                                    <thead>
+                                        <tr>
+                                            <th>Property</th>
+                                            <th>Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Self-Similarity Dimension</td>
+                                            <td>{{ selfSimilarityDim }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Copies</td>
+                                            <td>{{ selfSimilarityCopies }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Scale Factor</td>
+                                            <td>{{ selfSimilarityScaleFactor }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Box Dimension</td>
+                                            <td>{{ boxDimension }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <button type="button" class="btn btn-success" id="calcDimensionButton" v-on:click="calcDimension">Calc
+                                    Self-Similarity Dimension</button>
+                                <button type="button" class="btn btn-success" disabled id="calcBoxDimensionButton"
+                                    v-on:click="calcBoxDimension">Calc
+                                    Box Dimension (Coming soon)</button>
+                                    
+                            </div>
+                        </div>
+                    </div
                 </div>
                 <div v-html="log"> </div>
                 <div class="form-group">
                     <button type="button" class="btn btn-primary" id="generateButton" v-on:click="generate">Generate</button>
                     <button type="button" class="btn btn-success" id="generateButton2" v-on:click="generateWithSilentTurtle">Silent
                         Turtle</button>
-                    <button type="button" class="btn btn-success" id="calcDimensionButton" v-on:click="calcDimension">Calc
-                        Self-Similarity Dimension</button>
+
                     <p style="color:grey"><em>{{ durationOut }}</em></p>
 
                 </div>
             </div>
-            <div class='col-*-*' style='padding:10px;'>
-                <canvas id='screenPostProcessing' style="border: 2px solid black;display:ignore" width='512' height='512'></canvas>
+            <div class='col-md-*' style=''>
+                <canvas id='screenPostProcessing' style="border: 2px solid black;display:none" width='512' height='512'></canvas>
             </div>
-            <div class='col-*-*' style='padding:10px;'>
+            <div class='col-md-3' style=''>
                 <canvas id='screen' style='border:2px solid black' width='512' height='512'></canvas>
             </div>
         </div>
     </div>
-
     <script>
         // Post Content Scripts
 
@@ -281,11 +338,15 @@
                 endTime: null,
                 durationOut: "",
                 silentTurtleOut: "",
-                showCanvasDebug: true,
+                showCanvasDebug: false,
                 ctx: null,
                 autoGen: true,
                 preProcesssingCtx: null,
-                preProcessingVisible: false
+                preProcessingVisible: false,
+                selfSimilarityDim: 0,
+                selfSimilarityCopies: 0,
+                selfSimilarityScaleFactor: 0,
+                boxDimension: 0
             },
             created: function () {
                 //this.setLStarTemplate(); // --> Default
@@ -469,6 +530,7 @@
                     this.ctx.drawImage(t.finalCanvas, 0, 0);
                     this.preProcesssingCtx.drawImage(t.preProcessingCanvas, 0, 0);
 
+
                     /*} catch (error) {
                         this.log = "<div class='alert alert-danger'>[Turtle]: " + error + "</div>";
                     }*/
@@ -515,7 +577,7 @@
                     l1.E = this.E;
                     l1.Axiom = this.A;
                     l1.P = this.P;
-                    l1.n = 2;
+                    l1.n = 9;
                     l1.generate();
 
                     var l2 = new LSystem();
@@ -523,7 +585,7 @@
                     l2.E = this.E;
                     l2.Axiom = this.A;
                     l2.P = this.P;
-                    l2.n = 3;
+                    l2.n = 10;
                     l2.generate();
 
                     var t1 = new SilentTurtle();
@@ -535,27 +597,50 @@
                     var A = t1.points
                     var B = t2.points
 
-                    
+                    var iterationDelta = Math.abs(l2.n - l1.n);
 
-                    var p1 = A[A.length-1]
-                    var p2 = B[B.length-1]
-                    var p1b = Math.sqrt(Math.pow(p2[0],2)+Math.pow(p2[1],2))
-                    var p2b = Math.sqrt(Math.pow(p1[0],2)+Math.pow(p1[1],2))
+                    var centerA = Math.sqrt(Math.pow(t1.bounds.xAverage, 2) + Math.pow(t1.bounds.yAverage, 2));
+                    var centerB = Math.sqrt(Math.pow(t2.bounds.xAverage, 2) + Math.pow(t2.bounds.yAverage, 2));
 
-                    console.log("p1b: " + p1b);
-                    console.log("p2b: " + p2b);
+                    var scaleFactor = Math.round(Math.pow(centerB / centerA, 1 / iterationDelta) * 100) / 100;
+                    var N = Math.round(Math.pow(B.length / A.length, 1 / iterationDelta) * 100) / 100;
 
-                    var scaleFactor = p1b / p2b;
-                    
-                    var N = (B.length / A.length);
-                    
-                    var dim = Math.log(N) / Math.log(scaleFactor);
-                    console.log(p1);
+                    var dim = Math.round(Math.log(N) / Math.log(scaleFactor) * 100) / 100;
 
-                    console.log("|A| = " + A.length + "\n|B| = " + B.length);
-                    console.log("N = |B|/|A| = " + N);
-                    console.log("ε = sqr((B.last.x - A.last.x)^2 + (B.last.y - A.last.y)^2) = "  + scaleFactor)
-                    console.log("dim_s(F) = " + dim);
+                    this.selfSimilarityCopies = N;
+                    this.selfSimilarityScaleFactor = scaleFactor;
+                    this.selfSimilarityDim = dim;
+                },
+
+                calcBoxDimension: function () {
+
+                    var l = new LSystem();
+                    l.V = this.V;
+                    l.E = this.E;
+                    l.Axiom = this.A;
+                    l.P = this.P;
+                    l.n = 5;
+                    l.generate();
+
+                    var width = 100;
+                    var height = 100;
+                    var resolution = width * height;
+
+                    var t = new Turtle(width, height, this.alpha);
+                    t.computeWord(l.out);
+
+                    var img = t.finalContext.getImageData(0, 0, width, height);
+                    var pixelCounter = 0;
+                    for (let i = 0; i < resolution * 4; i += 4) {
+                        console.log(img.data[i] + "/" + img.data[i + 1] + "/" + img.data[i + 2] + "/" + img.data[i + 3]);
+                        if (img.data[i] != 0)
+                            pixelCounter++;
+                    }
+
+                    console.log("Resolution:    " + resolution);
+                    console.log("Pixel Counter: " + pixelCounter);
+
+                    this.boxDimension = Math.log(pixelCounter) / Math.log(resolution);
                 }
             }
         });

@@ -1,0 +1,11 @@
+.slider{
+    height : 20pt;
+    width : 100pt;
+    text-align: middle;
+    /*background-color : rgba(255, 153, 0, 0.623);*/
+}
+
+.textField{
+    height : 20pt;
+    width : 100pt;
+}

@@ -278,7 +278,6 @@ class Turtle {
         }
 
 
-
         // Write Name of the View on the Canvas
         this.finalContext.save();
 
