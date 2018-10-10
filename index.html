@@ -93,24 +93,24 @@
                         </div>
                         <div id="collapse1" class="collapse show" data-parent="#accordion">
                             <div class="card-body">
-                                <div class="form-group">
-                                    <label class="control-label" for="variables">Variables (V):</label>
-                                    <input type="text" class="form-control" v-model="V" v-on:keyup="autoGenerate" id="variables">
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4" for="variables">Variables (V):</label>
+                                    <input type="text" class="form-control col-sm-7 textField" v-model="V" v-on:keyup="autoGenerate" id="variables">
                                 </div>
 
-                                <div class="form-group">
-                                    <label class="control-label" for="alphabet">Alphabet (&Sigma;):</label>
-                                    <input type="text" class="form-control" v-model="E" v-on:keyup="autoGenerate" id="alphabet">
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4" for="alphabet">Alphabet (&Sigma;):</label>
+                                    <input type="text" class="form-control col-sm-7 textField" v-model="E" v-on:keyup="autoGenerate" id="alphabet">
                                 </div>
 
-                                <div class="form-group">
-                                    <label class="control-label" for="axiom">Axiom (&omega;):</label>
-                                    <input type="text" class="form-control" v-model="A" v-on:keyup="autoGenerate" id="axiom">
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4" for="axiom">Axiom (&omega;):</label>
+                                    <input type="text" class="form-control col-sm-7 textField" v-model="A" v-on:keyup="autoGenerate" id="axiom">
                                 </div>
 
-                                <div class="form-group">
-                                    <label class="control-label" for="rules">Rules (P):</label>
-                                    <textarea class="form-control" rows="3" v-model="P" v-on:keyup="autoGenerate" id="rules"></textarea>
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4" for="rules">Rules (P):</label>
+                                    <textarea class="form-control col-sm-7" rows="3" v-model="P" v-on:keyup="autoGenerate" id="rules"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <button type="button" class="btn btn-danger" id="clearButton" v-on:click="clear">Clear</button>
@@ -252,7 +252,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="card" id="card6">
                         <div class="card-header">
                             <a class="collapsed card-link" data-toggle="collapse" href="#collapse6">Fractal
@@ -260,7 +260,7 @@
                         </div>
                         <div id="collapse6" class="collapse hidden" data-parent="#accordion">
                             <div class="card-body">
-                                
+
                                 <table class="table" style='text-align:left'>
                                     <thead>
                                         <tr>
@@ -292,10 +292,10 @@
                                 <button type="button" class="btn btn-success" disabled id="calcBoxDimensionButton"
                                     v-on:click="calcBoxDimension">Calc
                                     Box Dimension (Coming soon)</button>
-                                    
+
                             </div>
                         </div>
-                    </div
+                    </div>
                 </div>
                 <div v-html="log"> </div>
                 <div class="form-group">
@@ -307,10 +307,10 @@
 
                 </div>
             </div>
-            <div class='col-md-*' style=''>
+            <div class='col-md-*'>
                 <canvas id='screenPostProcessing' style="border: 2px solid black;display:none" width='512' height='512'></canvas>
             </div>
-            <div class='col-md-3' style=''>
+            <div class='col-md-3'>
                 <canvas id='screen' style='border:2px solid black' width='512' height='512'></canvas>
             </div>
         </div>
