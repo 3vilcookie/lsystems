@@ -170,17 +170,13 @@ class Turtle {
 
         // Clear Pre-Processing Canvas
         this.preProcessingContext.save();
-
         this.preProcessingContext.fillRect(0, 0, this.width, this.height);
-
         this.preProcessingContext.restore();
 
 
         // Clear everything on the canvas
         this.finalContext.save();
-
         this.finalContext.fillRect(0, 0, this.width, this.height);
-
         this.finalContext.restore();
 
     }
@@ -218,8 +214,10 @@ class Turtle {
         this.preProcessingContext.setTransform(1, 0, 0, 1, 0, 0);
         var fontSize = 20;
         this.preProcessingContext.font = fontSize + "px Consolas";
-        this.preProcessingContext.fillStyle = "black";
+        this.preProcessingContext.fillStyle = "white";
         this.preProcessingContext.fillText("Pre-Processing View", fontSize, this.height - fontSize);
+        this.preProcessingContext.fillStyle = "black";
+        this.preProcessingContext.fillText("Pre-Processing View", fontSize-1, this.height - fontSize-1);
         this.preProcessingContext.restore();
 
         /*
@@ -246,11 +244,12 @@ class Turtle {
         this.finalContext.scale(r, r);
 
         // 4) Move Canvas to the Fractal
-        this.finalContext.translate(this.width - this.bounds.xAverage*r, this.height  - this.bounds.yAverage*r);
+        this.finalContext.translate(this.width/2 - this.bounds.xAverage*r, this.height/2  - this.bounds.yAverage*r);
 
         // Render Fractal
         this.preProcessingStage = false;
         this.resetTurtle();
+        this.finalContext.lineWidth = 1/r;
         for (var i = 0; i < word.length; i++) {
             this.consume(word[i]);
         }
@@ -284,8 +283,10 @@ class Turtle {
         this.finalContext.setTransform(1, 0, 0, 1, 0, 0);
         var fontSize = 20;
         this.finalContext.font = fontSize + "px Consolas";
-        this.finalContext.fillStyle = "black";
+        this.finalContext.fillStyle = "white";
         this.finalContext.fillText("Output View", fontSize, this.height - fontSize);
+        this.finalContext.fillStyle = "black";
+        this.finalContext.fillText("Output View", fontSize-1, this.height - fontSize-1);
         this.finalContext.restore();
     }
 
