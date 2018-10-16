@@ -38,32 +38,34 @@
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script>-->
 
 
-    <!-- Include our Bounds Class-->
+    <!-- Include our Box Dimension class for calculating and visualizing the Box Dimension -->
+    <script src="boxdim.js"></script>
+
+    <!-- Include our Bounds Class to calculate Extrema and Center of a set of points-->
     <script src="bounds.js"></script>
 
-    <!-- Include our Turtle Class-->
+    <!-- Include our Turtle Class to draw command-based on a Cavas-->
     <script src="turtle.js"></script>
 
-    <!-- Include our Silent Turtle Class-->
+    <!-- Include our Silent Turtle Class to create a set of points without drawing it on a canvas-->
     <script src="silent_turtle.js"></script>
 
-    <!-- Include our LSystem Class-->
+    <!-- Include our LSystem Class which builds up a formal language and generates words-->
     <script src="lsystem.js"></script>
 
+    <!-- Include Audio Interpreter to hear the Fractal-->
+    <script src="audiopreter.js"></script>
 
     <title>L-Systems</title>
 </head>
 
 <body class="text-center">
-
     <div class='jumbotron' style='padding:10px'>
         <h1>
             <a href='index.html'><img src='logo.png' style='vertical-align:center;margin-right:40px'></a>L-Systems</h1>
         <p><em>~Fractals, powered by formal languages~</em></p>
     </div>
-
     <div class='container' id='lSystemsApp'>
-
         <div class='row'>
             <div class="col-md-2" style='text-align:left;line-height:40px;'>
                 <div class="form-group">
@@ -85,7 +87,7 @@
                     <button type="button" class="btn btn-primary" id="lstarTemplateButton" v-on:click="setLStarTemplate">LStar</button>
                 </div>
             </div>
-            <div class='col-md-5'>
+            <div class='col-md-6'>
                 <div id="accordion" style='padding-bottom:25px;'>
                     <div class="card" id="card1">
                         <div class="card-header">
@@ -95,22 +97,23 @@
                             <div class="card-body">
                                 <div class="form-group row">
                                     <label class="control-label col-sm-4" for="variables">Variables (V):</label>
-                                    <input type="text" class="form-control col-sm-7 textField" v-model="V" v-on:keyup="autoGenerate" id="variables">
+                                    <input type="text" class="form-control col-sm-7 textField" v-model="V" v-on:keyup="autoGenerate"
+                                        id="variables">
                                 </div>
-
                                 <div class="form-group row">
                                     <label class="control-label col-sm-4" for="alphabet">Alphabet (&Sigma;):</label>
-                                    <input type="text" class="form-control col-sm-7 textField" v-model="E" v-on:keyup="autoGenerate" id="alphabet">
+                                    <input type="text" class="form-control col-sm-7 textField" v-model="E" v-on:keyup="autoGenerate"
+                                        id="alphabet">
                                 </div>
-
                                 <div class="form-group row">
                                     <label class="control-label col-sm-4" for="axiom">Axiom (&omega;):</label>
-                                    <input type="text" class="form-control col-sm-7 textField" v-model="A" v-on:keyup="autoGenerate" id="axiom">
+                                    <input type="text" class="form-control col-sm-7 textField" v-model="A" v-on:keyup="autoGenerate"
+                                        id="axiom">
                                 </div>
-
                                 <div class="form-group row">
                                     <label class="control-label col-sm-4" for="rules">Rules (P):</label>
-                                    <textarea class="form-control col-sm-7" rows="3" v-model="P" v-on:keyup="autoGenerate" id="rules"></textarea>
+                                    <textarea class="form-control col-sm-7" rows="3" v-model="P" v-on:keyup="autoGenerate"
+                                        id="rules"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <button type="button" class="btn btn-danger" id="clearButton" v-on:click="clear">Clear</button>
@@ -151,51 +154,78 @@
                         </div>
                     </div>
 
-                    <div class="card" id="card3">
+                    <div class="card" id="card22">
                         <div class="card-header">
-                            <a class="collapsed card-link" data-toggle="collapse" href="#collapse22">Turtle
-                                Command Reference</a>
+                            <a class="collapsed card-link" data-toggle="collapse" href="#collapse22">Audio Interpreter <span class="glyphicon-glyphicon-fire"></span></a>
                         </div>
                         <div id="collapse22" class="collapse hidden" data-parent="#accordion">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <button class="btn btn-success" type="button" id="playFractalButton" v-on:click="playFractal">Play
+                                        </button>
+                                    <button class="btn btn-danger" type="button" id="stopFractalButton" v-on:click="stopFractal">Stop
+                                        </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" id="card3">
+                        <div class="card-header">
+                            <a class="collapsed card-link" data-toggle="collapse" href="#collapse3">
+                                Command Reference</a>
+                        </div>
+                        <div id="collapse3" class="collapse hidden" data-parent="#accordion">
                             <div class="card-body">
                                 <table class="table" style='text-align:left'>
                                     <thead>
                                         <tr>
                                             <th>Symbol</th>
-                                            <th>Turtle Command</th>
+                                            <th>Turtle</th>
+                                            <th>Audio Interpreter</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td style='font-family:monospace;'>f,F,G</td>
-                                            <td>Go one step forward and draw a line</td>
+                                            <td style='font-family:monospace;'>f,F</td>
+                                            <td>Go forward and draw a line</td>
+                                            <td>Play short note</td>
+                                        </tr>
+                                        <tr>
+                                            <td style='font-family:monospace;'>G</td>
+                                            <td>Go forward and draw a line</td>
+                                            <td>Play long note</td>
                                         </tr>
                                         <tr>
                                             <td style='font-family:monospace;'>+</td>
                                             <td>Turn right by &alpha;&deg;</td>
+                                            <td>Increment Note by one semitone</td>
                                         </tr>
                                         <tr>
                                             <td style='font-family:monospace;'>-</td>
                                             <td>Turn left by &alpha;&deg;</td>
+                                            <td>Decrement Note by one semitone</td>
                                         </tr>
                                         <tr>
                                             <td style='font-family:monospace;'>|</td>
                                             <td>Turn around (+180&deg;)</td>
+                                            <td>-</td>
                                         </tr>
                                         <tr>
                                             <td style='font-family:monospace;'>[</td>
-                                            <td>Save current Turtle state (Position and Orientation)</td>
+                                            <td>Save current state (Position and Orientation)</td>
+                                            <td>Save current state (Note)</td>
                                         </tr>
                                         <tr>
                                             <td style='font-family:monospace;'>]</td>
-                                            <td>Restore last saved Turtle state</td>
+                                            <td>Restore latest state</td>
+                                            <td>Restore latest state</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
-
                     <div class="card" id="card4">
                         <div class="card-header">
                             <a class="collapsed card-link" data-toggle="collapse" href="#collapse4">Debugging</a>
@@ -220,7 +250,6 @@
                                         v-model="zoomUI" v-on:change="generate" id="zoomId">
                                     <div class="col-sm-2">{{ zoomUI}}</div>
                                 </div>
-
                                 <div class="form-group row">
                                     <label class="control-label col-sm-4" for="preProcessingVisibilityId">Pre-Processing
                                         Output:</label>
@@ -235,7 +264,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="card" id="card5">
                         <div class="card-header">
                             <a class="collapsed card-link" data-toggle="collapse" href="#collapse5">Language
@@ -252,7 +280,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="card" id="card6">
                         <div class="card-header">
                             <a class="collapsed card-link" data-toggle="collapse" href="#collapse6">Fractal
@@ -289,10 +316,8 @@
                                 </table>
                                 <button type="button" class="btn btn-success" id="calcDimensionButton" v-on:click="calcDimension">Calc
                                     Self-Similarity Dimension</button>
-                                <button type="button" class="btn btn-success" disabled id="calcBoxDimensionButton"
-                                    v-on:click="calcBoxDimension">Calc
+                                <button type="button" class="btn btn-success" id="calcBoxDimensionButton" v-on:click="calcBoxDimension">Calc
                                     Box Dimension (Coming soon)</button>
-
                             </div>
                         </div>
                     </div>
@@ -304,7 +329,6 @@
                         Turtle</button>
 
                     <p style="color:grey"><em>{{ durationOut }}</em></p>
-
                 </div>
             </div>
             <div class='col-md-*'>
@@ -316,8 +340,6 @@
         </div>
     </div>
     <script>
-        // Post Content Scripts
-
         var app = new Vue({
             el: '#lSystemsApp',
             data: {
@@ -346,7 +368,8 @@
                 selfSimilarityDim: 0,
                 selfSimilarityCopies: 0,
                 selfSimilarityScaleFactor: 0,
-                boxDimension: 0
+                boxDimension: 0,
+                audiopreter: null
             },
             created: function () {
                 //this.setLStarTemplate(); // --> Default
@@ -367,7 +390,6 @@
                     this.E = "";
                     this.A = "";
                 },
-
                 setDebugCanvasTemplate: function () {
                     this.V = "F";
                     this.P = "F=F+F";
@@ -476,7 +498,6 @@
                     this.log = "";
                     this.autoGenerate();
                 },
-
                 togglePreProcessingCanvas() {
 
                     if (this.preProcessingVisible)
@@ -485,12 +506,37 @@
                         $('#screenPostProcessing').hide();
 
                 },
-
                 autoGenerate: function () {
                     if (this.autoGen)
                         this.generate();
                 },
+                stopFractal: function () {
+                    if (this.audiopreter != null) {
+                        this.audiopreter.stop();
 
+                    }
+                },
+                playFractal: function () {
+                    this.stopFractal();
+                    var l = new LSystem();
+                    var output = "";
+                    this.log = "";
+                    try {
+                        l.V = this.V;
+                        l.E = this.E;
+                        l.Axiom = this.A;
+                        l.P = this.P;
+                        l.n = this.n;
+                        l.generate()
+                        this.out = l.out;
+                    } catch (error) {
+                        this.log = "<div class='alert alert-danger'>[LSystem]: " + error + "</div>";
+                        return;
+                    }
+
+                    this.audiopreter = new Audiopreter();
+                    this.audiopreter.interpretWord(l.out);
+                },
                 generate: function () {
 
                     var l = new LSystem();
@@ -614,25 +660,33 @@
 
                 calcBoxDimension: function () {
 
+
                     var l = new LSystem();
                     l.V = this.V;
                     l.E = this.E;
                     l.Axiom = this.A;
                     l.P = this.P;
-                    l.n = 5;
+                    l.n = this.n;
                     l.generate();
 
-                    var width = 100;
+                    /*var width = 100;
                     var height = 100;
-                    var resolution = width * height;
+                    var resolution = width * height;*/
 
-                    var t = new Turtle(width, height, this.alpha);
+                    var t = new Turtle(this.ctx.canvas.width, this.ctx.canvas.height, this.alpha, this.n, 100.0);
+                    t.angleOffset = parseFloat(this.angleOffset) + parseFloat(this.startAngle);
                     t.computeWord(l.out);
 
+
+                    //this.ctx.drawImage(t.finalContext.canvas, 0,0);
+                    var boxDim = new BoxDimension(t.finalContext);
+                    boxDim.calculate();
+                    this.ctx.drawImage(boxDim.boxCanvas, 0, 0);
+
+                    /*
                     var img = t.finalContext.getImageData(0, 0, width, height);
                     var pixelCounter = 0;
                     for (let i = 0; i < resolution * 4; i += 4) {
-                        console.log(img.data[i] + "/" + img.data[i + 1] + "/" + img.data[i + 2] + "/" + img.data[i + 3]);
                         if (img.data[i] != 0)
                             pixelCounter++;
                     }
@@ -640,7 +694,7 @@
                     console.log("Resolution:    " + resolution);
                     console.log("Pixel Counter: " + pixelCounter);
 
-                    this.boxDimension = Math.log(pixelCounter) / Math.log(resolution);
+                    this.boxDimension = Math.log(pixelCounter) / Math.log(resolution);*/
                 }
             }
         });
@@ -657,6 +711,7 @@
 
                 // Create First Fractal on pageload
                 app.generate();
+                //app.calcBoxDimension();
 
             }
             else

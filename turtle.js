@@ -249,7 +249,7 @@ class Turtle {
         // Render Fractal
         this.preProcessingStage = false;
         this.resetTurtle();
-        this.finalContext.lineWidth = 1/r;
+        this.finalContext.lineWidth = 2 / r;
         for (var i = 0; i < word.length; i++) {
             this.consume(word[i]);
         }
@@ -278,16 +278,16 @@ class Turtle {
 
 
         // Write Name of the View on the Canvas
-        this.finalContext.save();
+        /*this.finalContext.save();
 
         this.finalContext.setTransform(1, 0, 0, 1, 0, 0);
-        var fontSize = 20;
+        var fontSize = 30;
         this.finalContext.font = fontSize + "px Consolas";
         this.finalContext.fillStyle = "white";
-        this.finalContext.fillText("Output View", fontSize, this.height - fontSize);
+        //this.finalContext.fillText("Output View", fontSize, this.height - fontSize);
         this.finalContext.fillStyle = "black";
         this.finalContext.fillText("Output View", fontSize-1, this.height - fontSize-1);
-        this.finalContext.restore();
+        this.finalContext.restore();*/
     }
 
     consume(symbol) {
