@@ -85,6 +85,7 @@
                         Curve</button>
                     <button type="button" class="btn btn-primary" id="plantTemplateButton" v-on:click="setPlantTemplate">Plant</button>
                     <button type="button" class="btn btn-primary" id="lstarTemplateButton" v-on:click="setLStarTemplate">LStar</button>
+                    <button type="button" class="btn btn-success" id="coastlineTemplateButton" v-on:click="setCoastlineTemplate">Coastline</button>
                 </div>
             </div>
             <div class='col-md-6'>
@@ -136,15 +137,15 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label" for="alpha">Alpha (&alpha;):</label>
-                                    <input type="range" start="0" min="0" max="360" step="0.1" class="form-control"
+                                    <input type="range" start="0" min="0" max="360" step="1" class="form-control"
                                         v-model="alpha" v-on:change="autoGenerate" id="alpha">
-                                    {{alpha}}
+                                    {{alpha}}°
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label" for="startAngleId">Start-Angle (&beta;):</label>
-                                    <input type="range" start="0" min="0" max="360" step="0.1" class="form-control"
+                                    <input type="range" start="0" min="0" max="360" step="1" class="form-control"
                                         v-model="startAngle" v-on:change="autoGenerate" id="startAngleId">
-                                    {{startAngle}}
+                                    {{startAngle}}°
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label" for="autoGenId">Auto Generate</label>
@@ -414,6 +415,18 @@
                     this.log = "";
                     this.autoGenerate();
                 },
+                setCoastlineTemplate : function(){
+                    this.V = "F";
+                    this.P = "F=F+F--[--F]+F";
+                    this.E = "+-[]|";
+                    this.A = "F|F";
+                    this.alpha = 90
+                    this.n = 6;
+                    this.startAngle = 0;
+                    this.out = "";
+                    this.log = "";
+                    this.autoGenerate();
+                },
                 setLStarTemplate: function () {
                     this.V = "AF";
                     this.P = "A=AAffff--f--fff++ff--f--fff+AA-";
@@ -557,10 +570,11 @@
 
                     // Draw it.
                     //try {
+
                     var t = new Turtle(this.ctx.canvas.width, this.ctx.canvas.height, this.alpha, this.n, 100.0, this.showCanvasDebug);
 
                     t.angleOffset = parseFloat(this.angleOffset) + parseFloat(this.startAngle);
-                    //console.log(this.angleOffset + "/" + this.startAngle + "/" + t.angleOffset);
+
                     t.xOffsetUI = this.xoffsetUI;
                     t.yOffsetUI = this.yoffsetUI;
                     t.zoomUI = this.zoomUI;
