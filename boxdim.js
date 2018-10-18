@@ -4,7 +4,8 @@ class BoxDimension {
         this.ctx = context;
         this.width = this.ctx.canvas.width;
         this.height = this.ctx.canvas.height;
-        this.gridSize = gridSize;
+        this.gridSize = Number(gridSize);
+        this.showGrid = showGrid;
 
         // Create Canvas for Box-Dimension-Visualization
         this.boxCanvas = document.createElement("canvas");
@@ -15,22 +16,10 @@ class BoxDimension {
         if (this.boxCanvas && this.boxCanvas.getContext) {
             this.boxContext = this.boxCanvas.getContext('2d');
             this.boxContext.drawImage(this.ctx.canvas, 0, 0);
-            this.boxContext.fillStyle = "rgba(255, 0, 0)";
-            this.boxContext.strokeStyle = "red";
-            this.boxContext.lineWidth = 0.5;
+            this.boxContext.fillStyle = "red";
+            this.boxContext.strokeStyle = "black";
+            this.boxContext.lineWidth = 0.1;
 
-            this.boxContext.save();
-            this.boxContext.scale(1, -1)
-            this.boxContext.translate(0, -this.width);
-            //console.log(this.width + "/" + this.height + "/" + this.gridSize + "/" + this.width / this.gridSize);
-
-            if (showGrid)
-                for (let y = 0; y < this.height; y += this.gridSize)
-                    for (let x = 0; x < this.width; x += this.gridSize)
-                        this.boxContext.strokeRect(x, y, this.gridSize, this.gridSize);
-
-
-            this.boxContext.restore();
         }
         else
             throw "Invalid Box Canvas";
@@ -51,8 +40,7 @@ class BoxDimension {
 
     calculate() {
         var img = this.ctx.getImageData(0, 0, this.width, this.height);
-        var pixelCounter = 0;
-        for (let i = 0; i < this.width * this.height * 4; i +=4) {
+        for (let i = 0; i < this.width * this.height * 4; i += 4) {
 
             if (img.data[i] == 0 && img.data[i + 3] > 0) {
                 var x = (i / 4) % this.width;
@@ -64,5 +52,32 @@ class BoxDimension {
                 this.boxContext.fillRect(rx, ry, this.gridSize, this.gridSize);
             }
         }
+        if (this.showGrid)
+            for (let i = 0; i < this.width; i += this.gridSize) {
+
+                this.boxContext.beginPath();
+
+                // Horizontal Lines
+                if (Number(i % (this.gridSize * 4)) == 0)
+                    this.boxContext.lineWidth = 1.0;
+                else
+                    this.boxContext.lineWidth = 0.1;
+
+                this.boxContext.moveTo(0, i);
+                this.boxContext.lineTo(this.width, i);  
+
+                // Vertical Lines
+                if (i % (this.gridSize * 2) == 0)
+                    this.boxContext.lineWidth = 1.0;
+                else
+                    this.boxContext.lineWidth = 0.1;
+                this.boxContext.moveTo(i, 0);
+                this.boxContext.lineTo(i, this.height);
+
+                this.boxContext.stroke();
+                this.boxContext.closePath();
+                //this.boxContext.strokeRect(x, y, this.gridSize, this.gridSize);
+
+            }
     }
 }

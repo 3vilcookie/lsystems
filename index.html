@@ -86,6 +86,8 @@
                     <button type="button" class="btn btn-primary" id="plantTemplateButton" v-on:click="setPlantTemplate">Plant</button>
                     <button type="button" class="btn btn-primary" id="lstarTemplateButton" v-on:click="setLStarTemplate">LStar</button>
                     <button type="button" class="btn btn-success" id="coastlineTemplateButton" v-on:click="setCoastlineTemplate">Coastline</button>
+                    <button type="button" class="btn btn-success" id="cloudTemplateButton" v-on:click="setCloudTemplate">Cloud</button>
+                    <button type="button" class="btn btn-success" id="LichterketteTemplateButton" v-on:click="setLichterketteTemplate">Lichterkette</button>
                 </div>
             </div>
             <div class='col-md-6'>
@@ -129,23 +131,23 @@
                         </div>
                         <div id="collapse2" class="collapse hidden" data-parent="#accordion">
                             <div class="card-body">
-                                <div class="form-group">
-                                    <label class="control-label" for="iterations">Iterations:</label>
-                                    <input type="range" value="1" step="1" min="1" max="20" class="form-control"
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4" for="iterations">Iterations:</label>
+                                    <input type="range" value="1" step="1" min="1" max="20" class="form-control col-sm-4 slider"
                                         v-model="n" v-on:change="autoGenerate" id="iterations">
-                                    {{ n }}
+                                    <div class="col-sm-2">{{ n }}</div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="control-label" for="alpha">Alpha (&alpha;):</label>
-                                    <input type="range" start="0" min="0" max="360" step="1" class="form-control"
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4" for="alpha">Alpha (&alpha;):</label>
+                                    <input type="range" start="0" min="0" max="360" step="1" class="form-control col-sm-4 slider"
                                         v-model="alpha" v-on:change="autoGenerate" id="alpha">
-                                    {{alpha}}°
+                                    <div class="col-sm-2">{{alpha}}°</div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="control-label" for="startAngleId">Start-Angle (&beta;):</label>
-                                    <input type="range" start="0" min="0" max="360" step="1" class="form-control"
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4" for="startAngleId">Start-Angle (&beta;):</label>
+                                    <input type="range" start="0" min="0" max="360" step="1" class="form-control col-sm-4 slider"
                                         v-model="startAngle" v-on:change="autoGenerate" id="startAngleId">
-                                    {{startAngle}}°
+                                    <div class="col-sm-2">{{startAngle}}°</div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label" for="autoGenId">Auto Generate</label>
@@ -157,15 +159,16 @@
 
                     <div class="card" id="card22">
                         <div class="card-header">
-                            <a class="collapsed card-link" data-toggle="collapse" href="#collapse22">Audio Interpreter <span class="glyphicon-glyphicon-fire"></span></a>
+                            <a class="collapsed card-link" data-toggle="collapse" href="#collapse22">Audio Interpreter
+                                <span class="glyphicon-glyphicon-fire"></span></a>
                         </div>
                         <div id="collapse22" class="collapse hidden" data-parent="#accordion">
                             <div class="card-body">
                                 <div class="form-group">
                                     <button class="btn btn-success" type="button" id="playFractalButton" v-on:click="playFractal">Play
-                                        </button>
+                                    </button>
                                     <button class="btn btn-danger" type="button" id="stopFractalButton" v-on:click="stopFractal">Stop
-                                        </button>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -316,7 +319,17 @@
                                     </tbody>
                                 </table>
                                 <button type="button" class="btn btn-success" id="calcDimensionButton" v-on:click="calcDimension">Calc
-                                    Self-Similarity Dimension</button>
+                                    Self-Similarity dimension</button>
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4" for="gridSizeId">Grid Size:</label>
+                                    <input type="range" class="form-control col-sm-4 slider" min="1" max="100" step="1"
+                                         v-model="gridSize" id="gridSizeId">
+                                    <div class="col-sm-2">{{ gridSize }}</div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4" for="showGridId">Show Grid</label>
+                                    <input class="col-sm-4" type="checkbox" v-model="showGrid" id="showGridId">
+                                </div>
                                 <button type="button" class="btn btn-success" id="calcBoxDimensionButton" v-on:click="calcBoxDimension">Calc
                                     Box Dimension (Coming soon)</button>
                             </div>
@@ -370,6 +383,8 @@
                 selfSimilarityCopies: 0,
                 selfSimilarityScaleFactor: 0,
                 boxDimension: 0,
+                gridSize: 50,
+                showGrid : false,
                 audiopreter: null
             },
             created: function () {
@@ -415,7 +430,7 @@
                     this.log = "";
                     this.autoGenerate();
                 },
-                setCoastlineTemplate : function(){
+                setCoastlineTemplate: function () {
                     this.V = "F";
                     this.P = "F=F+F--[--F]+F";
                     this.E = "+-[]|";
@@ -423,6 +438,30 @@
                     this.alpha = 90
                     this.n = 6;
                     this.startAngle = 0;
+                    this.out = "";
+                    this.log = "";
+                    this.autoGenerate();
+                },
+                setCloudTemplate : function(){
+                    this.V = "F";
+                    this.P="F=F+FF-";
+                    this.E = "+-|";
+                    this.A = "F|F";
+                    this.alpha = 90
+                    this.n = 6;
+                    this.startAngle = 0;
+                    this.out = "";
+                    this.log = "";
+                    this.autoGenerate();
+                },
+                setLichterketteTemplate : function(){
+                    this.V = "FG";
+                    this.P="F=F+F-G-F-\nG=GFG";
+                    this.E = "+-|";
+                    this.A = "F|F";
+                    this.alpha = 212
+                    this.n = 6;
+                    this.startAngle = 96;
                     this.out = "";
                     this.log = "";
                     this.autoGenerate();
@@ -568,16 +607,13 @@
                         return;
                     }
 
-                    // Draw it.
-                    //try {
-
-                    var t = new Turtle(this.ctx.canvas.width, this.ctx.canvas.height, this.alpha, this.n, 100.0, this.showCanvasDebug);
+                    var t = new Turtle(this.ctx.canvas.width, this.ctx.canvas.height, parseFloat(this.alpha), Number(this.n), 100.0, this.showCanvasDebug);
 
                     t.angleOffset = parseFloat(this.angleOffset) + parseFloat(this.startAngle);
 
-                    t.xOffsetUI = this.xoffsetUI;
-                    t.yOffsetUI = this.yoffsetUI;
-                    t.zoomUI = this.zoomUI;
+                    t.xOffsetUI = Number(this.xoffsetUI);
+                    t.yOffsetUI = Number(this.yoffsetUI);
+                    t.zoomUI = Number(this.zoomUI);
                     t.clear();
 
                     this.startTime = performance.now();
@@ -589,11 +625,6 @@
 
                     this.ctx.drawImage(t.finalCanvas, 0, 0);
                     this.preProcesssingCtx.drawImage(t.preProcessingCanvas, 0, 0);
-
-
-                    /*} catch (error) {
-                        this.log = "<div class='alert alert-danger'>[Turtle]: " + error + "</div>";
-                    }*/
 
                 },
 
@@ -672,8 +703,16 @@
                     this.selfSimilarityDim = dim;
                 },
 
+                clearCanvas: function () {
+                    this.ctx.save();
+                    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+                    this.ctx.fillStyle = "#FFF"
+                    this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+                    this.ctx.restore();
+                },
                 calcBoxDimension: function () {
 
+                    this.clearCanvas();
 
                     var l = new LSystem();
                     l.V = this.V;
@@ -693,9 +732,10 @@
 
 
                     //this.ctx.drawImage(t.finalContext.canvas, 0,0);
-                    var boxDim = new BoxDimension(t.finalContext);
+                    var boxDim = new BoxDimension(t.finalContext, this.gridSize, this.showGrid);
                     boxDim.calculate();
                     this.ctx.drawImage(boxDim.boxCanvas, 0, 0);
+                    this.ctx.drawImage(t.finalContext.canvas, 0,0);
 
                     /*
                     var img = t.finalContext.getImageData(0, 0, width, height);
