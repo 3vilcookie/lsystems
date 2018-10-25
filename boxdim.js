@@ -4,7 +4,7 @@ class BoxDimension {
         this.ctx = context;
         this.width = this.ctx.canvas.width;
         this.height = this.ctx.canvas.height;
-        this.gridSize = Number(gridSize);
+        this.gridSize = Math.max(5,Number(gridSize));
         this.showGrid = showGrid;
 
         // Create Canvas for Box-Dimension-Visualization
@@ -68,7 +68,7 @@ class BoxDimension {
 
                 // Vertical Lines
                 if (i % (this.gridSize * 2) == 0)
-                    this.boxContext.lineWidth = 1.0;
+                    this.boxContext.lineWidth = 0.5;
                 else
                     this.boxContext.lineWidth = 0.1;
                 this.boxContext.moveTo(i, 0);

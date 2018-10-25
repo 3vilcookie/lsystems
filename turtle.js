@@ -57,7 +57,7 @@ class Turtle {
         if (this.finalCanvas && this.finalCanvas.getContext) {
             this.finalContext = this.finalCanvas.getContext('2d');
             this.finalContext.fillStyle = "rgb(255, 255, 255)";
-            this.finalContext.strokeStyle = "black";
+            this.finalContext.strokeStyle = "rgb(0,0,0)";
             this.finalContext.lineWidth = 5;
 
         }
@@ -188,6 +188,32 @@ class Turtle {
         this.coordinateStack = [];
     }
 
+    transformCanvas(){
+      // 1) Invert Y-Axis, let it point to the bottom
+      this.finalContext.scale(1, -1);
+
+      // 2) Move Coordinate Origin into the bottom-left Corner
+      this.finalContext.translate(0, -this.height);
+
+      // Transformation from the Transformation Test 
+
+      // Calculate Rescale-Factor using the smallest factor of both dimensions
+      var r = Math.min(this.width/this.bounds.xLength, this.height/this.bounds.yLength);
+      this.finalContext.scale(r,r);
+
+      // Move center of the Object  to the origin
+      this.finalContext.translate(-this.bounds.xCenter, -this.bounds.yCenter);
+
+      // Move Object to the center of the canvas
+      this.finalContext.translate(this.width/(2*r),this.height/(2*r));
+
+      
+        // Adjust line width relative to the Rescale-Factor to avoid that objects get invisible due to 
+        // a small line width
+        this.finalContext.lineWidth = 1/ r;
+    }
+
+
     computeWord(word) {
 
         if (typeof word == 'undefined' || word == "")
@@ -226,92 +252,44 @@ class Turtle {
          * Change Canvas Orientation and transform it in order to get the
          * best view onto the Fractal
          */
-
-
-        // test Transformations with easier object like a triangle or Square in
-        // another web app
-
-
-        // 1) Invert Y-Axis, let it point to the bottom
-        this.finalContext.scale(1, -1);
-
-        // 2) Move Coordinate Origin into the bottom-left Corner
-        this.finalContext.translate(0, -this.height);
-
-
-         // 4) Move Canvas to the Fractal
-         //this.finalContext.translate(this.width/2 - this.bounds.xAverage*r, this.height/2 - this.bounds.yAverage*r);
-         //this.finalContext.translate(-this.bounds.xAverage,  -this.bounds.yAverage);
-
-        
-        // 3) Scale it depending on the extent
-        /*var r;
-        if (this.width/this.bounds.xLength < this.height/this.bounds.yLength)
-            r = this.width / this.bounds.xLength;
-        else
-            r = this.height / this.bounds.yLength;
-        
-        console.log(this.bounds.toString())
-        console.log("Resize Factor: " + r)
-        this.finalContext.scale(r, r);
-        console.log("HALLO");*/
-
-        // 4) Move Canvas to the Fractal
-        //this.finalContext.translate(this.width/2 - this.bounds.xAverage*r, this.height/2 - this.bounds.yAverage*r);
-
-
-        // 5) Move Fractal by User-defined Parameters
-        //this.finalContext.scale(this.zoomUI, this.zoomUI);
-        //this.finalContext.translate(this.xOffsetUI, this.yOffsetUI);
-
-        // Transformation from the Transformation Test 
-        var r = Math.min(this.width/this.bounds.xLength, this.height/this.bounds.yLength);
-        this.finalContext.scale(r,r);
-        this.finalContext.translate(-this.bounds.xCenter, -this.bounds.yCenter);
-        this.finalContext.translate(this.width/(2*r),this.height/(2*r));
+        this.transformCanvas();
+  
         
         // Render Fractal
         this.preProcessingStage = false;
         this.resetTurtle();
-        //this.finalContext.lineWidth = 2 / r;
+
         for (var i = 0; i < word.length; i++) {
             this.consume(word[i]);
         }
 
         // Mark special Points
-        if (this.showCanvasDebug) {
-            this.finalContext.save();
+        if (this.showCanvasDebug)
+            this.drawHelp();
 
-            // Draw Bounding Box
-            this.finalContext.strokeStyle = "cyan"
-            this.finalContext.strokeRect(this.bounds.xMin, this.bounds.yMin, this.bounds.xLength, this.bounds.yLength);
+        
 
-            // Draw Extrema of the Bounding Box
-            var t = 2 / r;
-            this.finalContext.fillStyle = "magenta"
-            this.finalContext.fillRect(this.bounds.xMin - 5 * t, this.bounds.yAverage - 5 * t, 10 * t, 10 * t);
-            this.finalContext.fillRect(this.bounds.xMax - 5 * t, this.bounds.yAverage - 5 * t, 10 * t, 10 * t);
-            this.finalContext.fillRect(this.bounds.xAverage - 5 * t, this.bounds.yMax - 5 * t, 10 * t, 10 * t);
-            this.finalContext.fillRect(this.bounds.xAverage - 5 * t, this.bounds.yMin - 5 * t, 10 * t, 10 * t);
+    }
 
-            // Draw Center
-            this.finalContext.fillStyle = "yellow"
-            this.finalContext.fillRect(this.bounds.xAverage - 5 * t, this.bounds.yAverage - 5 * t, 10 * t, 10 * t)
-            this.finalContext.restore();
-        }
+    drawHelp(){
+        this.finalContext.save();
 
+        // Draw Bounding Box
+        this.finalContext.strokeStyle = "cyan"
+        this.finalContext.strokeRect(this.bounds.xMin, this.bounds.yMin, this.bounds.xLength, this.bounds.yLength);
 
-        // Write Name of the View on the Canvas
-        /*this.finalContext.save();
+        // Draw Extrema of the Bounding Box
+        var t = 2 / r;
+        this.finalContext.fillStyle = "magenta"
+        this.finalContext.fillRect(this.bounds.xMin - 5 * t, this.bounds.yAverage - 5 * t, 10 * t, 10 * t);
+        this.finalContext.fillRect(this.bounds.xMax - 5 * t, this.bounds.yAverage - 5 * t, 10 * t, 10 * t);
+        this.finalContext.fillRect(this.bounds.xAverage - 5 * t, this.bounds.yMax - 5 * t, 10 * t, 10 * t);
+        this.finalContext.fillRect(this.bounds.xAverage - 5 * t, this.bounds.yMin - 5 * t, 10 * t, 10 * t);
 
-        this.finalContext.setTransform(1, 0, 0, 1, 0, 0);
-        var fontSize = 30;
-        this.finalContext.font = fontSize + "px Consolas";
-        this.finalContext.fillStyle = "white";
-        //this.finalContext.fillText("Output View", fontSize, this.height - fontSize);
-        this.finalContext.fillStyle = "black";
-        this.finalContext.fillText("Output View", fontSize-1, this.height - fontSize-1);
-        this.finalContext.restore();*/
+        // Draw Center
+        this.finalContext.fillStyle = "yellow"
+        this.finalContext.fillRect(this.bounds.xAverage - 5 * t, this.bounds.yAverage - 5 * t, 10 * t, 10 * t)
+        this.finalContext.restore();
     }
 
     consume(symbol) {

@@ -60,19 +60,15 @@
 </head>
 
 <body class="text-center">
-    <div class='jumbotron' style='padding:10px'>
-        <h1>
+    <div class='jumbotron' style='padding:0px'>
+        <h1 style='padding:5px'>
             <a href='index.html'><img src='logo.png' style='vertical-align:center;margin-right:40px'></a>L-Systems</h1>
-        <p><em>~Fractals, powered by formal languages~</em></p>
+        <p style='padding:5px'><em>~Fractals, powered by formal languages~</em></p>
     </div>
     <div class='container' id='lSystemsApp'>
         <div class='row'>
             <div class="col-md-2" style='text-align:left;line-height:40px;'>
                 <div class="form-group">
-                    <button type="button" class="btn btn-warning" id="debugCanvasTemplateButton" v-on:click="setDebugCanvasTemplate">Canvas
-                        Debug</button>
-                    <button type="button" class="btn btn-warning" id="debugCanvasTemplateButton2" v-on:click="setDebugCanvas2Template">Canvas
-                        Debug2</button>
                     <button type="button" class="btn btn-primary" id="kochTemplateButton" v-on:click="setKochTemplate">Koch
                         Curve</button>
                     <button type="button" class="btn btn-primary" id="kochSnowflakeTemplateButton" v-on:click="setKochSnowflakeTemplate">Koch
@@ -230,7 +226,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card" id="card4">
+                    <!--<div class="card" id="card4">
                         <div class="card-header">
                             <a class="collapsed card-link" data-toggle="collapse" href="#collapse4">Debugging</a>
                         </div>
@@ -267,7 +263,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="card" id="card5">
                         <div class="card-header">
                             <a class="collapsed card-link" data-toggle="collapse" href="#collapse5">Language
@@ -278,8 +274,8 @@
                                 <div class="form-group">
                                     Output:
                                     <textarea readonly class="form-control" rows="5" id="output">{{ out }}</textarea>
-                                    Silent-Turtle Output:
-                                    <textarea readonly class="form-control" rows="5" id="output2">{{ silentTurtleOut }}</textarea>
+                                    <!--Silent-Turtle Output:
+                                    <textarea readonly class="form-control" rows="5" id="output2">{{ silentTurtleOut }}</textarea>-->
                                 </div>
                             </div>
                         </div>
@@ -339,8 +335,8 @@
                 <div v-html="log"> </div>
                 <div class="form-group">
                     <button type="button" class="btn btn-primary" id="generateButton" v-on:click="generate">Generate</button>
-                    <button type="button" class="btn btn-success" id="generateButton2" v-on:click="generateWithSilentTurtle">Silent
-                        Turtle</button>
+                    <!--<button type="button" class="btn btn-success" id="generateButton2" v-on:click="generateWithSilentTurtle">Silent
+                        Turtle</button>-->
 
                     <p style="color:grey"><em>{{ durationOut }}</em></p>
                 </div>
@@ -348,8 +344,8 @@
             <div class='col-md-*'>
                 <canvas id='screenPostProcessing' style="border: 2px solid black;display:none" width='512' height='512'></canvas>
             </div>
-            <div class='col-md-3'>
-                <canvas id='screen' style='border:2px solid black' width='512' height='512'></canvas>
+            <div class='col-md-4'>
+                <canvas id='screen' style='border:2px solid black' width='800' height='800'></canvas>
             </div>
         </div>
     </div>
