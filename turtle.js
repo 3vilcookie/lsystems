@@ -30,7 +30,7 @@ class Turtle {
 
 
         this.bounds = new Bounds();
-        this.bounds.process(this.x,this.y);
+        this.bounds.process(this.x, this.y);
 
 
         // Create Pre-Processing Canvas
@@ -217,7 +217,7 @@ class Turtle {
         this.preProcessingContext.fillStyle = "white";
         this.preProcessingContext.fillText("Pre-Processing View", fontSize, this.height - fontSize);
         this.preProcessingContext.fillStyle = "black";
-        this.preProcessingContext.fillText("Pre-Processing View", fontSize-1, this.height - fontSize-1);
+        this.preProcessingContext.fillText("Pre-Processing View", fontSize - 1, this.height - fontSize - 1);
         this.preProcessingContext.restore();
 
         /*
@@ -244,8 +244,12 @@ class Turtle {
         this.finalContext.scale(r, r);
 
         // 4) Move Canvas to the Fractal
-        this.finalContext.translate(this.width/2 - this.bounds.xAverage*r, this.height/2  - this.bounds.yAverage*r);
+        this.finalContext.translate(this.width / 2 - this.bounds.xAverage * r, this.height / 2 - this.bounds.yAverage * r);
 
+
+        // 5) Move Fractal by User-defined Parameters
+        this.finalContext.scale(this.zoomUI, this.zoomUI);
+        this.finalContext.translate(this.xOffsetUI, this.yOffsetUI);
         // Render Fractal
         this.preProcessingStage = false;
         this.resetTurtle();
@@ -272,7 +276,7 @@ class Turtle {
 
             // Draw Center
             this.finalContext.fillStyle = "yellow"
-            this.finalContext.fillRect(this.bounds.xAverage-5*t, this.bounds.yAverage-5*t,10*t,10*t)
+            this.finalContext.fillRect(this.bounds.xAverage - 5 * t, this.bounds.yAverage - 5 * t, 10 * t, 10 * t)
             this.finalContext.restore();
         }
 
