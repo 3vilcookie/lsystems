@@ -11,7 +11,7 @@ class Turtle {
      * Command Drawing System using an input string and a char interpreter to draw
      * on a HTML5 Canvas  
      */
-    constructor(width, height, alpha = 60.0, iterationCount = 1, length = 100.0, debugCanvas = false) {
+    constructor(width, height, alpha = 60.0, iterationCount = 1, length = 1.0, debugCanvas = false) {
         this.alpha = alpha;
         this.length = length;
         this.width = width;
@@ -19,7 +19,7 @@ class Turtle {
         this.angle = 0;
         this.x = 0;
         this.y = 0;
-        this.iterationCount = iterationCount;
+        this.iterationCount = Number(iterationCount);
         this.xOffset = 0;
         this.yOffset = 0;
         this.xOffsetUI = 0;
@@ -228,32 +228,52 @@ class Turtle {
          */
 
 
+        // test Transformations with easier object like a triangle or Square in
+        // another web app
+
+
         // 1) Invert Y-Axis, let it point to the bottom
         this.finalContext.scale(1, -1);
 
         // 2) Move Coordinate Origin into the bottom-left Corner
         this.finalContext.translate(0, -this.height);
 
+
+         // 4) Move Canvas to the Fractal
+         //this.finalContext.translate(this.width/2 - this.bounds.xAverage*r, this.height/2 - this.bounds.yAverage*r);
+         //this.finalContext.translate(-this.bounds.xAverage,  -this.bounds.yAverage);
+
+        
         // 3) Scale it depending on the extent
-        var r;
-        if (this.bounds.xLength + this.width > this.bounds.yLength + this.height)
+        /*var r;
+        if (this.width/this.bounds.xLength < this.height/this.bounds.yLength)
             r = this.width / this.bounds.xLength;
         else
             r = this.height / this.bounds.yLength;
-
+        
+        console.log(this.bounds.toString())
+        console.log("Resize Factor: " + r)
         this.finalContext.scale(r, r);
+        console.log("HALLO");*/
 
         // 4) Move Canvas to the Fractal
-        this.finalContext.translate(this.width / 2 - this.bounds.xAverage * r, this.height / 2 - this.bounds.yAverage * r);
+        //this.finalContext.translate(this.width/2 - this.bounds.xAverage*r, this.height/2 - this.bounds.yAverage*r);
 
 
         // 5) Move Fractal by User-defined Parameters
-        this.finalContext.scale(this.zoomUI, this.zoomUI);
-        this.finalContext.translate(this.xOffsetUI, this.yOffsetUI);
+        //this.finalContext.scale(this.zoomUI, this.zoomUI);
+        //this.finalContext.translate(this.xOffsetUI, this.yOffsetUI);
+
+        // Transformation from the Transformation Test 
+        var r = Math.min(this.width/this.bounds.xLength, this.height/this.bounds.yLength);
+        this.finalContext.scale(r,r);
+        this.finalContext.translate(-this.bounds.xCenter, -this.bounds.yCenter);
+        this.finalContext.translate(this.width/(2*r),this.height/(2*r));
+        
         // Render Fractal
         this.preProcessingStage = false;
         this.resetTurtle();
-        this.finalContext.lineWidth = 2 / r;
+        //this.finalContext.lineWidth = 2 / r;
         for (var i = 0; i < word.length; i++) {
             this.consume(word[i]);
         }

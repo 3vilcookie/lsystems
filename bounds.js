@@ -47,24 +47,24 @@ class Bounds {
 
     processX(value) {
         if (value > this.xMax)
-            this.xMax = this.round(value);
+            this.xMax = value;
         if (value < this.xMin)
-            this.xMin = this.round(value);
+            this.xMin = value;
     }
 
     processY(value) {
         if (value > this.yMax)
-            this.yMax = this.round(value);
+            this.yMax = value;
         if (value < this.yMin)
-            this.yMin = this.round(value);
+            this.yMin = value;
     }
 
-    get xAverage() {
-        return this.round((this.xMax + this.xMin) / 2.0);
+    get xCenter() {
+        return (this.xMax + this.xMin) / 2.0;
     }
 
-    get yAverage() {
-        return this.round((this.yMax + this.yMin) / 2.0);
+    get yCenter() {
+        return (this.yMax + this.yMin) / 2.0;
     }
 
     get xLength() {
@@ -75,16 +75,18 @@ class Bounds {
         return this.yMax - this.yMin;
     }
 
+    /*
     round(value) {
+        return value;
         var factor = Math.pow(10, this.decimals);
         return Math.round(value * factor) / factor;
-    }
+    }*/
 
     toString() {
         return "X: " + this.xMin + "/" + this.xMax +
-            " LEN: " + this.xLength + " AVG: " + this.xAverage + "\n" +
+            " LEN: " + this.xLength + " AVG: " + this.xCenter + "\n" +
             "Y: " + this.yMin + "/" + this.yMax +
-            " LEN: " + this.yLength + " AVG: " + this.yAverage + "\n";
+            " LEN: " + this.yLength + " AVG: " + this.yCenter + "\n";
 
     }
 }
