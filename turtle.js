@@ -210,7 +210,7 @@ class Turtle {
       
         // Adjust line width relative to the Rescale-Factor to avoid that objects get invisible due to 
         // a small line width
-        this.finalContext.lineWidth = 1/ r;
+        this.finalContext.lineWidth =   1.5/ r;
     }
 
 

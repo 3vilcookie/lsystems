@@ -101,7 +101,7 @@
                                 </div>
                                 <div class="form-group row">
                                     <label class="control-label col-sm-4" for="alphabet">Alphabet (&Sigma;):</label>
-                                    <input type="text" class="form-control col-sm-7 textField" v-model="E" v-on:keyup="autoGenerate"
+                                    <input readonly type="text" class="form-control col-sm-7 textField" v-model="E" v-on:keyup="autoGenerate"
                                         id="alphabet">
                                 </div>
                                 <div class="form-group row">
@@ -274,8 +274,6 @@
                                 <div class="form-group">
                                     Output:
                                     <textarea readonly class="form-control" rows="5" id="output">{{ out }}</textarea>
-                                    <!--Silent-Turtle Output:
-                                    <textarea readonly class="form-control" rows="5" id="output2">{{ silentTurtleOut }}</textarea>-->
                                 </div>
                             </div>
                         </div>
@@ -335,17 +333,12 @@
                 <div v-html="log"> </div>
                 <div class="form-group">
                     <button type="button" class="btn btn-primary" id="generateButton" v-on:click="generate">Generate</button>
-                    <!--<button type="button" class="btn btn-success" id="generateButton2" v-on:click="generateWithSilentTurtle">Silent
-                        Turtle</button>-->
 
                     <p style="color:grey"><em>{{ durationOut }}</em></p>
                 </div>
             </div>
-            <!--<div id="screenDiv" class='col-sm-*'>
-                <canvas id='screenPostProcessing' style="border: 2px solid black;display:none" width="400" height="400"></canvas>
-            </div>-->
             <div class='col-md-4'>
-                <canvas id='screen' style='border:2px solid black' width='800' height='800'></canvas>
+                <canvas id='screen' class="screensize" style='border:2px solid black' width='800' height='800'></canvas>
             </div>
         </div>
     </div>
@@ -355,7 +348,7 @@
             data: {
                 V: "",
                 P: "",
-                E: "",
+                E: "+-[]|f",
                 A: "",
                 n: 4,
                 alpha: 45.0,
@@ -369,12 +362,9 @@
                 startTime: null,
                 endTime: null,
                 durationOut: "",
-                //silentTurtleOut: "",
                 showCanvasDebug: false,
                 ctx: null,
                 autoGen: true,
-                //preProcesssingCtx: null,
-                //preProcessingVisible: false,
                 selfSimilarityDim: 0,
                 selfSimilarityCopies: 0,
                 selfSimilarityScaleFactor: 0,
@@ -399,13 +389,13 @@
                 clear: function () {
                     this.V = "";
                     this.P = "";
-                    this.E = "";
+                    this.E = "+-[]|f";
                     this.A = "";
                 },
                 setCoastlineTemplate: function () {
                     this.V = "F";
                     this.P = "F=F+F--[--F]+F";
-                    this.E = "+-[]|";
+                    //this.E = "+-[]|";
                     this.A = "F|F";
                     this.alpha = 90
                     this.n = 6;
@@ -417,7 +407,7 @@
                 setCloudTemplate : function(){
                     this.V = "F";
                     this.P="F=F+FF-";
-                    this.E = "+-|";
+                    //this.E = "+-|";
                     this.A = "F|F";
                     this.alpha = 90
                     this.n = 6;
@@ -429,7 +419,7 @@
                 setLichterketteTemplate : function(){
                     this.V = "FG";
                     this.P="F=F+F-G-F-\nG=GFG";
-                    this.E = "+-|";
+                    //this.E = "+-|";
                     this.A = "F|F";
                     this.alpha = 212
                     this.n = 6;
@@ -441,7 +431,7 @@
                 setLStarTemplate: function () {
                     this.V = "AF";
                     this.P = "A=AAffff--f--fff++ff--f--fff+AA-";
-                    this.E = "+-f";
+                    //this.E = "+-f";
                     this.A = "FA";
                     this.alpha = 45.0;
                     this.startAngle = 0.0;
@@ -453,7 +443,7 @@
                 setKochTemplate: function () {
                     this.V = "F";
                     this.P = "F=F+F--F+F";
-                    this.E = "+-";
+                    //this.E = "+-";
                     this.A = "F";
                     this.alpha = 60.0;
                     this.startAngle = 0.0;
@@ -465,7 +455,7 @@
                 setKochSnowflakeTemplate: function () {
                     this.V = "F";
                     this.P = "F=F+F--F+F";
-                    this.E = "+-";
+                    //this.E = "+-";
                     this.A = "F--F--F";
                     this.alpha = 60.0;
                     this.startAngle = 0.0;
@@ -477,7 +467,7 @@
                 setDragonCurveTemplate: function () {
                     this.V = "FG";
                     this.P = "F=F+Gf+\nG=-fF-G";
-                    this.E = "+-f";
+                    //this.E = "+-f";
                     this.A = "fF";
                     this.alpha = 90.0;
                     this.startAngle = 0.0;
@@ -489,7 +479,7 @@
                 setHilbertTemplate: function () {
                     this.V = "AB";
                     this.P = "A=-Bf+AfA+fB-\nB=+Af-BfB-fA+";
-                    this.E = "+-f";
+                    //this.E = "+-f";
                     this.A = "B";
                     this.alpha = 90.0;
                     this.startAngle = 0.0;
@@ -501,7 +491,7 @@
                 setSierpinskiTriangleTemplate: function () {
                     this.V = "FG";
                     this.P = "F=G-F-G\nG=F+G+F";
-                    this.E = "+-";
+                    //this.E = "+-";
                     this.A = "F";
                     this.alpha = 60.0;
                     this.startAngle = 0.0;
@@ -513,7 +503,7 @@
                 setPlantTemplate: function () {
                     this.V = "FG";
                     this.P = "G=F+[[G]-G]-F[-FG]+F\nF=FF";
-                    this.E = "+-[]";
+                    //this.E = "+-[]";
                     this.A = "G";
                     this.alpha = 25.0;
                     this.startAngle = 270.0;
@@ -521,14 +511,6 @@
                     this.out = "";
                     this.log = "";
                     this.autoGenerate();
-                },
-                togglePreProcessingCanvas() {
-
-                    /*if (this.preProcessingVisible)
-                        $('#screenPostProcessing').show();
-                    else
-                        $('#screenPostProcessing').hide();
-                    */
                 },
                 autoGenerate: function () {
                     if (this.autoGen)
@@ -596,44 +578,8 @@
                     this.durationOut = "Rendered within " + duration + "s"
 
                     this.ctx.drawImage(t.finalCanvas, 0, 0);
-                    //this.preProcesssingCtx.drawImage(t.preProcessingCanvas, 0, 0);
 
                 },
-
-                /*generateWithSilentTurtle: function () {
-                    var l = new LSystem();
-                    var output = "";
-                    this.log = "";
-                    try {
-                        l.V = this.V;
-                        l.E = this.E;
-                        l.Axiom = this.A;
-                        l.P = this.P;
-                        l.n = this.n;
-                        l.generate()
-                        this.out = l.out;
-                    } catch (error) {
-                        this.log = "<div class='alert alert-danger'>[LSystem]: " + error + "</div>";
-                        return;
-                    }
-
-                    var st = new SilentTurtle();
-                    st.processWord(l.out, this.alpha);
-
-                    this.silentTurtleOut = ""
-                    var points = st.points;
-                    for (let index = 0; index < points.length - 1; index++) {
-                        const e = points[index];
-                        //console.log(e);
-                        this.silentTurtleOut += "(" + e[0] + "," + e[1] + "), "
-                    }
-
-                    this.silentTurtleOut += "(" +
-                        points[points.length - 1][0] + "," +
-                        points[points.length - 1][1] + ")";
-
-                    this.silentTurtleOut = st.points;
-                },*/
                 calcDimension: function () {
                     var l1 = new LSystem();
                     l1.V = this.V;
@@ -725,30 +671,16 @@
             }
         });
 
-        var canvas = document.getElementById("screen");
 
-        //var preProcessingCanvas = document.getElementById("screenPostProcessing");
+        // Initializes the Canvas and generates the first fractal
+        var canvas = document.getElementById("screen");
 
         if (canvas && canvas.getContext) {
             app.ctx = canvas.getContext('2d');
-
             app.generate();
-            /*if (preProcessingCanvas && preProcessingCanvas.getContext) {
-                app.preProcesssingCtx = preProcessingCanvas.getContext('2d');
-
-                // Create First Fractal on pageload
-                //app.calcBoxDimension();
-
-            }
-            else
-                console.log("Pre-Processing Canvas Error");*/
         }
-        else {
+        else 
             console.log("Canvas error.");
-        }
-
-
-
     </script>
     <div class='footer'>
         &copy; 2018 <a href='https://raphaelpour.de'>Raphael Pour</a> | <a href='https://bitbucket.org/evilc00kie/l-systems'>Source
