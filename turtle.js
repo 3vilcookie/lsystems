@@ -27,6 +27,7 @@ class Turtle {
         this.preProcessingStage = false;
         this.coordinateStack = [];
         this.showCanvasDebug = debugCanvas;
+        this.resizeFactor = 1.0;
 
 
         this.bounds = new Bounds();
@@ -188,29 +189,30 @@ class Turtle {
         this.coordinateStack = [];
     }
 
-    transformCanvas(){
-      // 1) Invert Y-Axis, let it point to the bottom
-      this.finalContext.scale(1, -1);
+    transformCanvas() {
+        // 1) Invert Y-Axis, let it point to the bottom
+        this.finalContext.scale(1, -1);
 
-      // 2) Move Coordinate Origin into the bottom-left Corner
-      this.finalContext.translate(0, -this.height);
+        // 2) Move Coordinate Origin into the bottom-left Corner
+        this.finalContext.translate(0, -this.height);
 
-      // Transformation from the Transformation Test 
+        // Transformation from the Transformation Test 
 
-      // Calculate Rescale-Factor using the smallest factor of both dimensions
-      var r = Math.min(this.width/this.bounds.xLength, this.height/this.bounds.yLength);
-      this.finalContext.scale(r,r);
+        // Calculate Rescale-Factor using the smallest factor of both dimensions
+        this.resizeFactor = Math.min(this.width / this.bounds.xLength, this.height / this.bounds.yLength);
+        this.finalContext.scale(this.resizeFactor, this.resizeFactor);
 
-      // Move center of the Object  to the origin
-      this.finalContext.translate(-this.bounds.xCenter, -this.bounds.yCenter);
+        // Move center of the Object  to the origin
+        this.finalContext.translate(-this.bounds.xCenter, -this.bounds.yCenter);
 
-      // Move Object to the center of the canvas
-      this.finalContext.translate(this.width/(2*r),this.height/(2*r));
+        // Move Object to the center of the canvas
+        this.finalContext.translate(this.width / (2 * this.resizeFactor), this.height / (2 * this.resizeFactor));
 
-      
+
         // Adjust line width relative to the Rescale-Factor to avoid that objects get invisible due to 
         // a small line width
-        this.finalContext.lineWidth =   1.5/ r;
+        this.finalContext.lineWidth = 1.5 / this.resizeFactor;
+
     }
 
 
@@ -253,8 +255,8 @@ class Turtle {
          * best view onto the Fractal
          */
         this.transformCanvas();
-  
-        
+
+
         // Render Fractal
         this.preProcessingStage = false;
         this.resetTurtle();
@@ -267,11 +269,9 @@ class Turtle {
         if (this.showCanvasDebug)
             this.drawHelp();
 
-        
-
     }
 
-    drawHelp(){
+    drawHelp() {
         this.finalContext.save();
 
         // Draw Bounding Box
@@ -279,16 +279,16 @@ class Turtle {
         this.finalContext.strokeRect(this.bounds.xMin, this.bounds.yMin, this.bounds.xLength, this.bounds.yLength);
 
         // Draw Extrema of the Bounding Box
-        var t = 2 / r;
+        var t = 2/this.resizeFactor;
         this.finalContext.fillStyle = "magenta"
-        this.finalContext.fillRect(this.bounds.xMin - 5 * t, this.bounds.yAverage - 5 * t, 10 * t, 10 * t);
-        this.finalContext.fillRect(this.bounds.xMax - 5 * t, this.bounds.yAverage - 5 * t, 10 * t, 10 * t);
-        this.finalContext.fillRect(this.bounds.xAverage - 5 * t, this.bounds.yMax - 5 * t, 10 * t, 10 * t);
-        this.finalContext.fillRect(this.bounds.xAverage - 5 * t, this.bounds.yMin - 5 * t, 10 * t, 10 * t);
+        this.finalContext.fillRect(this.bounds.xMin - 5 * t, this.bounds.yCenter - 5 * t, 10 * t, 10 * t);
+        this.finalContext.fillRect(this.bounds.xMax - 5 * t, this.bounds.yCenter - 5 * t, 10 * t, 10 * t);
+        this.finalContext.fillRect(this.bounds.xCenter - 5 * t, this.bounds.yMax - 5 * t, 10 * t, 10 * t);
+        this.finalContext.fillRect(this.bounds.xCenter - 5 * t, this.bounds.yMin - 5 * t, 10 * t, 10 * t);
 
         // Draw Center
         this.finalContext.fillStyle = "yellow"
-        this.finalContext.fillRect(this.bounds.xAverage - 5 * t, this.bounds.yAverage - 5 * t, 10 * t, 10 * t)
+        this.finalContext.fillRect(this.bounds.xCenter - 5 * t, this.bounds.yCenter - 5 * t, 10 * t, 10 * t)
         this.finalContext.restore();
     }
 

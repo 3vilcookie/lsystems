@@ -174,7 +174,6 @@ class LSystem {
         if (typeof this._P == 'undefined' || this._P.length == 0)
             throw "Please add at least one rule. For example F=F-F or G=F+G";
 
-
         // Every iteration is a new generation
         for (k = 0; k < this.n; k++) {
             output = "";

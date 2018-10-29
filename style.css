@@ -20,3 +20,12 @@
         height: 70vw;
     }
 }
+
+.cardSize{
+    padding:2px;
+    font-size:15px;
+}
+
+.waiting{
+    display:none;
+}
