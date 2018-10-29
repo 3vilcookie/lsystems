@@ -9,3 +9,15 @@
     height : 20pt;
     color: #000000;
 }
+
+#screen{
+    width: 35vw;
+    height: 35vw;
+}
+
+@media (max-width: 766px){
+    #screen{
+        width: 70vw;
+        height: 70vw;
+    }
+}

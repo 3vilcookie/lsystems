@@ -341,9 +341,9 @@
                     <p style="color:grey"><em>{{ durationOut }}</em></p>
                 </div>
             </div>
-            <div class='col-md-*'>
-                <canvas id='screenPostProcessing' style="border: 2px solid black;display:none" width='512' height='512'></canvas>
-            </div>
+            <!--<div id="screenDiv" class='col-sm-*'>
+                <canvas id='screenPostProcessing' style="border: 2px solid black;display:none" width="400" height="400"></canvas>
+            </div>-->
             <div class='col-md-4'>
                 <canvas id='screen' style='border:2px solid black' width='800' height='800'></canvas>
             </div>
@@ -369,12 +369,12 @@
                 startTime: null,
                 endTime: null,
                 durationOut: "",
-                silentTurtleOut: "",
+                //silentTurtleOut: "",
                 showCanvasDebug: false,
                 ctx: null,
                 autoGen: true,
-                preProcesssingCtx: null,
-                preProcessingVisible: false,
+                //preProcesssingCtx: null,
+                //preProcessingVisible: false,
                 selfSimilarityDim: 0,
                 selfSimilarityCopies: 0,
                 selfSimilarityScaleFactor: 0,
@@ -401,30 +401,6 @@
                     this.P = "";
                     this.E = "";
                     this.A = "";
-                },
-                setDebugCanvasTemplate: function () {
-                    this.V = "F";
-                    this.P = "F=F+F";
-                    this.E = "+-";
-                    this.A = "F";
-                    this.alpha = 1.0;
-                    this.startAngle = 0.0;
-                    this.n = 10;
-                    this.out = "";
-                    this.log = "";
-                    this.autoGenerate();
-                },
-                setDebugCanvas2Template: function () {
-                    this.V = "F";
-                    this.P = "F=FF";
-                    this.E = "+";
-                    this.A = "+FFFF";
-                    this.alpha = 45.0;
-                    this.startAngle = 0.0;
-                    this.n = 3;
-                    this.out = "";
-                    this.log = "";
-                    this.autoGenerate();
                 },
                 setCoastlineTemplate: function () {
                     this.V = "F";
@@ -457,7 +433,7 @@
                     this.A = "F|F";
                     this.alpha = 212
                     this.n = 6;
-                    this.startAngle = 96;
+                    this.startAngle = 0.0;
                     this.out = "";
                     this.log = "";
                     this.autoGenerate();
@@ -548,11 +524,11 @@
                 },
                 togglePreProcessingCanvas() {
 
-                    if (this.preProcessingVisible)
+                    /*if (this.preProcessingVisible)
                         $('#screenPostProcessing').show();
                     else
                         $('#screenPostProcessing').hide();
-
+                    */
                 },
                 autoGenerate: function () {
                     if (this.autoGen)
@@ -620,11 +596,11 @@
                     this.durationOut = "Rendered within " + duration + "s"
 
                     this.ctx.drawImage(t.finalCanvas, 0, 0);
-                    this.preProcesssingCtx.drawImage(t.preProcessingCanvas, 0, 0);
+                    //this.preProcesssingCtx.drawImage(t.preProcessingCanvas, 0, 0);
 
                 },
 
-                generateWithSilentTurtle: function () {
+                /*generateWithSilentTurtle: function () {
                     var l = new LSystem();
                     var output = "";
                     this.log = "";
@@ -657,7 +633,7 @@
                         points[points.length - 1][1] + ")";
 
                     this.silentTurtleOut = st.points;
-                },
+                },*/
                 calcDimension: function () {
                     var l1 = new LSystem();
                     l1.V = this.V;
@@ -751,21 +727,21 @@
 
         var canvas = document.getElementById("screen");
 
-        var preProcessingCanvas = document.getElementById("screenPostProcessing");
+        //var preProcessingCanvas = document.getElementById("screenPostProcessing");
 
         if (canvas && canvas.getContext) {
             app.ctx = canvas.getContext('2d');
 
-            if (preProcessingCanvas && preProcessingCanvas.getContext) {
+            app.generate();
+            /*if (preProcessingCanvas && preProcessingCanvas.getContext) {
                 app.preProcesssingCtx = preProcessingCanvas.getContext('2d');
 
                 // Create First Fractal on pageload
-                app.generate();
                 //app.calcBoxDimension();
 
             }
             else
-                console.log("Pre-Processing Canvas Error");
+                console.log("Pre-Processing Canvas Error");*/
         }
         else {
             console.log("Canvas error.");
