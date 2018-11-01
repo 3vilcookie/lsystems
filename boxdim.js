@@ -6,6 +6,10 @@ class BoxDimension {
         this.height = this.ctx.canvas.height;
         this.gridSize = Math.max(8,Number(gridSize));
         this.showGrid = showGrid;
+        this.totalBoxCount = Math.floor((this.width/this.gridSize)*(this.height/this.gridSize));
+
+        this.dimension = 0;
+        this.occupied = 0;
 
         // Create Canvas for Box-Dimension-Visualization
         this.boxCanvas = document.createElement("canvas");
@@ -38,8 +42,13 @@ class BoxDimension {
         this._boxContext = value;
     }
 
+
     calculate() {
         var img = this.ctx.getImageData(0, 0, this.width, this.height);
+
+        this.occupied = 0;
+        this.occupiedL = {};
+
         for (let i = 0; i < this.width * this.height * 4; i += 4) {
 
             if (img.data[i] == 0 && img.data[i + 3] > 0) {
@@ -49,35 +58,24 @@ class BoxDimension {
                 var rx = x - x % this.gridSize;
                 var ry = y - y % this.gridSize;
 
+                if(ry in this.occupiedL)
+                {
+                    if(rx in this.occupiedL[ry])
+                    //if(this.occupiedL[ry].indexOf(rx) >= 0)
+                        continue;
+                    
+                }
+                else
+                    this.occupiedL[ry] = {}
+
+                this.occupied++;
                 this.boxContext.fillRect(rx, ry, this.gridSize, this.gridSize);
+                
+                this.occupiedL[ry][rx] = undefined
             }
         }
-        if (this.showGrid)
-            for (let i = 0; i < this.width; i += this.gridSize) {
 
-                this.boxContext.beginPath();
-
-                // Horizontal Lines
-                if (Number(i % (this.gridSize * 4)) == 0)
-                    this.boxContext.lineWidth = 1.0;
-                else
-                    this.boxContext.lineWidth = 0.1;
-
-                this.boxContext.moveTo(0, i);
-                this.boxContext.lineTo(this.width, i);  
-
-                // Vertical Lines
-                if (i % (this.gridSize * 2) == 0)
-                    this.boxContext.lineWidth = 0.5;
-                else
-                    this.boxContext.lineWidth = 0.1;
-                this.boxContext.moveTo(i, 0);
-                this.boxContext.lineTo(i, this.height);
-
-                this.boxContext.stroke();
-                this.boxContext.closePath();
-                //this.boxContext.strokeRect(x, y, this.gridSize, this.gridSize);
-
-            }
+        this.dimension = Math.log(this.occupied)/Math.log(this.gridSize);
+    
     }
 }

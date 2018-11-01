@@ -11,7 +11,7 @@ class Turtle {
      * Command Drawing System using an input string and a char interpreter to draw
      * on a HTML5 Canvas  
      */
-    constructor(width, height, alpha = 60.0, iterationCount = 1, length = 1.0, debugCanvas = false) {
+    constructor(width, height, alpha = 60.0, iterationCount = 1, length = 1.0, debugCanvas = false, showPoints = false) {
         this.alpha = alpha;
         this.length = length;
         this.width = width;
@@ -28,6 +28,7 @@ class Turtle {
         this.coordinateStack = [];
         this.showCanvasDebug = debugCanvas;
         this.resizeFactor = 1.0;
+        this.showPoints = showPoints;
 
 
         this.bounds = new Bounds();
@@ -147,6 +148,7 @@ class Turtle {
             this.preProcessingContext.lineTo(this.x, this.y);
             this.preProcessingContext.stroke();
             this.preProcessingContext.closePath();
+
         }
         else {
 
@@ -155,6 +157,13 @@ class Turtle {
             this.finalContext.lineTo(this.x, this.y);
             this.finalContext.stroke();
             this.finalContext.closePath();
+
+            if (this.showPoints) {
+                this.finalContext.save();
+                this.finalContext.fillStyle = "red";
+                this.finalContext.fillRect(this.x - 10, this.y - 10, 20, 20);
+                this.finalContext.restore();
+            }
         }
 
     }
@@ -261,6 +270,16 @@ class Turtle {
         this.preProcessingStage = false;
         this.resetTurtle();
 
+
+
+        if (this.showPoints) {
+            // Draw first point
+            this.finalContext.save();
+            this.finalContext.fillStyle = "red";
+            this.finalContext.fillRect(this.x - 10, this.y - 10, 20, 20);
+            this.finalContext.restore();
+        }
+
         for (var i = 0; i < word.length; i++) {
             this.consume(word[i]);
         }
@@ -279,7 +298,7 @@ class Turtle {
         this.finalContext.strokeRect(this.bounds.xMin, this.bounds.yMin, this.bounds.xLength, this.bounds.yLength);
 
         // Draw Extrema of the Bounding Box
-        var t = 2/this.resizeFactor;
+        var t = 2 / this.resizeFactor;
         this.finalContext.fillStyle = "magenta"
         this.finalContext.fillRect(this.bounds.xMin - 5 * t, this.bounds.yCenter - 5 * t, 10 * t, 10 * t);
         this.finalContext.fillRect(this.bounds.xMax - 5 * t, this.bounds.yCenter - 5 * t, 10 * t, 10 * t);

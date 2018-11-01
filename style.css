@@ -29,3 +29,18 @@
 .waiting{
     display:none;
 }
+
+.form-small{
+    height: 10px;
+}
+
+.form-medium{
+    height: 20px;
+}
+.control-label{
+    text-align:right;
+}
+
+.form-value{
+    text-align:left;
+}
