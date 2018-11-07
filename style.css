@@ -44,3 +44,7 @@
 .form-value{
     text-align:left;
 }
+
+.disabled{
+    color:#AAA;
+}

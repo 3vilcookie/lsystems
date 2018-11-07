@@ -136,8 +136,8 @@ class Turtle {
         var lastX = this.x;
         var lastY = this.y;
 
-        this.x += Math.round(length * Math.sin(this.radians(this.angle)));
-        this.y += Math.round(length * Math.cos(this.radians(this.angle)));
+            this.x += Math.round(length * Math.sin(this.radians(this.angle)));
+            this.y += Math.round(length * Math.cos(this.radians(this.angle)));
 
         if (this.preProcessingStage) {
             // Calculate min/max coordinates
