@@ -23,7 +23,7 @@
                 boxDimensionValue: 0,
                 occupiedBoxes : 0,
                 allBoxes : 0,
-                gridSize: 50,
+                gridSize: 0.99,
                 gridCheckBox: false,
                 audiopreter: null,
                 boxDimCheckBox: false,
@@ -91,7 +91,8 @@
 
                 drawGrid: function () {
 
-                    var localGridSize = Math.max(8, Number(this.gridSize));
+                    var localGridSize = Number((this.gridSize * this.ctx.canvas.width));
+                    console.log(localGridSize);
 
                     this.ctx.save();
                     for (let i = 0; i < this.ctx.canvas.width; i += localGridSize) {
@@ -148,7 +149,7 @@
 
                     this.out = lsystem.out;
 
-                    var boxDim = new BoxDimension(t.finalContext, this.gridSize, this.gridCheckBox);
+                    var boxDim = new BoxDimension(t.finalContext,Number((this.gridSize * this.ctx.canvas.width)), parseFloat(this.gridSize), this.gridCheckBox);
                     boxDim.calculate();
                     this.ctx.drawImage(boxDim.boxCanvas, 0, 0);
                     this.ctx.drawImage(t.finalContext.canvas, 0, 0);
@@ -269,6 +270,17 @@
                     this.alpha = 60.0;
                     this.startAngle = 0.0;
                     this.n = 4;
+                    this.out = "";
+                    this.log = "";
+                    this.autoGenerate();
+                },
+                setNotSierpinskiTemplate: function () {
+                    this.V = "F";
+                    this.P = "F=F[-F][+F]F";
+                    this.A = "F";
+                    this.alpha = 120.0;
+                    this.startAngle = 270.0;
+                    this.n = 8;
                     this.out = "";
                     this.log = "";
                     this.autoGenerate();

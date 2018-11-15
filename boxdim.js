@@ -1,6 +1,6 @@
 class BoxDimension {
 
-    constructor(context, gridSize = 64, showGrid = false) {
+    constructor(context, gridSize = 64, sigma = 0.5, showGrid = false) {
         this.ctx = context;
         this.width = this.ctx.canvas.width;
         this.height = this.ctx.canvas.height;
@@ -10,6 +10,7 @@ class BoxDimension {
         let xBoxCount = Math.ceil(this.width/this.gridSize);
         let yBoxCount = Math.ceil(this.height/this.gridSize);
 
+        this.sigma = sigma;
         this.totalBoxCount = xBoxCount*yBoxCount;
 
         this.dimension = 0;
@@ -78,7 +79,7 @@ class BoxDimension {
                 this.occupiedL[ry][rx] = undefined
             }
         }
-        this.dimension = -Math.log(this.occupied)/Math.log(this.gridSize);
+        this.dimension = -Math.log(this.occupied)/Math.log(this.sigma);
     
     }
 }
