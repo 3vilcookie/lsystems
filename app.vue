@@ -20,9 +20,6 @@
                 showCanvasDebug: false,
                 ctx: null,
                 autoGen: true,
-                selfSimilarityDim: 0,
-                selfSimilarityCopies: 0,
-                selfSimilarityScaleFactor: 0,
                 boxDimensionValue: 0,
                 occupiedBoxes : 0,
                 allBoxes : 0,
@@ -30,7 +27,6 @@
                 gridCheckBox: false,
                 audiopreter: null,
                 boxDimCheckBox: false,
-                selfSimDimCheckBox: false,
                 showPoints: false
             },
             created: function () {
@@ -71,20 +67,12 @@
                         return;
                     }
 
-                    if (this.selfSimDimCheckBox)
-                        this.calcDimension();
-
                     if (this.boxDimCheckBox)
                         this.calcBoxDimension(l);
                     else {
                         var t = new Turtle(this.ctx.canvas.width, this.ctx.canvas.height, parseFloat(this.alpha), Number(this.n), 100.0, this.showCanvasDebug, this.showPoints);
 
                         t.angleOffset = parseFloat(this.angleOffset) + parseFloat(this.startAngle);
-
-                        //t.xOffsetUI = Number(this.xoffsetUI);
-                        //t.yOffsetUI = Number(this.yoffsetUI);
-                        //t.zoomUI = Number(this.zoomUI);
-                        //t.clear();
 
                         t.computeWord(l.out);
                         this.ctx.drawImage(t.finalCanvas, 0, 0);
@@ -129,52 +117,9 @@
 
                         this.ctx.stroke();
                         this.ctx.closePath();
-                        //this.boxContext.strokeRect(x, y, this.gridSize, this.gridSize);
-
                     }
 
                     this.ctx.restore();
-
-                },
-                calcDimension: function () {
-                    var l1 = new LSystem();
-                    l1.V = this.V;
-                    l1.E = this.E;
-                    l1.Axiom = this.A;
-                    l1.P = this.P;
-                    l1.n = 8;
-                    l1.generate();
-
-                    var l2 = new LSystem();
-                    l2.V = this.V;
-                    l2.E = this.E;
-                    l2.Axiom = this.A;
-                    l2.P = this.P;
-                    l2.n = 9;
-                    l2.generate();
-
-                    var t1 = new SilentTurtle();
-                    t1.processWord(l1.out, parseFloat(this.alpha));
-
-                    var t2 = new SilentTurtle();
-                    t2.processWord(l2.out, parseFloat(this.alpha));
-
-                    var N1 = t1.points.length;
-                    var N2 = t2.points.length;
-
-                    var iterationDelta = Math.abs(N1-N2);
-
-                    var centerA = Math.sqrt(Math.pow(t1.bounds.xCenter, 2) + Math.pow(t1.bounds.yCenter, 2));
-                    var centerB = Math.sqrt(Math.pow(t2.bounds.xCenter, 2) + Math.pow(t2.bounds.yCenter, 2));
-
-                    var scaleFactor = Math.pow(centerB / centerA,1/iterationDelta);
-                    var N = Math.pow(N2 / N1,1/iterationDelta);
-
-                    var dim = Math.round(Math.log(N) / Math.log(scaleFactor) * 100) / 100;
-
-                    this.selfSimilarityCopies = N;
-                    this.selfSimilarityScaleFactor = scaleFactor;
-                    this.selfSimilarityDim = dim;
 
                 },
                 calcBoxDimension: function (lsystem = false) {
@@ -203,21 +148,11 @@
 
                     this.out = lsystem.out;
 
-
-                    //this.ctx.drawImage(t.finalContext.canvas, 0,0);
                     var boxDim = new BoxDimension(t.finalContext, this.gridSize, this.gridCheckBox);
                     boxDim.calculate();
                     this.ctx.drawImage(boxDim.boxCanvas, 0, 0);
                     this.ctx.drawImage(t.finalContext.canvas, 0, 0);
 
-                    /*
-                    var img = t.finalContext.getImageData(0, 0, width, height);
-                    var pixelCounter = 0;
-                    for (let i = 0; i < resolution * 4; i += 4) {
-                        if (img.data[i] != 0)
-                            pixelCounter++;
-                    }
-                    */
                    this.occupiedBoxes = boxDim.occupied;
                    this.allBoxes = boxDim.totalBoxCount;
                    this.boxDimensionValue = boxDim.dimension;
@@ -400,6 +335,12 @@
                         this.audiopreter.stop();
 
                     }
+                }
+            },
+            filters : {
+                round2f : function(value){
+                    if(!value) return 0;
+                    return Math.round(Number(value)*100.0)/100.0;
                 }
             }
         });

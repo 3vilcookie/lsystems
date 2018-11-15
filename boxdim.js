@@ -4,9 +4,13 @@ class BoxDimension {
         this.ctx = context;
         this.width = this.ctx.canvas.width;
         this.height = this.ctx.canvas.height;
-        this.gridSize = Math.max(8,Number(gridSize));
+        this.gridSize = Math.max(2,Number(gridSize));
         this.showGrid = showGrid;
-        this.totalBoxCount = Math.floor((this.width/this.gridSize)*(this.height/this.gridSize));
+
+        let xBoxCount = Math.ceil(this.width/this.gridSize);
+        let yBoxCount = Math.ceil(this.height/this.gridSize);
+
+        this.totalBoxCount = xBoxCount*yBoxCount;
 
         this.dimension = 0;
         this.occupied = 0;
@@ -74,8 +78,7 @@ class BoxDimension {
                 this.occupiedL[ry][rx] = undefined
             }
         }
-
-        this.dimension = Math.log(this.occupied)/Math.log(this.gridSize);
+        this.dimension = -Math.log(this.occupied)/Math.log(this.gridSize);
     
     }
 }

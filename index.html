@@ -15,20 +15,17 @@
     <link rel="shortcut icon" type="image/png" href="logo.png">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
 
     <!-- Custom CSS to make  UI more awesome-->
     <link rel="stylesheet" href="style.css">
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
         crossorigin="anonymous"></script>-->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
-        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
     <!-- development version, includes helpful console warnings -->
     <!--<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>-->
     <!--<script src="https://unpkg.com/vue@2.3.3/dist/vue.js"></script>-->
@@ -169,7 +166,7 @@
                                 </div>
                                 <div class="form-group row form-small">
                                     <label class="control-label col-sm-4 " for="gridSizeId">Grid Size</label>
-                                    <input type="range" class="form-control col-sm-4 slider" min="1" max="200" step="1"
+                                    <input type="range" class="form-control col-sm-4 slider" min="2" max="200" step="1"
                                         v-model="gridSize" v-on:change="autoGenerate" id="gridSizeId">
                                     <div class="col-sm-2 form-value">{{ gridSize }}</div>
                                 </div>
@@ -249,21 +246,20 @@
                         <div id="collapse6" class="collapse hidden" data-parent="#accordion">
                             <div class="card-body">
                                 <div class="form-group row">
-                                    <label class="control-label col-sm-4" for="calculateSelfDimId">
-                                        Self-Similarty Dimension:</label>
-                                    <input type="checkbox" class="form-control col-sm-4" v-on:change="autoGenerate"
-                                        v-model="selfSimDimCheckBox" id="calculateSelfDimId">
-                                </div>
-
-                                <div class="form-group row">
                                     <label class="control-label col-sm-4" for="calculateBoxDimId">
                                         Box Dimension:</label>
                                     <input type="checkbox" class="form-control col-sm-4" v-model="boxDimCheckBox"
                                         v-on:change="autoGenerate" id="calculateBoxDimId">
                                 </div>
                                 <div class="form-group row">
+                                    <label class="control-label col-sm-4 " for="showGridId">Show Grid</label>
+                                    <input class="col-sm-4" type="checkbox" v-model="gridCheckBox" v-on:change="autoGenerate"
+                                        id="showGridId">
+                                </div>
+
+                                <div class="form-group row">
                                     <label class="control-label col-sm-4 " for="gridSizeId">Grid Size</label>
-                                    <input type="range" class="form-control col-sm-4 slider" min="1" max="200" step="1"
+                                    <input type="range" class="form-control col-sm-4 slider" min="2" max="200" step="1"
                                         v-model="gridSize" v-on:change="autoGenerate" id="gridSizeId">
                                     <div class="col-sm-2 form-value">{{ gridSize }}</div>
                                 </div>
@@ -282,24 +278,12 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>Self-Similarity Dimension</td>
-                                            <td>{{ selfSimilarityDim }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Copies</td>
-                                            <td>{{ selfSimilarityCopies }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Scale Factor</td>
-                                            <td>{{ selfSimilarityScaleFactor }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Box Dimension</td>
-                                            <td>{{ boxDimensionValue }}</td>
+                                            <td>Approx. Box Dimension</td>
+                                            <td>{{ boxDimensionValue | round2f}}</td>
                                         </tr>
                                         <tr>
                                             <td>Occupied boxes</td>
-                                            <td>{{ occupiedBoxes }} / {{ allBoxes }}</td>
+                                            <td>{{ 100.0 / allBoxes * occupiedBoxes | round2f }}% ({{ occupiedBoxes}}/{{allBoxes}})</td>
                                         </tr>
                                         
                                     </tbody>
@@ -324,46 +308,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card" style="display:none" id="card4">
-                        <div class="card-header cardSize">
-                            <a class="collapsed card-link" data-toggle="collapse" href="#collapse4">Debugging</a>
-                        </div>
-                        <div id="collapse4" class="collapse hidden" data-parent="#accordion">
-                            <div class="card-body">
-                                <div class="form-group row">
-                                    <label class="control-label col-sm-4" for="xoffsetId">X-Offset:</label>
-                                    <input readonly type="range" min="-500" max="500" value="0" step="1" class="form-control col-sm-4 slider"
-                                        v-model="xoffsetUI" v-on:change="generate" id="xoffsetId">
-                                    <div class="col-sm-2">{{ xoffsetUI}}</div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="control-label col-sm-4" for="yoffsetId">Y-Offset:</label>
-                                    <input readonly type="range" min="-500" max="500" value="0" step="1" class="form-control col-sm-4 slider"
-                                        v-model="yoffsetUI" v-on:change="generate" id="yoffsetId">
-                                    <div class="col-sm-2">{{ yoffsetUI}}</div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="control-label col-sm-4" for="zoomId">Zoom:</label>
-                                    <input readonly type="range" min="0.1" max="10" value="1" step="0.11" class="form-control col-sm-4 slider"
-                                        v-model="zoomUI" v-on:change="generate" id="zoomId">
-                                    <div class="col-sm-2">{{ zoomUI}}</div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="control-label col-sm-4" for="showCanvasDebugId">Show Canvas Debug
-                                        Graphics</label>
-                                    <input type="checkbox" class="form-control col-sm-1" v-model="showCanvasDebug"
-                                        v-on:change="autoGenerate" id="showCanvasDebugId">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
+                    
                 </div>
                 <div v-html="log"> </div>
                 <div class="form-group">
                     <button type="button" class="btn btn-primary" id="generateButton" v-on:click="generate">Generate</button>
-                    <p style="color:grey"><em>{{ durationOut }}</em></p>
+                    <em style="color:grey">{{ durationOut }}</em>
                 </div>
             </div>
             <div class='col-md-4'>
@@ -375,10 +325,6 @@
     <script src="app.vue"></script>
     <script>
         "use strict";
-
-        if (window.location.search != 0 && window.location.search == "?debug")
-            $("#card4").show();
-
 
         // Initializes the Canvas and generates the first fractal
         var canvas = document.getElementById("screen");
