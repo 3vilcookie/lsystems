@@ -79,6 +79,8 @@ class BoxDimension {
                 this.occupiedL[ry][rx] = undefined
             }
         }
+
+        // Actual Box-Dim Formula
         this.dimension = -Math.log(this.occupied)/Math.log(this.sigma);
     
     }
