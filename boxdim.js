@@ -25,7 +25,7 @@ class BoxDimension {
         if (this.boxCanvas && this.boxCanvas.getContext) {
             this.boxContext = this.boxCanvas.getContext('2d');
             this.boxContext.drawImage(this.ctx.canvas, 0, 0);
-            this.boxContext.fillStyle = "rgba(250,0,0,0.05)";
+            this.boxContext.fillStyle = "rgba(250,0,0,0.5)";
             this.boxContext.strokeStyle = "black";
             this.boxContext.lineWidth = 0.1;
 
@@ -63,16 +63,18 @@ class BoxDimension {
                 var rx = x - x % this.gridSize;
                 var ry = y - y % this.gridSize;
 
-                if (ry in this.occupiedL) 
+                if (ry in this.occupiedL) {
                     if (rx in this.occupiedL[ry])
                         continue;
+                }
                 else
-                    this.occupiedL[ry] = {}
+                    this.occupiedL[ry] = {};
 
                 this.occupied++;
                 this.boxContext.fillRect(rx, ry, this.gridSize, this.gridSize);
 
                 this.occupiedL[ry][rx] = undefined
+
             }
         }
 
