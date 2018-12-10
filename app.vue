@@ -23,7 +23,7 @@
                 boxDimensionValue: 0,
                 occupiedBoxes : 0,
                 allBoxes : 0,
-                gridSize: 0.99,
+                gridSize: 0.05,
                 gridCheckBox: false,
                 audiopreter: null,
                 boxDimCheckBox: false,
@@ -92,7 +92,6 @@
                 drawGrid: function () {
 
                     var localGridSize = Number((this.gridSize * this.ctx.canvas.width));
-                    console.log(localGridSize);
 
                     this.ctx.save();
                     for (let i = 0; i < this.ctx.canvas.width; i += localGridSize) {
@@ -101,7 +100,7 @@
 
                         // Horizontal Lines
                         if (Number(i % (localGridSize * 4)) == 0)
-                            this.ctx.lineWidth = 1.0;
+                            this.ctx.lineWidth = 0.25;
                         else
                             this.ctx.lineWidth = 0.1;
 
@@ -110,7 +109,7 @@
 
                         // Vertical Lines
                         if (i % (localGridSize * 2) == 0)
-                            this.ctx.lineWidth = 0.5;
+                            this.ctx.lineWidth = 0.25;
                         else
                             this.ctx.lineWidth = 0.1;
                         this.ctx.moveTo(i, 0);
@@ -150,6 +149,7 @@
                     this.out = lsystem.out;
 
                     var boxDim = new BoxDimension(t.finalContext,Number((this.gridSize * this.ctx.canvas.width)), parseFloat(this.gridSize), this.gridCheckBox);
+                    
                     boxDim.calculate();
                     this.ctx.drawImage(boxDim.boxCanvas, 0, 0);
                     this.ctx.drawImage(t.finalContext.canvas, 0, 0);

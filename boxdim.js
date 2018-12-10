@@ -4,14 +4,14 @@ class BoxDimension {
         this.ctx = context;
         this.width = this.ctx.canvas.width;
         this.height = this.ctx.canvas.height;
-        this.gridSize = Math.max(2,Number(gridSize));
+        this.gridSize = Math.max(2, Number(gridSize));
         this.showGrid = showGrid;
 
-        let xBoxCount = Math.ceil(this.width/this.gridSize);
-        let yBoxCount = Math.ceil(this.height/this.gridSize);
+        let xBoxCount = Math.ceil(this.width / this.gridSize);
+        let yBoxCount = Math.ceil(this.height / this.gridSize);
 
         this.sigma = sigma;
-        this.totalBoxCount = xBoxCount*yBoxCount;
+        this.totalBoxCount = xBoxCount * yBoxCount;
 
         this.dimension = 0;
         this.occupied = 0;
@@ -25,7 +25,7 @@ class BoxDimension {
         if (this.boxCanvas && this.boxCanvas.getContext) {
             this.boxContext = this.boxCanvas.getContext('2d');
             this.boxContext.drawImage(this.ctx.canvas, 0, 0);
-            this.boxContext.fillStyle = "red";
+            this.boxContext.fillStyle = "rgba(250,0,0,0.05)";
             this.boxContext.strokeStyle = "black";
             this.boxContext.lineWidth = 0.1;
 
@@ -63,25 +63,21 @@ class BoxDimension {
                 var rx = x - x % this.gridSize;
                 var ry = y - y % this.gridSize;
 
-                if(ry in this.occupiedL)
-                {
-                    if(rx in this.occupiedL[ry])
-                    //if(this.occupiedL[ry].indexOf(rx) >= 0)
+                if (ry in this.occupiedL) 
+                    if (rx in this.occupiedL[ry])
                         continue;
-                    
-                }
                 else
                     this.occupiedL[ry] = {}
 
                 this.occupied++;
                 this.boxContext.fillRect(rx, ry, this.gridSize, this.gridSize);
-                
+
                 this.occupiedL[ry][rx] = undefined
             }
         }
 
         // Actual Box-Dim Formula
-        this.dimension = -Math.log(this.occupied)/Math.log(this.sigma);
-    
+        this.dimension = -Math.log(this.occupied) / Math.log(this.sigma);
+
     }
 }

@@ -15,24 +15,15 @@
     <link rel="shortcut icon" type="image/png" href="logo.png">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="3rd/bootstrap.min.css">
 
     <!-- Custom CSS to make  UI more awesome-->
     <link rel="stylesheet" href="style.css">
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
-        crossorigin="anonymous"></script>-->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
-    <!-- development version, includes helpful console warnings -->
-    <!--<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>-->
-    <!--<script src="https://unpkg.com/vue@2.3.3/dist/vue.js"></script>-->
-    <script src="https://unpkg.com/vue"></script>
-
-    <!-- production version, optimized for size and speed -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script>-->
+    <!-- Needed JavaScript Libs-->
+    <script src="3rd/jquery-3.3.1.slim.min.js"></script>
+    <script src="3rd/bootstrap.min.js"></script>
+    <script src="3rd/vue.js"></script>
 
 
     <!-- Include our Box Dimension class for calculating and visualizing the Box Dimension -->
@@ -309,7 +300,6 @@
                             </div>
                         </div>
                     </div>
-                    
                 </div>
                 <div v-html="log"> </div>
                 <div class="form-group">
