@@ -175,6 +175,17 @@
                 },
 
                 // L-System Templates
+                setHoneycombTemplate: function () {
+                    this.V = "F";
+                    this.P = "F=F++F+F+F+F";
+                    this.A = "F|F|F";
+                    this.alpha = 60
+                    this.n = 5;
+                    this.startAngle = 0;
+                    this.out = "";
+                    this.log = "";
+                    this.autoGenerate();
+                },
                 setCoastlineTemplate: function () {
                     this.V = "F";
                     this.P = "F=F+F--[--F]+F";
