@@ -74,8 +74,8 @@
                     <button type="button" class="btn btn-success" id="coastlineTemplateButton" v-on:click="setCoastlineTemplate">Coastline</button>
                     <button type="button" class="btn btn-success" id="cloudTemplateButton" v-on:click="setCloudTemplate">Cloud</button>
                     <button type="button" class="btn btn-success" id="LichterketteTemplateButton" v-on:click="setLichterketteTemplate">Lichterkette</button>
-                    <button type="button" class="btn btn-success" id="notSierpinskiTemplateButton" v-on:click="setNotSierpinskiTemplate">Not Sierpinski
-                        </button>
+                    <button type="button" class="btn btn-success" id="notSierpinskiTemplateButton" v-on:click="setNotSierpinskiTemplate">Not Sierpinski</button>
+                    <button type="button" class="btn btn-success" id="honeycombTemplateButton" v-on:click="setHoneycombTemplate">Honeycomb</button>
                 </div>
             </div>
             <div class='col-md-6'>
@@ -140,13 +140,13 @@
                                     <label class="control-label col-sm-4 " for="alpha">Alpha (&alpha;)</label>
                                     <input type="range" start="0" min="0" max="360" step="1" class="form-control col-sm-4 slider"
                                         v-model="alpha" v-on:change="autoGenerate" id="alpha">
-                                    <div class="col-sm-2 form-value">{{alpha}}Â°</div>
+                                    <div class="col-sm-2 form-value">{{alpha}}°</div>
                                 </div>
                                 <div class="form-group row form-small">
                                     <label class="control-label col-sm-4 " for="startAngleId">Start-Angle (&beta;)</label>
                                     <input type="range" start="0" min="0" max="360" step="1" class="form-control col-sm-4 slider"
                                         v-model="startAngle" v-on:change="autoGenerate" id="startAngleId">
-                                    <div class="col-sm-2 form-value">{{startAngle}}Â°</div>
+                                    <div class="col-sm-2 form-value">{{startAngle}}°</div>
                                 </div>
                                 <div class="form-group row form-small ">
                                     <label class="control-label col-sm-4 " for="autoGenId">Auto Generate</label>
