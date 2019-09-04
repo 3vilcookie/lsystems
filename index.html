@@ -4,8 +4,8 @@
 <!--
     @file:      index.html
     @brief:     L-System Frontend
-    @author:    Raphael Pour <turtle@raphaelpour.de>
-    @license:   (C) 2018 Raphael Pour GPL
+    @author:    Raphael Pour <dev@raphaelpour.de>
+    @license:   (C) 2018-2019 Raphael Pour. Licensed under GPL
 -->
 
 <head>
@@ -310,6 +310,7 @@
                 <div v-html="log"> </div>
                 <div class="form-group">
                     <button type="button" class="btn btn-primary" id="generateButton" v-on:click="generate">Generate</button>
+                    <!--<button type="button" class="btn btn-success" id="playButton" v-on:click="animate">Animate</button>-->
                     <em style="color:grey">{{ durationOut }}</em>
                 </div>
             </div>

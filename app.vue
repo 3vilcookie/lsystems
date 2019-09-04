@@ -353,7 +353,7 @@
                 },
                 setRandom: function (){
                     
-                    var maxVars = 5;
+                    var maxVars = 10;
                     var maxRuleChars = 10;
                     var maxIterations = 4;
                     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -367,7 +367,6 @@
                     var A = "";
                     var valid = false;
 
-                    console.log("MIEP\n");
 
                     while(!valid)
                     {
@@ -375,7 +374,8 @@
                     var P = "";
                     var charPool = "";
                     var A = "";
-                        for(var i=0;i<Math.floor(Math.random() * maxVars);i++)
+                    var varCount = Math.floor(Math.random() * maxVars);
+                        while(V.length< varCount)
                         {
                             var candidate = characters.charAt(Math.floor(Math.random()*characters.length));
                             if(V.indexOf(candidate) != -1)
@@ -467,6 +467,13 @@
                     this.audiopreter.interpretWord(l.out);
                 },
 
+                animate : function(){
+                    
+                    this.alpha ++;
+                    this.autoGenerate();
+
+                    setTimeout(this.animate,1000);
+                },
                 stopFractal: function () {
                     if (this.audiopreter != null) {
                         this.audiopreter.stop();
