@@ -329,6 +329,120 @@
                     this.log = "";
                     this.autoGenerate();
                 },
+                setOccultTemplate: function () {
+                    this.V = "ABC";
+                    this.P = "A=fA++B++Af\nB=fB--C--Bf\nC=f+f";
+                    this.A = "A";
+                    this.alpha = 60.0;
+                    this.startAngle = 0.0;
+                    this.n = 8;
+                    this.out = "";
+                    this.log = "";
+                    this.autoGenerate();
+                },
+                setRobotTemplate: function () {
+                    this.V = "AB";
+                    this.P = "A=fA+B+Af\nB=fB-f-Bf";
+                    this.A = "A";
+                    this.alpha = 87.0;
+                    this.startAngle = 18.0;
+                    this.n = 6;
+                    this.out = "";
+                    this.log = "";
+                    this.autoGenerate();
+                },
+                setRandom: function (){
+                    
+                    var maxVars = 5;
+                    var maxRuleChars = 10;
+                    var maxIterations = 4;
+                    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+
+                    var alpha = Math.floor((Math.random()*360.0));
+                    var n = Math.floor(Math.random()*(maxIterations-1))+1;
+                    var V = "";
+                    var P = "";
+                    var charPool = "";
+                    var A = "";
+                    var valid = false;
+
+                    console.log("MIEP\n");
+
+                    while(!valid)
+                    {
+                    var V = "";
+                    var P = "";
+                    var charPool = "";
+                    var A = "";
+                        for(var i=0;i<Math.floor(Math.random() * maxVars);i++)
+                        {
+                            var candidate = characters.charAt(Math.floor(Math.random()*characters.length));
+                            if(V.indexOf(candidate) != -1)
+                                continue;
+                            V += candidate;
+                        }
+    
+                        if(V.length == 0)continue;
+
+                        charPool = V + '+-f';
+
+                        for(var i=0;i<V.length;i++)
+                        {
+                          P += V[i] + ' = ';
+                        
+
+                          for(var j=0;j<maxRuleChars;j++)
+                            P += charPool.charAt(Math.floor(Math.random()*charPool.length)); 
+
+                            if(i<V.length-1)
+                                P += '\n';
+                        }
+
+                        for(var j=0;j<maxRuleChars;j++)
+                            A += charPool.charAt(Math.floor(Math.random()*charPool.length)); 
+
+
+                        /*
+                         * Validate stuff
+                         **/
+
+                        // Check if Axiom has at least one char
+                        var hasOneVar = false;
+                        for(var i=0; i<A.length;i++)
+                            if(characters.indexOf(A[i]) != -1)
+                            {
+                                hasOneVar = true;
+                                break;
+                            }
+
+                        if(!hasOneVar)
+                            continue;
+                        
+                        // Check if at least one rule has an f or F (draw symbol)
+                        var hasDrawSymbol = false;
+                        for(var i=0;i<P.length;i++)
+                            if(P[i] == 'f' || P[i] == 'F')
+                            {
+                                hasDrawSymbol = true;
+                                break;
+                            }
+                        
+                        if(!hasDrawSymbol) continue;
+
+                        valid = true;
+                    }
+
+                    this.V = V;
+                    this.A = A;
+                    this.P = P;
+                    this.alpha = alpha;
+                    this.startAngle = 0.0;
+                    this.n = n;
+                    this.out = "";
+                    this.log = "";
+                    this.autoGenerate();
+                },
 
                 // Audio Interpreter
                 playFractal: function () {
