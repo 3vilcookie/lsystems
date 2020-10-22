@@ -1,0 +1,15 @@
+version: '2.0'
+
+services:
+  web:
+    container_name: lsystems_web
+    build: .
+    restart: always
+    labels:
+      caddy: lsystems.raphaelpour.de
+      caddy.reverse_proxy: "{{upstreams http 8002}}"
+
+networks:
+  default:
+    external:
+      name: aproxymate_caddy

@@ -1,8 +1,8 @@
 /*
  * @file:       lsystem.js
  * @brief:      Another Lsystem Class which can create Turtle-Graphics-Printable output 
- * @author:     Raphael Pour <turtle@raphaelpour.de>
- * @license:    (C) 2018 Raphael Pour LGPL
+ * @author:     Raphael Pour <info@raphaelpour.de>
+ * @license:    (C) 2018-2020 Raphael Pour GPL
  */
 
 // TODO: Outsource String parsing to Vue App, since it isn't the problem of the LSystem which format the UI Input has

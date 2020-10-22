@@ -1,8 +1,8 @@
 /*
  * @file:       turtle.js
  * @brief:      Another Turtle Graphic Class using HTML5-Canvas
- * @author:     Raphael Pour <turtle@raphaelpour.de>
- * @license:    (C) 2018 Raphael Pour GPL
+ * @author:     Raphael Pour <info@raphaelpour.de>
+ * @license:    (C) 2018-2020 Raphael Pour GPL
  */
 
 class Turtle {
