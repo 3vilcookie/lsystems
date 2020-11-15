@@ -29,6 +29,7 @@ class Turtle {
         this.showCanvasDebug = debugCanvas;
         this.resizeFactor = 1.0;
         this.showPoints = showPoints;
+        this.lines = []
 
 
         this.bounds = new Bounds();
@@ -66,6 +67,12 @@ class Turtle {
         else
             throw "Invalid Final Canvas";
 
+    }
+    get lines() {
+        return this._lines;
+    }
+    set lines(value) {
+        this._lines = value;
     }
 
     get finalCanvas() {
@@ -157,6 +164,9 @@ class Turtle {
             this.finalContext.lineTo(this.x, this.y);
             this.finalContext.stroke();
             this.finalContext.closePath();
+
+            
+            this.lines.push([[lastX, lastY], [this.x, this.y]]);
 
             if (this.showPoints) {
                 this.finalContext.save();
