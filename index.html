@@ -25,7 +25,6 @@
     <script src="3rd/bootstrap.min.js"></script>
     <script src="3rd/vue.js"></script>
 
-
     <!-- Include our Box Dimension class for calculating and visualizing the Box Dimension -->
     <script src="boxdim.js"></script>
 
@@ -58,16 +57,11 @@
             <div class="col-md-2" style='text-align:left;line-height:40px;'>
                 <div class="form-group">
                     <div style='color:blue;opacity:.5'>Adapted</div>
-                    <button type="button" class="btn btn-primary" id="kochTemplateButton" v-on:click="setKochTemplate">Koch
-                        Curve</button>
-                    <button type="button" class="btn btn-primary" id="kochSnowflakeTemplateButton" v-on:click="setKochSnowflakeTemplate">Koch
-                        Snowflake</button>
-                    <button type="button" class="btn btn-primary" id="hilbertTemplateButton" v-on:click="setHilbertTemplate">Hilbert
-                        Curve</button>
-                    <button type="button" class="btn btn-primary" id="sierpinskiTriangleTemplateButton" v-on:click="setSierpinskiTriangleTemplate">Sierpinski
-                        Triangle</button>
-                    <button type="button" class="btn btn-primary" id="dragonCurveTemplateButton" v-on:click="setDragonCurveTemplate">Dragon
-                        Curve</button>
+                    <button type="button" class="btn btn-primary" id="kochTemplateButton" v-on:click="setKochTemplate">Koch Curve</button>
+                    <button type="button" class="btn btn-primary" id="kochSnowflakeTemplateButton" v-on:click="setKochSnowflakeTemplate">Koch Snowflake</button>
+                    <button type="button" class="btn btn-primary" id="hilbertTemplateButton" v-on:click="setHilbertTemplate">Hilbert Curve</button>
+                    <button type="button" class="btn btn-primary" id="sierpinskiTriangleTemplateButton" v-on:click="setSierpinskiTriangleTemplate">Sierpinski Triangle</button>
+                    <button type="button" class="btn btn-primary" id="dragonCurveTemplateButton" v-on:click="setDragonCurveTemplate">Dragon Curve</button>
                     <button type="button" class="btn btn-primary" id="plantTemplateButton" v-on:click="setPlantTemplate">Plant</button>
                     <button type="button" class="btn btn-primary" id="lstarTemplateButton" v-on:click="setLStarTemplate">LStar</button>
                     <button type="button" class="btn btn-primary" id="lecyCTemaplateButton" v-on:click="setLecyCTemplate">Lecy-C-Curve</button>
@@ -94,8 +88,7 @@
                             <div class="card-body">
                                 <div class="form-group row form-medium">
                                     <label class="control-label col-sm-4" for="variables">Variables (V)</label>
-                                    <input type="text" class="form-control col-sm-7 textField" v-model="V" v-on:keyup="autoGenerate"
-                                        id="variables">
+                                    <input type="text" class="form-control col-sm-7 textField" v-model="V" v-on:keyup="autoGenerate" id="variables">
                                 </div>
                                 <div class="form-group row form-medium">
                                     <label class="control-label col-sm-4" for="alphabet">Alphabet (&Sigma;)</label>
@@ -104,18 +97,15 @@
                                 </div>
                                 <div class="form-group row form-medium">
                                     <label class="control-label col-sm-4" for="axiom">Axiom (&omega;)</label>
-                                    <input type="text" class="form-control col-sm-7 textField" v-model="A" v-on:keyup="autoGenerate"
-                                        id="axiom">
+                                    <input type="text" class="form-control col-sm-7 textField" v-model="A" v-on:keyup="autoGenerate" id="axiom">
                                 </div>
                                 <div class="form-group row">
                                     <label class="control-label col-sm-4" for="rules">Rules (P)</label>
-                                    <textarea class="form-control col-sm-7" rows="3" v-model="P" v-on:keyup="autoGenerate"
-                                        id="rules"></textarea>
+                                    <textarea class="form-control col-sm-7" rows="3" v-model="P" v-on:keyup="autoGenerate" id="rules"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <button type="button" class="btn btn-danger" id="clearButton" v-on:click="clear">Clear</button>
-                                    <button class="btn btn-primary collapsed card-link" data-toggle="collapse" href="#collapseLanguageOut">Language
-                                        Output</button>
+                                    <button class="btn btn-primary collapsed card-link" data-toggle="collapse" href="#collapseLanguageOut">Language Output</button>
                                 </div>
 
                                 <div id="collapseLanguageOut" class="collapse hidden">
@@ -131,28 +121,24 @@
                     </div>
                     <div class="card" id="card2">
                         <div class="card-header cardSize">
-                            <a class="collapsed card-link" data-toggle="collapse" href="#collapse2">Turtle
-                                Graphic Settings</a>
+                            <a class="collapsed card-link" data-toggle="collapse" href="#collapse2">Turtle Graphic Settings</a>
                         </div>
                         <div id="collapse2" class="collapse hidden" data-parent="#accordion">
                             <div class="card-body">
                                 <div class="form-group row form-small">
                                     <label class="control-label col-sm-4 " for="iterations">Iterations</label>
-                                    <input type="range" value="1" step="1" min="1" max="20" class="form-control col-sm-4 slider"
-                                        v-model="n" v-on:change="autoGenerate" id="iterations">
+                                    <input type="range" value="1" step="1" min="1" max="20" class="form-control col-sm-4 slider" v-model="n" v-on:change="autoGenerate" id="iterations">
                                     <div class="col-sm-2 form-value">{{ n }}</div>
                                 </div>
                                 <div class="form-group row form-small">
                                     <label class="control-label col-sm-4 " for="alpha">Alpha (&alpha;)</label>
-                                    <input type="range" start="0" min="0" max="360" step="1" class="form-control col-sm-4 slider"
-                                        v-model="alpha" v-on:change="autoGenerate" id="alpha">
-                                    <div class="col-sm-2 form-value">{{alpha}}?</div>
+                                    <input type="range" start="0" min="0" max="360" step="1" class="form-control col-sm-4 slider" v-model="alpha" v-on:change="autoGenerate" id="alpha">
+                                    <div class="col-sm-2 form-value">{{alpha}}&deg;</div>
                                 </div>
                                 <div class="form-group row form-small">
                                     <label class="control-label col-sm-4 " for="startAngleId">Start-Angle (&beta;)</label>
-                                    <input type="range" start="0" min="0" max="360" step="1" class="form-control col-sm-4 slider"
-                                        v-model="startAngle" v-on:change="autoGenerate" id="startAngleId">
-                                    <div class="col-sm-2 form-value">{{startAngle}}?</div>
+                                    <input type="range" start="0" min="0" max="360" step="1" class="form-control col-sm-4 slider" v-model="startAngle" v-on:change="autoGenerate" id="startAngleId">
+                                    <div class="col-sm-2 form-value">{{startAngle}}&deg;</div>
                                 </div>
                                 <div class="form-group row form-small ">
                                     <label class="control-label col-sm-4 " for="autoGenId">Auto Generate</label>
@@ -160,19 +146,16 @@
                                 </div>
                                 <div class="form-group row form-small">
                                     <label class="control-label col-sm-4 " for="showPointsId">Show Points</label>
-                                    <input type="checkbox" class="form-control col-sm-4" v-model="showPoints" v-on:change="autoGenerate"
-                                        id="showPointsId form-value">
+                                    <input type="checkbox" class="form-control col-sm-4" v-model="showPoints" v-on:change="autoGenerate" id="showPointsId form-value">
                                 </div>
                                 <div class="form-group row form-small">
                                     <label class="control-label col-sm-4 " for="gridSizeId">Grid Size</label>
-                                    <input type="range" class="form-control col-sm-4 slider" min="0.01" max="0.99" step="0.01"
-                                        v-model="gridSize" v-on:change="autoGenerate" id="gridSizeId">
+                                    <input type="range" class="form-control col-sm-4 slider" min="0.01" max="0.99" step="0.01" v-model="gridSize" v-on:change="autoGenerate" id="gridSizeId">
                                     <div class="col-sm-2 form-value">{{ gridSize }}</div>
                                 </div>
                                 <div class="form-group row form-small">
                                     <label class="control-label col-sm-4 " for="showGridId">Show Grid</label>
-                                    <input class="col-sm-4" type="checkbox" v-model="gridCheckBox" v-on:change="autoGenerate"
-                                        id="showGridId">
+                                    <input class="col-sm-4" type="checkbox" v-model="gridCheckBox" v-on:change="autoGenerate" id="showGridId">
                                 </div>
                             </div>
                         </div>
@@ -182,8 +165,7 @@
 
                     <div class="card" id="card3">
                         <div class="card-header cardSize">
-                            <a class="collapsed card-link" data-toggle="collapse" href="#collapse3">
-                                Command Reference</a>
+                            <a class="collapsed card-link" data-toggle="collapse" href="#collapse3"> Command Reference</a>
                         </div>
                         <div id="collapse3" class="collapse hidden" data-parent="#accordion">
                             <div class="card-body">
@@ -237,34 +219,28 @@
                         </div>
                     </div>
 
-                    <div class="card" id="card6">
+                    <div class="card" id="card4">
                         <div class="card-header cardSize">
-                            <a class="collapsed card-link" data-toggle="collapse" href="#collapse6">Fractal
-                                Properties</a>
+                            <a class="collapsed card-link" data-toggle="collapse" href="#collapse4">Fractal Properties</a>
                         </div>
-                        <div id="collapse6" class="collapse hidden" data-parent="#accordion">
+                        <div id="collapse4" class="collapse hidden" data-parent="#accordion">
                             <div class="card-body">
                                 <div class="form-group row">
-                                    <label class="control-label col-sm-4" for="calculateBoxDimId">
-                                        Box Dimension:</label>
-                                    <input type="checkbox" class="form-control col-sm-4" v-model="boxDimCheckBox"
-                                        v-on:change="autoGenerate" id="calculateBoxDimId">
+                                    <label class="control-label col-sm-4" for="calculateBoxDimId">Box Dimension:</label>
+                                    <input type="checkbox" class="form-control col-sm-4" v-model="boxDimCheckBox" v-on:change="autoGenerate" id="calculateBoxDimId">
                                 </div>
                                 <div class="form-group row">
                                     <label class="control-label col-sm-4 " for="showGridId">Show Grid</label>
-                                    <input class="col-sm-4" type="checkbox" v-model="gridCheckBox" v-on:change="autoGenerate"
-                                        id="showGridId">
+                                    <input class="col-sm-4" type="checkbox" v-model="gridCheckBox" v-on:change="autoGenerate" id="showGridId">
                                 </div>
                                 <div class="form-group row form-small">
                                     <label class="control-label col-sm-4 " for="gridSizeId">Grid Size</label>
-                                    <input type="range" class="form-control col-sm-4 slider" min="0.01" max="0.99" step="0.01"
-                                        v-model="gridSize" v-on:change="autoGenerate" id="gridSizeId">
+                                    <input type="range" class="form-control col-sm-4 slider" min="0.01" max="0.99" step="0.01" v-model="gridSize" v-on:change="autoGenerate" id="gridSizeId">
                                     <div class="col-sm-2 form-value">{{ gridSize }}</div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="control-label col-sm-4 " for="iterations">Iterations</label>
-                                    <input type="range" value="1" step="1" min="1" max="20" class="form-control col-sm-4 slider"
-                                        v-model="n" v-on:change="autoGenerate" id="iterations">
+                                    <input type="range" value="1" step="1" min="1" max="20" class="form-control col-sm-4 slider" v-model="n" v-on:change="autoGenerate" id="iterations">
                                     <div class="col-sm-2 form-value">{{ n }}</div>
                                 </div>
                                 <table class="table table-sm" style='text-align:left'>
@@ -283,25 +259,21 @@
                                             <td>Occupied boxes</td>
                                             <td>{{ 100.0 / allBoxes * occupiedBoxes | round2f }}% ({{ occupiedBoxes}}/{{allBoxes}})</td>
                                         </tr>
-                                        
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
 
-                    <div class="card" id="card22">
+                    <div class="card" id="card5">
                         <div class="card-header cardSize">
-                            <a class="collapsed card-link" data-toggle="collapse" href="#collapse22">Audio Interpreter
-                                <span class="glyphicon-glyphicon-fire"></span></a>
+                            <a class="collapsed card-link" data-toggle="collapse" href="#collapse5">Audio Interpreter</a>
                         </div>
-                        <div id="collapse22" class="collapse hidden" data-parent="#accordion">
+                        <div id="collapse5" class="collapse hidden" data-parent="#accordion">
                             <div class="card-body">
                                 <div class="form-group">
-                                    <button class="btn btn-success" type="button" id="playFractalButton" v-on:click="playFractal">Play
-                                    </button>
-                                    <button class="btn btn-danger" type="button" id="stopFractalButton" v-on:click="stopFractal">Stop
-                                    </button>
+                                    <button class="btn btn-success" type="button" id="playFractalButton" v-on:click="playFractal">Play</button>
+                                    <button class="btn btn-danger" type="button" id="stopFractalButton" v-on:click="stopFractal">Stop</button>
                                 </div>
                             </div>
                         </div>
@@ -309,14 +281,12 @@
 
                     <div class="card" id="card6">
                         <div class="card-header cardSize">
-                            <a class="collapsed card-link" data-toggle="collapse" href="#collapse6">Export
-                                <span class="glyphicon-glyphicon-fire"></span></a>
+                            <a class="collapsed card-link" data-toggle="collapse" href="#collapse6">Export</a>
                         </div>
                         <div id="collapse6" class="collapse hidden" data-parent="#accordion">
                             <div class="card-body">
                                 <div class="form-group">
-                                    <button class="btn btn-success" type="button" id="exportSVGButton">SVG
-                                    </button>
+                                    <button class="btn btn-success" type="button" id="exportSVGButton">SVG</button>
                                 </div>
                             </div>
                         </div>
@@ -325,7 +295,6 @@
                 <div v-html="log"> </div>
                 <div class="form-group">
                     <button type="button" class="btn btn-primary" id="generateButton" v-on:click="generate">Generate</button>
-                    <!--<button type="button" class="btn btn-success" id="playButton" v-on:click="animate">Animate</button>-->
                     <em style="color:grey">{{ durationOut }}</em>
                 </div>
             </div>
@@ -350,8 +319,7 @@
             console.log("Canvas error.");
     </script>
     <div class='footer'>
-        &copy; 2018-2019 <a href='https://raphaelpour.de'>Raphael Pour</a> | <a href='https://github.com/RaphaelPour/lsystems'>Source
-            Code</a> licensed under
+        &copy; 2018-2020 <a href='https://raphaelpour.de'>Raphael Pour</a> | <a href='https://github.com/RaphaelPour/lsystems'>Source Code</a> licensed under
         <a href='http://www.gnu.de/documents/gpl.de.html'>GPL</a> | <a href='https://raphaelpour.de/impressum/'>Impressum</a>
     </div>
 </body>

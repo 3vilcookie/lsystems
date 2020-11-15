@@ -466,14 +466,6 @@
                     this.audiopreter = new Audiopreter();
                     this.audiopreter.interpretWord(l.out);
                 },
-
-                animate : function(){
-                    
-                    this.alpha ++;
-                    this.autoGenerate();
-
-                    setTimeout(this.animate,1000);
-                },
                 stopFractal: function () {
                     if (this.audiopreter != null) {
                         this.audiopreter.stop();
