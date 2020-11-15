@@ -27,7 +27,9 @@
                 gridCheckBox: false,
                 audiopreter: null,
                 boxDimCheckBox: false,
-                showPoints: false
+                showPoints: false,
+                lsystem: null,
+                turtle: null,
             },
             created: function () {
                 //this.setLStarTemplate(); // --> Default
@@ -41,7 +43,6 @@
                 this.autoGen = temp;
             },
             methods: {
-
                 autoGenerate: function () {
                     if (this.autoGen)
                         this.generate();
@@ -51,31 +52,31 @@
 
                     this.clearCanvas();
 
-                    var l = new LSystem();
+                    this.lsystem = new LSystem();
                     var output = "";
                     this.log = "";
                     try {
-                        l.V = this.V;
-                        l.E = this.E;
-                        l.Axiom = this.A;
-                        l.P = this.P;
-                        l.n = this.n;
-                        l.generate()
-                        this.out = l.out;
+                        this.lsystem.V = this.V;
+                        this.lsystem.E = this.E;
+                        this.lsystem.Axiom = this.A;
+                        this.lsystem.P = this.P;
+                        this.lsystem.n = this.n;
+                        this.lsystem.generate()
+                        this.out = this.lsystem.out;
                     } catch (error) {
                         this.log = "<div class='alert alert-danger'>[LSystem]: " + error + "</div>";
                         return;
                     }
 
                     if (this.boxDimCheckBox)
-                        this.calcBoxDimension(l);
+                        this.calcBoxDimension(this.lsystem);
                     else {
-                        var t = new Turtle(this.ctx.canvas.width, this.ctx.canvas.height, parseFloat(this.alpha), Number(this.n), 100.0, this.showCanvasDebug, this.showPoints);
+                        this.turtle = new Turtle(this.ctx.canvas.width, this.ctx.canvas.height, parseFloat(this.alpha), Number(this.n), 100.0, this.showCanvasDebug, this.showPoints);
 
-                        t.angleOffset = parseFloat(this.angleOffset) + parseFloat(this.startAngle);
+                        this.turtle.angleOffset = parseFloat(this.angleOffset) + parseFloat(this.startAngle);
 
-                        t.computeWord(l.out);
-                        this.ctx.drawImage(t.finalCanvas, 0, 0);
+                        this.turtle.computeWord(this.lsystem.out);
+                        this.ctx.drawImage(this.turtle.finalCanvas, 0, 0);
                     }
 
                     if (this.gridCheckBox)
@@ -86,11 +87,8 @@
                     var duration = (this.endTime - this.startTime) / 1000.0;
                     this.durationOut = "Rendered within " + duration + "s"
 
-
                 },
-
                 drawGrid: function () {
-
                     var localGridSize = Number((this.gridSize * this.ctx.canvas.width));
 
                     this.ctx.save();
@@ -120,11 +118,8 @@
                     }
 
                     this.ctx.restore();
-
                 },
                 calcBoxDimension: function (lsystem = false) {
-
-
                     this.clearCanvas();
 
                     if (lsystem === false) {
@@ -136,7 +131,6 @@
                         lsystem.n = this.n;
                         lsystem.generate();
                     }
-
 
                     var width = this.ctx.canvas.width;
                     var height = this.ctx.canvas.height;
@@ -159,7 +153,6 @@
                    this.boxDimensionValue = boxDim.dimension;
                 },
                 // Clear-Function for L-System and Turtle
-
                 clear: function () {
                     this.V = "";
                     this.P = "";
@@ -173,7 +166,6 @@
                     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
                     this.ctx.restore();
                 },
-
                 // L-System Templates
                 setHoneycombTemplate: function () {
                     this.V = "F";
@@ -352,12 +344,10 @@
                     this.autoGenerate();
                 },
                 setRandom: function (){
-                    
                     var maxVars = 10;
                     var maxRuleChars = 10;
                     var maxIterations = 4;
                     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
 
                     var alpha = Math.floor((Math.random()*360.0));
                     var n = Math.floor(Math.random()*(maxIterations-1))+1;
@@ -366,7 +356,6 @@
                     var charPool = "";
                     var A = "";
                     var valid = false;
-
 
                     while(!valid)
                     {
@@ -390,7 +379,6 @@
                         for(var i=0;i<V.length;i++)
                         {
                           P += V[i] + ' = ';
-                        
 
                           for(var j=0;j<maxRuleChars;j++)
                             P += charPool.charAt(Math.floor(Math.random()*charPool.length)); 
@@ -401,7 +389,6 @@
 
                         for(var j=0;j<maxRuleChars;j++)
                             A += charPool.charAt(Math.floor(Math.random()*charPool.length)); 
-
 
                         /*
                          * Validate stuff
@@ -467,10 +454,53 @@
                     this.audiopreter.interpretWord(l.out);
                 },
                 stopFractal: function () {
-                    if (this.audiopreter != null) {
-                        this.audiopreter.stop();
+                    if (this.audiopreter != null) this.audiopreter.stop();
+                },
+                exportSVG: function() {
+                    /* 
+                     * Transform points [(-infinity,-infinity),(infinity, infinity)] 
+                     * to svg space, which is [(0,0),(xmax,ymax)]. This will be accomplished by
+                     * translating all points by the minimum x/y or zero if the minimum is positive value.
+                     * This ensures that no negative points are left.
+                     * 
+                     * Also transform the line to a svg-line-primitive. A polygone can't be used
+                     * while trees (e.g. plant) are not convex hulls and therefore no polygons.
+                     */
+                    xMin = this.turtle.bounds.xMin;
+                    yMin = this.turtle.bounds.yMin;
+                    lines = this.turtle.lines.map(function(line){
 
-                    }
+                        startPoint = [
+                            line[0][0] + Math.abs(xMin),
+                            line[0][1] + Math.abs(yMin)
+                        ];
+
+                        endPoint = [
+                            line[1][0] + Math.abs(xMin),
+                            line[1][1] + Math.abs(yMin)
+                        ];
+
+                        return `<line x1="${startPoint[0]}" y1="${startPoint[1]}" x2="${endPoint[0]}" y2="${endPoint[1]}" />`
+                    });
+
+
+                    svg = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+                    <svg 
+                       xmlns="http://www.w3.org/2000/svg"
+                       version="1.0"
+                       width="${this.turtle.bounds.xLength}"
+                       height="${this.turtle.bounds.yLength}"
+                       style="stroke:rgb(0,0,0);stroke-width:1">
+                       ${lines.join("\n")}
+                    </svg>`
+                    svgBlob = new Blob([svg], {type: "image/svg+xml"});
+
+                    /* Create new link to simulate download */
+                    link = document.createElement('a');
+                    link.download = "out.svg"
+                    link.href = window.URL.createObjectURL(svgBlob);
+                    link.click();
+                    window.URL.revokeObjectURL(link.href);
                 }
             },
             filters : {
